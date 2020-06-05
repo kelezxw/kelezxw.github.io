@@ -55,15 +55,19 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="爬虫相关工具，有python的，有node的">
+<meta name="keywords" content="Node,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫相关工具">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/spider/index.html">
 <meta property="og:site_name" content="不进则退">
+<meta property="og:description" content="爬虫相关工具，有python的，有node的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-01T14:07:19.797Z">
+<meta property="og:updated_time" content="2020-06-05T08:00:57.565Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-  <link rel="canonical" href="http://yoursite.com/tags/">
+<meta name="twitter:title" content="爬虫相关工具">
+<meta name="twitter:description" content="爬虫相关工具，有python的，有node的">
+  <link rel="canonical" href="http://yoursite.com/2020/06/05/spider/">
 
 
 <script id="page-configurations">
@@ -71,13 +75,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>tags | 不进则退</title>
+  <title>爬虫相关工具 | 不进则退</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -192,24 +196,6 @@
 
     
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
 </nav>
 </div>
     </header>
@@ -228,71 +214,124 @@
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">tags
-
-</h1>
-
-<div class="post-meta">
+      <article itemscope itemtype="http://schema.org/Article">
   
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/spider/">
 
-</div>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kele">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
 
-</header>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不进则退">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">爬虫相关工具
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-05 15:54:22 / 修改时间：16:00:57" itemprop="dateCreated datePublished" datetime="2020-06-05T15:54:22+08:00">2020-06-05</time>
+            </span>
+          
+            
+
+            
+          
+
+          
+            <div class="post-description">爬虫相关工具，有python的，有node的</div>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-      
-      
-      <div class="post-body">
+        <h4 id="urllib-request-简单的Python工具"><a href="#urllib-request-简单的Python工具" class="headerlink" title="urllib.request 简单的Python工具"></a>urllib.request 简单的Python工具</h4><p>最早的时候，我是用基本的 urllib.request 这种库请求网页，然后截取页面内容实现简单的爬虫<br>如果遇到需要填写输入框的页面就没用了</p>
+<h4 id="selenium-配合-无头浏览器-Phantomjs"><a href="#selenium-配合-无头浏览器-Phantomjs" class="headerlink" title="selenium 配合 无头浏览器  Phantomjs"></a>selenium 配合 无头浏览器  Phantomjs</h4><p>Selenium是一个自动化测试的web应用程序，能做到用代码控制浏览器，比如表单填写，鼠标单击<br>拖拽，执行js脚本，截图等等，但是它需要借助WebDriver工具来实现<br>Phantomjs是一个无头浏览器，所谓无头就是代码控制浏览器访问数据，不需要显示出来，这样爬虫效率也高，内存消耗也低，Selenium+Phantomjs 配合就能实现自动化测试或者爬虫的完整步骤</p>
+<h4 id="ChromeDriver新的-Headless"><a href="#ChromeDriver新的-Headless" class="headerlink" title="ChromeDriver新的 Headless"></a>ChromeDriver新的 Headless</h4><p>Phantomjs慢慢的不更新了，后来新版本的Selenium干脆抛弃了Phantomjs，不支持了，新的ChromeDriver<br>就成了替代品，区别是ChromeDriver提供了一个窗口，用来监控代码运行的事件，是完全模仿浏览器行为的</p>
+<h4 id="Pyppeteer新的爬虫工具"><a href="#Pyppeteer新的爬虫工具" class="headerlink" title="Pyppeteer新的爬虫工具"></a>Pyppeteer新的爬虫工具</h4><p>Selenium+ChromeDriver模式运行起来，配置比较麻烦，运行效率也低，再则就是，这个模式运行了很多年，不少系统已经针对Selenium执行了反爬虫，新的替代品出现了，Pyppeteer，它配置起来相对简单，执行效率也高，虽然只支持 Chromium，但是也够用了。<br>Pyppeteer 其实是 Puppeteer 的 Python 版本，是个日本工程师维护的，而且更新的也慢，所以bug不少</p>
+<h4 id="Puppeteer-Chrome出品，必属精品"><a href="#Puppeteer-Chrome出品，必属精品" class="headerlink" title="Puppeteer  Chrome出品，必属精品"></a>Puppeteer  Chrome出品，必属精品</h4><p>Puppeteer是一个Node库，它提供了一个高级 API 来通过 DevTools 协议控制 Chromium 或 Chrome。Puppeteer 默认以 headless 模式运行，但是可以通过修改配置文件运行“有头”模式。<br>我们可以使用Puppeteer完成以下工作:</p>
+<ul>
+<li>访问页面，进行截图</li>
+<li>自动进行键盘输入，提交表单</li>
+<li>模拟点击等用户操作</li>
+<li>截获Response</li>
+<li>……</li>
+</ul>
+
+    </div>
+
+    
+    
+    
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Node/" rel="tag"># Node</a>
+            
+              <a href="/tags/Python/" rel="tag"># Python</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
               
+                <a href="/2019/11/22/flutter/" rel="next" title="Flutter学习笔记">
+                  <i class="fa fa-chevron-left"></i> Flutter学习笔记
+                </a>
               
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-              目前共计 5 个标签
             </div>
-            <div class="tag-cloud-tags">
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
               
-                <a href="/tags/Android/" style="font-size: 30px; color: #111">Android</a> <a href="/tags/Dart/" style="font-size: 21px; color: #6f6f6f">Dart</a> <a href="/tags/Flutter/" style="font-size: 21px; color: #6f6f6f">Flutter</a> <a href="/tags/Node/" style="font-size: 21px; color: #6f6f6f">Node</a> <a href="/tags/Python/" style="font-size: 12px; color: #ccc">Python</a>
+                <a href="/2020/06/05/puppeteer/" rel="prev" title="Puppeteer">
+                  Puppeteer <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
         
-      </div>
-      
-      
-      
-    </div>
+      </footer>
     
+  </div>
+  
+  
+  
+  </article>
 
-    
-    
-    
   </div>
 
 
@@ -329,6 +368,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#urllib-request-简单的Python工具"><span class="nav-number">1.</span> <span class="nav-text">urllib.request 简单的Python工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#selenium-配合-无头浏览器-Phantomjs"><span class="nav-number">2.</span> <span class="nav-text">selenium 配合 无头浏览器  Phantomjs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChromeDriver新的-Headless"><span class="nav-number">3.</span> <span class="nav-text">ChromeDriver新的 Headless</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pyppeteer新的爬虫工具"><span class="nav-number">4.</span> <span class="nav-text">Pyppeteer新的爬虫工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Puppeteer-Chrome出品，必属精品"><span class="nav-number">5.</span> <span class="nav-text">Puppeteer  Chrome出品，必属精品</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 

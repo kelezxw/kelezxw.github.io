@@ -55,15 +55,19 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="Chrome出品的node工具">
+<meta name="keywords" content="Node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Puppeteer">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/puppeteer/index.html">
 <meta property="og:site_name" content="不进则退">
+<meta property="og:description" content="Chrome出品的node工具">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-01T14:07:19.797Z">
+<meta property="og:updated_time" content="2020-06-05T08:13:17.786Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-  <link rel="canonical" href="http://yoursite.com/tags/">
+<meta name="twitter:title" content="Puppeteer">
+<meta name="twitter:description" content="Chrome出品的node工具">
+  <link rel="canonical" href="http://yoursite.com/2020/06/05/puppeteer/">
 
 
 <script id="page-configurations">
@@ -71,13 +75,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>tags | 不进则退</title>
+  <title>Puppeteer | 不进则退</title>
   <meta name="generator" content="Hexo 3.9.0">
   
 
@@ -192,24 +196,6 @@
 
     
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
 </nav>
 </div>
     </header>
@@ -228,71 +214,116 @@
             
 
   <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">tags
-
-</h1>
-
-<div class="post-meta">
+      <article itemscope itemtype="http://schema.org/Article">
   
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/puppeteer/">
 
-</div>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kele">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
 
-</header>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不进则退">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Puppeteer
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-05 16:03:26 / 修改时间：16:13:17" itemprop="dateCreated datePublished" datetime="2020-06-05T16:03:26+08:00">2020-06-05</time>
+            </span>
+          
+            
+
+            
+          
+
+          
+            <div class="post-description">Chrome出品的node工具</div>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-      
-      
-      <div class="post-body">
+        <p>Puppeteer 是 Chrome 开发团队在 2017 年发布的一个 Node.js 包，用来模拟 Chrome 浏览器的运行。<br>它可以作为自动化的测试工具，也可以作为爬虫工具。<br><a href="https://zhaoqize.github.io/puppeteer-api-zh_CN/#?product=Puppeteer&version=v3.3.0&show=api-class-puppeteer" target="_blank" rel="noopener">Puppeteer传送门</a></p>
+<h4 id="Puppeteer安装"><a href="#Puppeteer安装" class="headerlink" title="Puppeteer安装"></a>Puppeteer安装</h4><p>先在文件夹初始化个简单项目吧，npm init</p>
+<ul>
+<li>安装puppeter<br>使用npm i Puppeter安装的时候会下载 Chromium (~170MB Mac, ~282MB Linux, ~280MB Win)<br>实际上Puppeteer是Chromium+Puppeteer-core组成的，Chromium是chrome的开源版本，也是开发版本，有啥好玩的新功能Chromium都会先测试稳定再发布到Chrome上，所以可以选择不下载Chromium，使用本机的Chrome，这样的话需要另外一个插件 carlo，自动寻找本机Chrome的路径</li>
+<li>安装puppeter-core<br>现在使用本机Chrome<br>npm i puppeter-core carlo</li>
+</ul>
+<h4 id="简单的例子–美团网搜索关键字-烧烤"><a href="#简单的例子–美团网搜索关键字-烧烤" class="headerlink" title="简单的例子–美团网搜索关键字 烧烤"></a>简单的例子–美团网搜索关键字 烧烤</h4><p>talk is cheap, show me the code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">const puppeteer = require(&apos;puppeteer-core&apos;);</span><br><span class="line">const findChrome = require(&apos;carlo/lib/find_chrome&apos;);</span><br><span class="line">(async () =&gt; &#123;</span><br><span class="line">let findChromePath = await findChrome(&#123;&#125;);</span><br><span class="line">// console.log(findChromePath)</span><br><span class="line">const browser = await puppeteer.launch(&#123;</span><br><span class="line">    executablePath: findChromePath.executablePath,</span><br><span class="line">    pipe: true,</span><br><span class="line">    defaultViewport: null,</span><br><span class="line">    headless: false,</span><br><span class="line">    devtools: true,</span><br><span class="line">    userDataDir: &apos;C:\Users\kele\Desktop\puppeteer&apos;,</span><br><span class="line">    // args,</span><br><span class="line">&#125;);</span><br><span class="line">const page = await browser.newPage();</span><br><span class="line">page.on(&apos;response&apos;, (response)=&gt;&#123;</span><br><span class="line">    if(response._url.indexOf(&apos;ptapi/recommends?limit&apos;) != -1)&#123;</span><br><span class="line">    console.log(response.json().then(json=&gt;&#123;</span><br><span class="line">        console.log(json)</span><br><span class="line">        &#125;)</span><br><span class="line">    )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">await page.goto(&apos;https://sh.meituan.com/&apos;);</span><br><span class="line">// await page.screenshot(&#123;path: &apos;example.png&apos;&#125;);</span><br><span class="line">await page.type(&apos;.header-search-input&apos;,&apos;烧烤&apos;);</span><br><span class="line">await page.click(&apos;.header-search-btn&apos;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// await browser.close();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<h4 id="Run"><a href="#Run" class="headerlink" title="Run"></a>Run</h4><p>node  example.js</p>
+
+    </div>
+
+    
+    
+    
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Node/" rel="tag"># Node</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
               
+                <a href="/2020/06/05/spider/" rel="next" title="爬虫相关工具">
+                  <i class="fa fa-chevron-left"></i> 爬虫相关工具
+                </a>
               
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-              目前共计 5 个标签
             </div>
-            <div class="tag-cloud-tags">
-              
-                <a href="/tags/Android/" style="font-size: 30px; color: #111">Android</a> <a href="/tags/Dart/" style="font-size: 21px; color: #6f6f6f">Dart</a> <a href="/tags/Flutter/" style="font-size: 21px; color: #6f6f6f">Flutter</a> <a href="/tags/Node/" style="font-size: 21px; color: #6f6f6f">Node</a> <a href="/tags/Python/" style="font-size: 12px; color: #ccc">Python</a>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
               
             </div>
           </div>
         
-      </div>
-      
-      
-      
-    </div>
+      </footer>
     
+  </div>
+  
+  
+  
+  </article>
 
-    
-    
-    
   </div>
 
 
@@ -329,6 +360,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Puppeteer安装"><span class="nav-number">1.</span> <span class="nav-text">Puppeteer安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的例子–美团网搜索关键字-烧烤"><span class="nav-number">2.</span> <span class="nav-text">简单的例子–美团网搜索关键字 烧烤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Run"><span class="nav-number">3.</span> <span class="nav-text">Run</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
