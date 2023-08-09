@@ -16,24 +16,25 @@
   <meta name="author" content="kele">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Activity的四种加载模式Activity的四种加载模式： 1、standard  系统的默认模式，一次跳转即会生成一个新的实例。假设有一个activity命名为Act1，执行语句： startActivity(new Intent(Act1.this, Act1.class)); 后Act1将跳转到另外一个Act1，也就是现在的栈里面有 Act1 的两个实例。按返回键后你会发现仍然是在Act">
+    <meta name="description" content="爬虫相关工具1、最早的时候，我是用基本的 urllib.request 这种库请求网页，然后截取页面内容实现简单的爬虫 如果遇到需要填写输入框的页面就没用了 2、selenium 配合 无头浏览器  Phantomjs Selenium是一个自动化测试的web应用程序，能做到用代码控制浏览器，比如表单填写，鼠标单击 拖拽，执行js脚本，截图等等，但是它需要借助WebDriver工具来实现 Phan">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android的Activity的四种加载模式">
-<meta property="og:url" content="http://bestkele.cn/2021/09/23/android/Activity/index.html">
+<meta property="og:title" content="爬虫相关工具">
+<meta property="og:url" content="http://bestkele.cn/2020/06/05/concept/crawler/index.html">
 <meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
-<meta property="og:description" content="Activity的四种加载模式Activity的四种加载模式： 1、standard  系统的默认模式，一次跳转即会生成一个新的实例。假设有一个activity命名为Act1，执行语句： startActivity(new Intent(Act1.this, Act1.class)); 后Act1将跳转到另外一个Act1，也就是现在的栈里面有 Act1 的两个实例。按返回键后你会发现仍然是在Act">
+<meta property="og:description" content="爬虫相关工具1、最早的时候，我是用基本的 urllib.request 这种库请求网页，然后截取页面内容实现简单的爬虫 如果遇到需要填写输入框的页面就没用了 2、selenium 配合 无头浏览器  Phantomjs Selenium是一个自动化测试的web应用程序，能做到用代码控制浏览器，比如表单填写，鼠标单击 拖拽，执行js脚本，截图等等，但是它需要借助WebDriver工具来实现 Phan">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-09-23T07:12:45.000Z">
-<meta property="article:modified_time" content="2023-08-09T12:15:48.261Z">
+<meta property="article:published_time" content="2020-06-05T07:28:25.000Z">
+<meta property="article:modified_time" content="2023-08-09T12:26:17.736Z">
 <meta property="article:author" content="kele">
-<meta property="article:tag" content="Android">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="node">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Android的Activity的四种加载模式 - Move forward, or you&#39;ll fall behind</title>
+  <title>爬虫相关工具 - Move forward, or you&#39;ll fall behind</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -239,7 +240,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Android的Activity的四种加载模式"></span>
+            <span id="subtitle" data-typed-text="爬虫相关工具"></span>
           
         </div>
 
@@ -250,8 +251,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-09-23 15:12" pubdate>
-          2021年9月23日 下午
+        <time datetime="2020-06-05 15:28" pubdate>
+          2020年6月5日 下午
         </time>
       </span>
     
@@ -262,7 +263,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1k 字
+          821 字
         
       </span>
     
@@ -273,7 +274,7 @@
         
         
         
-          9 分钟
+          7 分钟
         
       </span>
     
@@ -318,7 +319,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Android的Activity的四种加载模式</h1>
+            <h1 id="seo-header">爬虫相关工具</h1>
             
               <p class="note note-info">
                 
@@ -331,18 +332,27 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Activity的四种加载模式"><a href="#Activity的四种加载模式" class="headerlink" title="Activity的四种加载模式"></a>Activity的四种加载模式</h1><p><strong>Activity的四种加载模式：</strong></p>
-<p>1、standard </p>
-<p>系统的默认模式，一次跳转即会生成一个新的实例。假设有一个activity命名为Act1，执行语句：</p>
-<p>startActivity(new Intent(Act1.this, Act1.class));</p>
-<p>后Act1将跳转到另外一个Act1，也就是现在的栈里面有 Act1 的两个实例。按返回键后你会发现仍然是在Act1（第一个）里面。</p>
-<p>2、singleTop</p>
-<p>singleTop 跟standard 模式比较类似。唯一的区别就是，当跳转的对象是位于栈顶的activity（应该可以理解为用户眼前所 看到的activity）时，程序将不会生成一个新的activity实例，而是直接跳到现存于栈顶的那个activity实例。拿上面的例子来说，当Act1 为 singleTop 模式时，执行跳转后栈里面依旧只有一个实例，如果现在按返回键程序将直接退出。这个貌似用得比较少。</p>
-<p>3、singleTask</p>
-<p>singleTask模式和后面的singleInstance模式都是只创建一个实例的。在这种模式下，无论跳转的对象是不是位于栈顶的activity，程序都不会生成一个新的实例（当然前提是栈里面已经有这个实例）。这种模式相当有用，在以后的多activity开发中， 经常会因为跳转的关系导致同个页面生成多个实例，这个在用户体验上始终有点不好，而如果你将对应的activity声明为 singleTask 模式，这种问题将不复存在。不过前阵子好像又看过有人说一般不要将除开始页面的其他页面设置为 singleTask 模式，原因暂时不明，哪位知道的可以请教下。</p>
-<p>4、singleInstance:</p>
-<p>设置为 singleInstance 模式的 activity 将独占一个task（感觉task可以理解为进程），独占一个task的activity与其说是activity，倒不如说是一个应用，这个应用与其他activity是独立的，它有自己的上下文activity。拿一个例子来说明：</p>
-<p>现在有以下三个activity: Act1、Act2、Act3，其中Acti2 为 singleInstance 模式。它们之间的跳转关系为： Act1 – Act2 – Act3 ，现在在Act3中按下返回键，由于Act2位于一个独立的task中，它不属于Act3的上下文activity，所以此时将直接返回到Act1。这就是singleInstance模式。</p>
+                <h1 id="爬虫相关工具"><a href="#爬虫相关工具" class="headerlink" title="爬虫相关工具"></a>爬虫相关工具</h1><p>1、最早的时候，我是用基本的 urllib.request 这种库请求网页，然后截取页面内容实现简单的爬虫</p>
+<p>如果遇到需要填写输入框的页面就没用了</p>
+<p>2、<strong>selenium 配合 无头浏览器</strong>  Phantomjs</p>
+<p>Selenium是一个自动化测试的web应用程序，能做到用代码控制浏览器，比如表单填写，鼠标单击</p>
+<p>拖拽，执行js脚本，截图等等，但是它需要借助WebDriver工具来实现</p>
+<p>Phantomjs是一个无头浏览器，所谓无头就是代码控制浏览器访问数据，不需要显示出来，这样爬虫效率也高，内存消耗也低，Selenium+Phantomjs 配合就能实现自动化测试或者爬虫的完整步骤</p>
+<p>3、 ChromeDriver新的无头浏览器</p>
+<p>Phantomjs慢慢的不更新了，后来新版本的Selenium干脆抛弃了Phantomjs，不支持了，新的ChromeDriver</p>
+<p>就成了替代品，区别是ChromeDriver提供了一个窗口，用来监控代码运行的事件，是完全模仿浏览器行为的</p>
+<p>4、 Pyppeteer新的爬虫工具</p>
+<p>Selenium+ChromeDriver模式运行起来，配置比较麻烦，运行效率也低，再则就是，这个模式运行了很多年，不少系统已经针对Selenium执行了反爬虫，新的替代品出现了，Pyppeteer，它配置起来相对简单，执行效率也高，虽然只支持 Chromium，但是也够用了。</p>
+<p>Pyppeteer 其实是 Puppeteer 的 Python 版本，是个日本工程师维护的，而且更新的也慢，所以bug不少</p>
+<p>5、 Puppeteer</p>
+<p>Puppeteer是一个Node库，它提供了一个高级 API 来通过 DevTools 协议控制 Chromium 或 Chrome。Puppeteer 默认以 headless 模式运行，但是可以通过修改配置文件运行“有头”模式。</p>
+<p>我们可以使用Puppeteer完成以下工作:</p>
+<ul>
+<li>访问页面，进行截图</li>
+<li>找到页面元素，比如输入框，模拟键盘输入，提交表单</li>
+<li>模拟点击等用户操作</li>
+<li>等等等等。。</li>
+</ul>
 
                 
               </div>
@@ -361,7 +371,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  <a href="/categories/%E6%A6%82%E5%BF%B5%E7%9F%A5%E8%AF%86/" class="category-chain-item">概念知识</a>
   
   
 
@@ -376,7 +386,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Android/" class="print-no-link">#Android</a>
+        <a href="/tags/python/" class="print-no-link">#python</a>
+      
+        <a href="/tags/node/" class="print-no-link">#node</a>
       
     </div>
   
@@ -388,8 +400,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Android的Activity的四种加载模式</div>
-      <div>http://bestkele.cn/2021/09/23/android/Activity/</div>
+      <div>爬虫相关工具</div>
+      <div>http://bestkele.cn/2020/06/05/concept/crawler/</div>
     </div>
     <div class="license-meta">
       
@@ -401,7 +413,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年9月23日</div>
+          <div>2020年6月5日</div>
         </div>
       
       
@@ -433,9 +445,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/09/23/android/android-keystore%20/" title="android的keystore相关命令">
+                      <a href="/2020/08/08/other/start/" title="hexo博客系统搭建简易教程">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">android的keystore相关命令</span>
+                        <span class="hidden-mobile">hexo博客系统搭建简易教程</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -443,8 +455,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/08/08/other/start/" title="hexo博客系统搭建简易教程">
-                        <span class="hidden-mobile">hexo博客系统搭建简易教程</span>
+                      <a href="/2020/06/02/concept/Https-principle/" title="Https原理及流程">
+                        <span class="hidden-mobile">Https原理及流程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
