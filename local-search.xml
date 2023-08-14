@@ -248,6 +248,33 @@
   
   
   <entry>
+    <title>Flutter android打包自定义jks</title>
+    <link href="/2019/12/20/flutter/flutter-android-jks/"/>
+    <url>/2019/12/20/flutter/flutter-android-jks/</url>
+    
+    <content type="html"><![CDATA[<h1 id="flutter-android-打包自定义jks"><a href="#flutter-android-打包自定义jks" class="headerlink" title="flutter android 打包自定义jks"></a>flutter android 打包自定义jks</h1><p>flutter android 打包直接生成了apk，我需要一个自己的jks</p><p>1、把keytool放在环境变量中</p><p>执行 flutter doctor -v</p><p><img src="/image/article/flutter/flutter-android-jks/6054f5ed-252d-4888-8f8e-1f86e7143e84.png"></p><p>这个路径里面的jre&#x2F;bin里面就是keytool.exe</p><p>2、生成key</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">keytool -genkey -v -keystore crpm-release-key.jks -<span class="hljs-built_in">alias</span> crpm -keyalg RSA -keysize 2048 -validity 10000<br></code></pre></td></tr></table></figure><p><img src="/image/article/flutter/flutter-android-jks/130526be-df53-4182-af26-2fa8c8272b27.png"></p><p>导出的路径就是运行的路径，现在是在 C:\Users\kele</p><p>3、把jks放在android&#x2F;app文件夹下</p><p>4、在android文件夹下新建文件key.properties    配置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">storePassword=123456<br>keyPassword=123456<br>keyAlias=crpm<br>storeFile=crpm-release-key.jks<br></code></pre></td></tr></table></figure><p>5、配置jks引用</p><p>&#x2F;android&#x2F;app&#x2F;build.gradle文件，在android {  这一行前面,加入如下代码： </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">def keystorePropertiesFile = rootProject.file(<span class="hljs-string">&quot;key.properties&quot;</span>)<br>def keystoreProperties = new Properties()<br>keystoreProperties.load(new FileInputStream(keystorePropertiesFile))<br></code></pre></td></tr></table></figure><p>将下面的代码</p><p>buildTypes{</p><p>    ……..</p><p>}</p><p>这一段换成：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">signingConfigs &#123;<br>    release &#123;<br>        keyAlias keystoreProperties[<span class="hljs-string">&#x27;keyAlias&#x27;</span>]<br>        keyPassword keystoreProperties[<span class="hljs-string">&#x27;keyPassword&#x27;</span>]<br>        storeFile file(keystoreProperties[<span class="hljs-string">&#x27;storeFile&#x27;</span>])<br>        storePassword keystoreProperties[<span class="hljs-string">&#x27;storePassword&#x27;</span>]<br>    &#125;<br>&#125;<br>buildTypes &#123;<br>    release &#123;<br>        signingConfig signingConfigs.release<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>6、打包</p><p>flutter  build  apk</p><p>7、获取签名md5</p><p>keytool -list -v -keystore  &lt;jks路径&gt;</p><p>参考链接：</p><p><a href="https://blog.csdn.net/weixin_44567104/article/details/90377912">https://blog.csdn.net/weixin_44567104&#x2F;article&#x2F;details&#x2F;90377912</a></p><p><a href="https://www.cnblogs.com/details-666/p/signature.html">https://www.cnblogs.com/details-666/p/signature.html</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Flutter</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Android</tag>
+      
+      <tag>Flutter</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Flutter所需依赖包下载不了</title>
     <link href="/2019/11/13/flutter/flutter-dependent/"/>
     <url>/2019/11/13/flutter/flutter-dependent/</url>
@@ -277,7 +304,7 @@
     <link href="/2019/10/23/flutter/flutter-compiler/"/>
     <url>/2019/10/23/flutter/flutter-compiler/</url>
     
-    <content type="html"><![CDATA[<h1 id="Flutter-的两种编译模式"><a href="#Flutter-的两种编译模式" class="headerlink" title="Flutter 的两种编译模式"></a>Flutter 的两种编译模式</h1><p>使用 Flutter 构建过 App 的人一定有一个困惑，就是 Flutter 编译出的产物到底是什么玩意。有时候分为几个文件，有时候是一个动态库，真的叫人摸不着头脑。</p><p>本文详细解释一下 Flutter 的编译模式。</p><hr><h3 id="编译模式的分类"><a href="#编译模式的分类" class="headerlink" title="编译模式的分类"></a><strong>编译模式的分类</strong></h3><p>编程语言要达到可运行的目的需要经过编译，一般地来说，编译模式分为两类：JIT 和 AOT。</p><p><strong>JIT</strong></p><p>JIT 全称 Just In Time (即时编译），典型的例子就是 v8，它可以即时编译并运行 JavaScript。所以你只需要输入源代码字符串，v8 就可以帮你编译并运行代码。通常来说，支持 JIT 的语言一般能够支持自省函数（eval），在运行时动态地执行代码。</p><p>JIT 模式的优势是显而易见的，可以动态下发和执行代码，而不用管用户的机器是什么架构，为应用的用户提供丰富而动态地内容。</p><p>但 JIT 的劣势也是显而易见的，大量字符串的代码很容易让 JIT 编译器花费很多时间和内存进行编译，给用户带来的直接感受就是应用启动慢。</p><p><strong>AOT</strong></p><p>AOT 全称 Ahead Of Time（事前编译），典型的例子就是 C&#x2F;C++，LLVM 或 GCC 通过编译并生成 C&#x2F;C++ 的二进制代码，然后这些二进制通过用户安装并取得执行权限后才可以通过进程加载执行。</p><p>AOT 的优势也是显而易见的，事先编译好的二进制代码，加载和执行的速度都会非常快。（所以编程语言速度排行榜上前列都是 AOT 编译类语言）这样的速度可以在密集计算场景下给用户带来非常好的体验，比如大型游戏的引擎渲染和逻辑执行。</p><p>但是 AOT 的劣势也是显而易见的，编译需要区分用户机器的架构，生成不同架构的二进制代码。除了架构，二进制代码本身也会让用户下载的安装包比较大。二进制代码一般需要取得执行权限才可以执行，所以无法在权限比较严格的系统中进行动态更新（如 iOS）。</p><hr><h3 id="Dart的编译模式"><a href="#Dart的编译模式" class="headerlink" title="Dart的编译模式"></a><strong>Dart的编译模式</strong></h3><p>Flutter 使用 Dart 作为编程语言，自然其编译模式也脱离不了 Dart 的干系。首先我们需要了解一下 Dart 所支持的编译模式。</p><p>Script：最普通的 JIT 模式，在 PC 命令行调用 Dart VM 执行 Dart 源代码文件即是这种模式；</p><p>Script Snapshot：JIT 模式，和上一个不同的是，这里载入的是已经 token 化的 Dart 源代码，提前执行了上一步的</p><p>lexer 步骤；</p><p>Application Snapshot：JIT 模式，这种模式来源于 Dart VM 直接载入源码后 dump 出数据。Dart VM</p><p>通过这种数据启动会更快。不过值得一提的是这种模式是区分架构的，在 x64 上生成的数据不可以给 arm 使用;</p><p>AOT：AOT模式，直接将 Dart 源码编译出 .S 文件，然后通过汇编器生成对应架构的代码。</p><p>总结一下刚才的列表，可以发现：</p><p><a href="https://img-blog.csdn.net/20180802154943293?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802154943293?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p><hr><h3 id="Flutter的编译模式"><a href="#Flutter的编译模式" class="headerlink" title="Flutter的编译模式"></a><strong>Flutter的编译模式</strong></h3><p>Flutter 完全采用了 Dart，按道理来说编译模式一致才是，但是事实并不是这样。由于 Android 和 iOS平台的生态差异，Flutter 也衍生出了非常丰富的编译模式。</p><p>Script：同 Dart Script 模式一致，虽然 Flutter 支持，但暂未看到使用，毕竟影响启动速度；</p><p>Script Snapshot：同 Dart Script Snapshot 一致，同样支持但未使用，Flutter</p><p>有大量的视图渲染逻辑，纯 JIT 模式影响执行速度；</p><p>Kernel Snapshot：Dart 的 bytecode模式，与 Application Snapshot 不同，bytecode</p><p>模式是不区分架构的。Kernel Snapshot 在 Flutter 项目内也叫 Core Snapshot。bytecode模式可以归类为 AOT 编译；</p><p>Core JIT：Dart 的一种二进制模式，将指令代码和 heap 数据打包成文件，然后在 VM 和 isolate</p><p>启动时载入，直接标记内存可执行，可以说这是一种 AOT 模式。Core JIT 也被叫做 AOTBlob；</p><p>AOT Assembly: 即 Dart 的 AOT 模式。直接生成汇编源代码文件，由各平台自行汇编。</p><p>可以看出来，Flutter 将 Dart 的编译模式复杂化了，多了不少概念，要一下叙述清楚是比较困难的，所以我们着重从 Flutter 应用开发的各个阶段来解读。</p><hr><h3 id="开发阶段的编译模式"><a href="#开发阶段的编译模式" class="headerlink" title="开发阶段的编译模式"></a><strong>开发阶段的编译模式</strong></h3><p>在开发阶段，我们需要 Flutter 的 Hot Reload 和 Hot Restart 功能，方便 UI 快速成型。同时，框架层也需要比较高的性能来进行视图渲染展现。因此开发模式下，Flutter 使用了 Kernel Snapshot 模式编译。</p><p>在打包产物中，你将发现几样东西：</p><p>isolate_snapshot_data：用于加速 isolate 启动，业务无关代码，固定，仅和 flutter engine</p><p>版本有关；</p><p>platform.dill：和 Dart VM 相关的 kernel 代码，仅和 Dart 版本以及 engine</p><p>编译版本有关。固定，业务无关代码；</p><p>vm_snapshot_data: 用于加速 Dart VM 启动的产物，业务无关代码，仅和 flutter engine 版本有关；</p><p>kernel_blob.bin：业务代码产物</p><p><a href="https://img-blog.csdn.net/201808021553413?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/201808021553413?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p><hr><h3 id="生产阶段的编译模式"><a href="#生产阶段的编译模式" class="headerlink" title="生产阶段的编译模式"></a><strong>生产阶段的编译模式</strong></h3><p>在生产阶段，应用需要的是非常快的速度，所以 Android 和 iOS target 毫无意外地都选择了 AOT 打包。不过由于平台特性不同，打包模式也是天壤之别。</p><p><a href="https://img-blog.csdn.net/20180802155358158?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802155358158?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p><p>首先我们很容易认识到 iOS 平台上做法的原因：App Store 审核条例不允许动态下发可执行二进制代码。</p><p>所以在 iOS 上，除了 JavaScript，其他语言运行时的实现都选择了 AOT（比如 OpenJDK 在 iOS 实现就是 AOT）。</p><p>在 Android 上，Flutter 的做法有点意思：支持了两种不同的路子。</p><p>Core JIT 的打包产物有 4 个：isolate_snapshot_data、vm_snapshot_data、isolate_snapshot_instr、vm_snapshot_instr。我们不认识的产物只有 2 个：isolate_snapshot_instr 和 vm_snapshot_instr，其实它俩代表着 VM 和 isolate 启动后所承载的指令等数据。在载入后，直接将该块内存执行即可。</p><p>Android 的 AOT Assembly 打包方式很容易让人想到需要支持多架构，无疑增大了代码包，并且该处代码需要从 JNI 调用，远不如 Core JIT 的 Java API 方便。所以 Android 上默认使用 Core JIT 打包，而不是 AOT Assembly。</p><hr><h3 id="Flutter-Engine-对编译模式的支持"><a href="#Flutter-Engine-对编译模式的支持" class="headerlink" title="Flutter Engine 对编译模式的支持"></a><strong>Flutter Engine 对编译模式的支持</strong></h3><p>在我的上篇文章：Flutter原理简解 中提到，Engine 承载了 Dart 运行时，毫无疑问 Engine 需要和打包出来的代码对的上号才行。</p><p>在 Engine 的编译模式中，Flutter 是这样选择的：</p><p><a href="https://img-blog.csdn.net/20180802155448379?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802155448379?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p><p>所以我们可以看到，Flutter 的编译模式是完全根据 Engine 的支持度来设计的。</p><hr><h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><strong>结论</strong></h3><p>Flutter 是一种高性能的、可跨平台的、动态化应用开发方案。</p><p>在 iOS 和 Android 平台上，动态化完全可由 Kernel Snapshot 打包实现，并且产物是一致通用的。不过目前通过打包工具进行了阉割，只能生成 debug 产物。</p><p>并且如果不需要动态化，同样可以打包出拥有更高执行性能的二进制库文件使用。这个特性目前就已经支持，有了理论的支持，我们就可以着手做改造的事了。</p><p>原文链接：</p><p><a href="https://blog.csdn.net/u010960265/article/details/81361711">https://blog.csdn.net/u010960265/article/details/81361711</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Flutter-的两种编译模式"><a href="#Flutter-的两种编译模式" class="headerlink" title="Flutter 的两种编译模式"></a>Flutter 的两种编译模式</h1><p>使用 Flutter 构建过 App 的人一定有一个困惑，就是 Flutter 编译出的产物到底是什么玩意。有时候分为几个文件，有时候是一个动态库，真的叫人摸不着头脑。</p><p>本文详细解释一下 Flutter 的编译模式。</p><hr><h3 id="编译模式的分类"><a href="#编译模式的分类" class="headerlink" title="编译模式的分类"></a><strong>编译模式的分类</strong></h3><p>编程语言要达到可运行的目的需要经过编译，一般地来说，编译模式分为两类：JIT 和 AOT。</p><p><strong>JIT</strong></p><p>JIT 全称 Just In Time (即时编译），典型的例子就是 v8，它可以即时编译并运行 JavaScript。所以你只需要输入源代码字符串，v8 就可以帮你编译并运行代码。通常来说，支持 JIT 的语言一般能够支持自省函数（eval），在运行时动态地执行代码。</p><p>JIT 模式的优势是显而易见的，可以动态下发和执行代码，而不用管用户的机器是什么架构，为应用的用户提供丰富而动态地内容。</p><p>但 JIT 的劣势也是显而易见的，大量字符串的代码很容易让 JIT 编译器花费很多时间和内存进行编译，给用户带来的直接感受就是应用启动慢。</p><p><strong>AOT</strong></p><p>AOT 全称 Ahead Of Time（事前编译），典型的例子就是 C&#x2F;C++，LLVM 或 GCC 通过编译并生成 C&#x2F;C++ 的二进制代码，然后这些二进制通过用户安装并取得执行权限后才可以通过进程加载执行。</p><p>AOT 的优势也是显而易见的，事先编译好的二进制代码，加载和执行的速度都会非常快。（所以编程语言速度排行榜上前列都是 AOT 编译类语言）这样的速度可以在密集计算场景下给用户带来非常好的体验，比如大型游戏的引擎渲染和逻辑执行。</p><p>但是 AOT 的劣势也是显而易见的，编译需要区分用户机器的架构，生成不同架构的二进制代码。除了架构，二进制代码本身也会让用户下载的安装包比较大。二进制代码一般需要取得执行权限才可以执行，所以无法在权限比较严格的系统中进行动态更新（如 iOS）。</p><hr><h3 id="Dart的编译模式"><a href="#Dart的编译模式" class="headerlink" title="Dart的编译模式"></a><strong>Dart的编译模式</strong></h3><p>Flutter 使用 Dart 作为编程语言，自然其编译模式也脱离不了 Dart 的干系。首先我们需要了解一下 Dart 所支持的编译模式。</p><p>Script：最普通的 JIT 模式，在 PC 命令行调用 Dart VM 执行 Dart 源代码文件即是这种模式；</p><p>Script Snapshot：JIT 模式，和上一个不同的是，这里载入的是已经 token 化的 Dart 源代码，提前执行了上一步的</p><p>lexer 步骤；</p><p>Application Snapshot：JIT 模式，这种模式来源于 Dart VM 直接载入源码后 dump 出数据。Dart VM</p><p>通过这种数据启动会更快。不过值得一提的是这种模式是区分架构的，在 x64 上生成的数据不可以给 arm 使用;</p><p>AOT：AOT模式，直接将 Dart 源码编译出 .S 文件，然后通过汇编器生成对应架构的代码。</p><p>总结一下刚才的列表，可以发现：</p><p><img src="/image/article/flutter/flutter-compiler/1.jpeg"></p><hr><h3 id="Flutter的编译模式"><a href="#Flutter的编译模式" class="headerlink" title="Flutter的编译模式"></a><strong>Flutter的编译模式</strong></h3><p>Flutter 完全采用了 Dart，按道理来说编译模式一致才是，但是事实并不是这样。由于 Android 和 iOS平台的生态差异，Flutter 也衍生出了非常丰富的编译模式。</p><p>Script：同 Dart Script 模式一致，虽然 Flutter 支持，但暂未看到使用，毕竟影响启动速度；</p><p>Script Snapshot：同 Dart Script Snapshot 一致，同样支持但未使用，Flutter</p><p>有大量的视图渲染逻辑，纯 JIT 模式影响执行速度；</p><p>Kernel Snapshot：Dart 的 bytecode模式，与 Application Snapshot 不同，bytecode</p><p>模式是不区分架构的。Kernel Snapshot 在 Flutter 项目内也叫 Core Snapshot。bytecode模式可以归类为 AOT 编译；</p><p>Core JIT：Dart 的一种二进制模式，将指令代码和 heap 数据打包成文件，然后在 VM 和 isolate</p><p>启动时载入，直接标记内存可执行，可以说这是一种 AOT 模式。Core JIT 也被叫做 AOTBlob；</p><p>AOT Assembly: 即 Dart 的 AOT 模式。直接生成汇编源代码文件，由各平台自行汇编。</p><p>可以看出来，Flutter 将 Dart 的编译模式复杂化了，多了不少概念，要一下叙述清楚是比较困难的，所以我们着重从 Flutter 应用开发的各个阶段来解读。</p><hr><h3 id="开发阶段的编译模式"><a href="#开发阶段的编译模式" class="headerlink" title="开发阶段的编译模式"></a><strong>开发阶段的编译模式</strong></h3><p>在开发阶段，我们需要 Flutter 的 Hot Reload 和 Hot Restart 功能，方便 UI 快速成型。同时，框架层也需要比较高的性能来进行视图渲染展现。因此开发模式下，Flutter 使用了 Kernel Snapshot 模式编译。</p><p>在打包产物中，你将发现几样东西：</p><p>isolate_snapshot_data：用于加速 isolate 启动，业务无关代码，固定，仅和 flutter engine</p><p>版本有关；</p><p>platform.dill：和 Dart VM 相关的 kernel 代码，仅和 Dart 版本以及 engine</p><p>编译版本有关。固定，业务无关代码；</p><p>vm_snapshot_data: 用于加速 Dart VM 启动的产物，业务无关代码，仅和 flutter engine 版本有关；</p><p>kernel_blob.bin：业务代码产物</p><p><img src="/image/article/flutter/flutter-compiler/2.jpeg"></p><hr><h3 id="生产阶段的编译模式"><a href="#生产阶段的编译模式" class="headerlink" title="生产阶段的编译模式"></a><strong>生产阶段的编译模式</strong></h3><p>在生产阶段，应用需要的是非常快的速度，所以 Android 和 iOS target 毫无意外地都选择了 AOT 打包。不过由于平台特性不同，打包模式也是天壤之别。</p><p><img src="/image/article/flutter/flutter-compiler/3.jpeg"></p><p>首先我们很容易认识到 iOS 平台上做法的原因：App Store 审核条例不允许动态下发可执行二进制代码。</p><p>所以在 iOS 上，除了 JavaScript，其他语言运行时的实现都选择了 AOT（比如 OpenJDK 在 iOS 实现就是 AOT）。</p><p>在 Android 上，Flutter 的做法有点意思：支持了两种不同的路子。</p><p>Core JIT 的打包产物有 4 个：isolate_snapshot_data、vm_snapshot_data、isolate_snapshot_instr、vm_snapshot_instr。我们不认识的产物只有 2 个：isolate_snapshot_instr 和 vm_snapshot_instr，其实它俩代表着 VM 和 isolate 启动后所承载的指令等数据。在载入后，直接将该块内存执行即可。</p><p>Android 的 AOT Assembly 打包方式很容易让人想到需要支持多架构，无疑增大了代码包，并且该处代码需要从 JNI 调用，远不如 Core JIT 的 Java API 方便。所以 Android 上默认使用 Core JIT 打包，而不是 AOT Assembly。</p><hr><h3 id="Flutter-Engine-对编译模式的支持"><a href="#Flutter-Engine-对编译模式的支持" class="headerlink" title="Flutter Engine 对编译模式的支持"></a><strong>Flutter Engine 对编译模式的支持</strong></h3><p>在我的上篇文章：Flutter原理简解 中提到，Engine 承载了 Dart 运行时，毫无疑问 Engine 需要和打包出来的代码对的上号才行。</p><p>在 Engine 的编译模式中，Flutter 是这样选择的：</p><p><img src="/image/article/flutter/flutter-compiler/4.jpeg"></p><p>所以我们可以看到，Flutter 的编译模式是完全根据 Engine 的支持度来设计的。</p><hr><h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><strong>结论</strong></h3><p>Flutter 是一种高性能的、可跨平台的、动态化应用开发方案。</p><p>在 iOS 和 Android 平台上，动态化完全可由 Kernel Snapshot 打包实现，并且产物是一致通用的。不过目前通过打包工具进行了阉割，只能生成 debug 产物。</p><p>并且如果不需要动态化，同样可以打包出拥有更高执行性能的二进制库文件使用。这个特性目前就已经支持，有了理论的支持，我们就可以着手做改造的事了。</p><p>原文链接：</p><p><a href="https://blog.csdn.net/u010960265/article/details/81361711">https://blog.csdn.net/u010960265/article/details/81361711</a></p>]]></content>
     
     
     <categories>
@@ -323,25 +350,75 @@
   
   
   <entry>
-    <title>Flutter android打包自定义jks</title>
-    <link href="/2018/10/08/flutter/flutter-android-jks/"/>
-    <url>/2018/10/08/flutter/flutter-android-jks/</url>
+    <title>cordova加载远程网页调用原生api</title>
+    <link href="/2019/03/20/cordova/cordova-webview/"/>
+    <url>/2019/03/20/cordova/cordova-webview/</url>
     
-    <content type="html"><![CDATA[<h1 id="flutter-android-打包自定义jks"><a href="#flutter-android-打包自定义jks" class="headerlink" title="flutter android 打包自定义jks"></a>flutter android 打包自定义jks</h1><p>flutter android 打包直接生成了apk，我需要一个自己的jks</p><p>1、把keytool放在环境变量中</p><p>执行 flutter doctor -v</p><p><img src="/image/article/flutter/flutter-android-jks/6054f5ed-252d-4888-8f8e-1f86e7143e84.png"></p><p>这个路径里面的jre&#x2F;bin里面就是keytool.exe</p><p>2、生成key</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">keytool -genkey -v -keystore crpm-release-key.jks -<span class="hljs-built_in">alias</span> crpm -keyalg RSA -keysize 2048 -validity 10000<br></code></pre></td></tr></table></figure><p><img src="/image/article/flutter/flutter-android-jks/130526be-df53-4182-af26-2fa8c8272b27.png"></p><p>导出的路径就是运行的路径，现在是在 C:\Users\kele</p><p>3、把jks放在android&#x2F;app文件夹下</p><p>4、在android文件夹下新建文件key.properties    配置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">storePassword=123456<br>keyPassword=123456<br>keyAlias=crpm<br>storeFile=crpm-release-key.jks<br></code></pre></td></tr></table></figure><p>5、配置jks引用</p><p>&#x2F;android&#x2F;app&#x2F;build.gradle文件，在android {  这一行前面,加入如下代码： </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">def keystorePropertiesFile = rootProject.file(<span class="hljs-string">&quot;key.properties&quot;</span>)<br>def keystoreProperties = new Properties()<br>keystoreProperties.load(new FileInputStream(keystorePropertiesFile))<br></code></pre></td></tr></table></figure><p>将下面的代码</p><p>buildTypes{</p><p>    ……..</p><p>}</p><p>这一段换成：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">signingConfigs &#123;<br>    release &#123;<br>        keyAlias keystoreProperties[<span class="hljs-string">&#x27;keyAlias&#x27;</span>]<br>        keyPassword keystoreProperties[<span class="hljs-string">&#x27;keyPassword&#x27;</span>]<br>        storeFile file(keystoreProperties[<span class="hljs-string">&#x27;storeFile&#x27;</span>])<br>        storePassword keystoreProperties[<span class="hljs-string">&#x27;storePassword&#x27;</span>]<br>    &#125;<br>&#125;<br>buildTypes &#123;<br>    release &#123;<br>        signingConfig signingConfigs.release<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>6、打包</p><p>flutter  build  apk</p><p>7、获取签名md5</p><p>keytool -list -v -keystore  &lt;jks路径&gt;</p><p>参考链接：</p><p><a href="https://blog.csdn.net/weixin_44567104/article/details/90377912">https://blog.csdn.net/weixin_44567104&#x2F;article&#x2F;details&#x2F;90377912</a></p><p><a href="https://www.cnblogs.com/details-666/p/signature.html">https://www.cnblogs.com/details-666/p/signature.html</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="cordova加载远程网页调用原生api"><a href="#cordova加载远程网页调用原生api" class="headerlink" title="cordova加载远程网页调用原生api"></a>cordova加载远程网页调用原生api</h1><p>截止目前为止，普遍的做法都是使用静态资源h5做好功能之后放在本地cordova项目里运行，那么既然是h5，是不是也可以放在服务器上，这样就实现了动态更新app,而不必使用codepush了。</p><p>调研了一番，有三个问题需要解决：</p><ol><li><p>ios上架审核问题</p><p> 每次都是加载远程网页，这可不一定能过审啊，如何审核人员测试你断网情况下的报错情况，页面出不来，那大概率是过不了，解决办法吗，可能是必须有个静态的首页还是放在cordova的安装包里面，后面再加其他策略跳转到你网页的地址，好多不可描述的app不都是这么做的吗。这里引申出另一个问题，远程加载的网页遇到网络波动肯定没有本地的效果好，调优是另一个问题了。</p></li><li><p>新开一个webview窗口</p><p> 在主体webview中加一个iframe加载远程地址不就行了？但是需要使用postmessage这样的跨页面通讯，费劲的一笔，而且iframe的页面事件穿透比如手指滑动事件就会有很多奇奇怪怪的问题，我吃过亏也不想再用这种方式，还不如新开一个webview呢，使用 cordova-plugin-inappbrowser就可以了</p></li><li><p>调用原生api</p><p> 这个需求不容易搞定,因为inappbrowser的实现默认是不允许使用cordova的任何资源,只是提供用新webview实例来加载一个纯的网页,所以需要对inAPPbrowser进行改造，简单来说就是注入cordova.js，这段我没试验，懒得弄了，应该是可以的，看下面的链接吧</p></li></ol><p>        </p><p>参考文章： </p><p><a href="https://www.jianshu.com/p/31b28b8661c5">https://www.jianshu.com/p/31b28b8661c5</a></p><p><a href="https://www.jianshu.com/p/0fd4e99acef3">https://www.jianshu.com/p/0fd4e99acef3</a></p>]]></content>
     
     
     <categories>
       
-      <category>Flutter</category>
+      <category>cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>Android</tag>
+      <tag>cordova</tag>
       
-      <tag>Flutter</tag>
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>cordova获取设备唯一标识</title>
+    <link href="/2018/12/26/cordova/cordova-Identifier/"/>
+    <url>/2018/12/26/cordova/cordova-Identifier/</url>
+    
+    <content type="html"><![CDATA[<h1 id="cordova获取设备唯一标识"><a href="#cordova获取设备唯一标识" class="headerlink" title="cordova获取设备唯一标识"></a>cordova获取设备唯一标识</h1><p>最近有个需求，获取到用户设备的唯一标识，唯一标识的概念知识：</p><ul><li>Device ID：设备ID。</li><li>IMEI：International Mobile Equipment Identity，国际移动设备身份码的缩写。是由15位数字组成的“电子串号”，它与每台手机一一对应，每个IMEI在世界上都是唯一的。</li><li>IDFA：Identifier For Advertising，iOS独有的广告标识符。</li><li>UDID：Unique Device Identifier，唯一设备标识码。</li><li>UUID：Universally Unique Identifier，通用唯一识别码。目前最广泛应用的UUID，是微软公司的全局唯一标识符GUID。其目的是让分布式系统中的所有元素，都能有唯一的辨识信息，而不需要通过中央控制端来做辨识信息的指定。</li></ul><p><img src="/image/article/cordova/cordova-Identifier/device.png"></p><p>自己做cordova的插件肯定不现实了，结合目前已有的插件(只找到一个获取IMEI的)，最终是想要使用IMEI或者UDID，安卓可以获取IMEI但是需要用户授权而且需要修改那个插件，ios在ios5以后iOS设备不能获取IMEI号，没啥好办法</p><p>本身我们是已经集成了jpush,最后我们用了jpush的registrationid做标识，registrationid也是基于这几个id加上包名组合而成了，但是这玩意仍然是可变的，不能保证设备唯一性，矮子里面拔高个了属于是</p><p>参考文章：</p><p><a href="https://www.jianshu.com/p/38f4d1a4763b">https://www.jianshu.com/p/38f4d1a4763b</a></p><p><a href="https://community.jiguang.cn/article/38100">https://community.jiguang.cn/article/38100</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Cordova和PhoneGap的关系</title>
+    <link href="/2018/10/09/cordova/Cordova-PhoneGap/"/>
+    <url>/2018/10/09/cordova/Cordova-PhoneGap/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Cordova和PhoneGap的关系"><a href="#Cordova和PhoneGap的关系" class="headerlink" title="Cordova和PhoneGap的关系"></a>Cordova和PhoneGap的关系</h1><p>1、<strong>PhoneGap</strong> 最早由 <strong>Nitobi</strong> 软件公司于 2009 年在旧金山召开的 iPhoneDevCamp 大会上发布。它是一个基于 HTML，CSS 和 JavaScript 技术创建跨平台移动应用程序的快速开发框架。它使开发者能够通过 JavaScript 调用 iOS、Android、Palm、Symbian、WP7、WP8、Bada 和 Blackberry 智能手机的核心功能，如地理定位，加速器，联系人，声音和振动等等，此外 PhoneGap 还包含丰富的插件用于简单而快速的开发。</p><p>2011年10月4日，<strong>Adobe</strong> 正式宣布收购 Nitobi 软件公司，并将 PhoneGap 的核心代码贡献给了 <strong>Apache</strong> 软件基金会，但保留了 PhoneGap 的商标所有权。Apache 将 PhoneGap 核心代码</p><p>命名为 <strong>Apache Callback</strong> 项目，后又更名为 <strong>Apache Cordova。</strong></p><p>就是说：Cordova是PhoneGap的核心代码开源出去的产品。</p><p>PhoneGap 的 faq[3] 里有个对比 —— Think about Cordova’s relationship to PhoneGap like WebKit’s relationship to Safari or Chrome.</p><p>在Adobe PhoneGap 的 faq 中有说明：如果你要贡献代码，请贡献到 Cordova.</p><p>参考链接：</p><p><a href="http://www.biliyu.com/article/1361.html">http://www.biliyu.com/article/1361.html</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Cordova</tag>
+      
+      <tag>PhoneGap</tag>
       
     </tags>
     
@@ -421,6 +498,106 @@
     <tags>
       
       <tag>Android</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>cordova插件的坑</title>
+    <link href="/2017/04/01/cordova/cordova-plugin/"/>
+    <url>/2017/04/01/cordova/cordova-plugin/</url>
+    
+    <content type="html"><![CDATA[<h1 id="cordova插件的坑"><a href="#cordova插件的坑" class="headerlink" title="cordova插件的坑"></a>cordova插件的坑</h1><p>1、jpush-phonegap-plugin</p><p>     该插件卸载再次安装的时候，在ios平台</p><p>     有个JPushConfig.plist的配置文件里面的AppKey会是空的，需要手动填写</p><p>2、cordova-plugin-camera</p><p>该插件在ios平台选择相册的图片时，压缩比参数qulity不生效，文件过大，上传失败</p><p>文件地址：</p><p><a href="https://github.com/apache/cordova-plugin-camera/blob/master/src/ios/CDVCamera.m">https://github.com/apache/cordova-plugin-camera/blob/master/src/ios/CDVCamera.m</a></p><p>该CDVCamera.m文件385行的if判断进去了，好吧，不是插件的问题，是我不会用，需要添加可编辑参数：allowEditing:true</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>cordova项目打包步骤</title>
+    <link href="/2017/03/20/cordova/cordova-build/"/>
+    <url>/2017/03/20/cordova/cordova-build/</url>
+    
+    <content type="html"><![CDATA[<h1 id="cordova项目打包步骤"><a href="#cordova项目打包步骤" class="headerlink" title="cordova项目打包步骤"></a>cordova项目打包步骤</h1><p>Android:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build android</li><li>检查AndroidManifest.xml版本号versionName和build号versionCode</li><li>打包APK，记得检查签名</li></ul><p>IOS:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build ios</li><li>检查JPushConfig.plist文件下的AppKey</li><li>检查项目General目录下的版本号和build号</li><li>检查Capabilities目录下的Push Notifications开关状态</li><li>如果是发布appStore的话， 检查   Info.list下的权限备注写了没</li><li>打包，记得检查签名</li></ul><p>tip：</p><p>     查看当前插件版本：cordova plugin ls</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ionic和cordova的关系</title>
+    <link href="/2016/11/28/cordova/Ionic-cordova/"/>
+    <url>/2016/11/28/cordova/Ionic-cordova/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Ionic和cordova的关系是什么"><a href="#Ionic和cordova的关系是什么" class="headerlink" title="Ionic和cordova的关系是什么"></a>Ionic和cordova的关系是什么</h1><p>ionic是什么：</p><p>Ionic(ionicframework)一款开源的Html5移动App开发框架,是AngularJS移动端解决方案,Ionic以流行的跨平台移动app开发框架phoengap为蓝本，让开发者可以通过命令行工具快速生成android ios移动app应用。</p><p>其实他就是基于AngularJS做了个H5，然后集成了Cordova把H5打包成APP。</p><p>cordova是什么？</p><p>cordova是一个用基于HTML，CSS和JavaScript的，创建移动跨平台移动应用程序的快速开发平台。它使开发者能够利用iPhone，Android，Palm，Symbian,WP7,WP8,Bada和Blackberry智能手机的核心功能——包括地理定位，加速器，联系人，声音和振动.</p><p>问题来了？</p><p>那我不用命令安装ionic 可以使用ionic开发app吗？答案是可以得。</p><p>就可以把ionic当作一款html5 移动app框架，把phonegap&#x2F;cordova 当作打包 并且调用原生的框架就可以了</p><p>至于：为什么ionic也可以打包，上面也说了，ionic的打包插件是基于phonegap&#x2F;cordova的</p><p>首先我们需要明确以下几个概念：</p><p>1.即使我们将移动端web页面做得和原生应用及其相似，在我们的页面中也无法像原生应用那样调用原生的能力，当然通过输入框触发键盘、图库、拍照等操作不在这里“调用原生能力”的范畴。</p><p>2.单纯的web页面不能提交到应用商店被用户使用。</p><p>然后，我们分别就它们之间的关系做出解释：</p><h2 id="Ionic和Angular"><a href="#Ionic和Angular" class="headerlink" title="Ionic和Angular"></a>Ionic和Angular</h2><p>首先要明确的是Ionic是Angular的衍生品，Angular是单独的js库，和jQuery一样能够独立用于开发应用，而Ionic只是对Angular进行了扩展，利用Angular实现了很多符合移动端应用的组件，并搭建了很完善的样式库，是对Angular最成功的应用样例。即使不使用Ionic，Angular也可与任意样式库，如Bootstrap、Foundation等搭配使用，得到想要的页面效果。</p><h2 id="Ionic-x2F-Angular和Cordova"><a href="#Ionic-x2F-Angular和Cordova" class="headerlink" title="Ionic&#x2F;Angular和Cordova"></a>Ionic&#x2F;Angular和Cordova</h2><p>可能会有人被问道：“Cordova比Ionic&#x2F;Angular好吗？”，这就很尴尬了，根本是毫无意义的问题。它们在混合开发中扮演的是不同的角色–Ionic&#x2F;Angular负责页面的实现，而Cordova负责将实现的页面包装成原生应用（Android:apk；iOS:ipa）。就像花生，最内层的花生仁是Angular，花生仁的表皮是Ionic，而最外层的花生壳则是Cordova。包装完成之后我们的页面才有可能调用设备的原生能力，最后才能上传到应用商店被用户使用。</p><h2 id="Ionic-x2F-Angular和Cordova插件"><a href="#Ionic-x2F-Angular和Cordova插件" class="headerlink" title="Ionic&#x2F;Angular和Cordova插件"></a>Ionic&#x2F;Angular和Cordova插件</h2><p>关于Cordova插件要明确以下几点：</p><ul><li>Cordova插件的作用是提供一个桥梁供页面和原生通信，首先我们的页面不能直接调用设备能力，所以需要与能够调用设备能力的原生代码（android:Java；ios:OC）通信，此时就需要Cordova插件了。</li><li>Cordova插件能够再任何Cordova工程中使用，和使用什么前端框架（如Ionic）无关。</li><li>Ionic 2中封装了Ionic Native，方便了Cordova插件的使用，但在Ionic 2中仍然可以像Ionic 1中一样使用Cordova插件，Ionic Native不是必须的。</li><li>即使在Ionic 2中使用了Ionic Native，也首先需要手动添加插件，如：cordova plugin add cordova-plugin-pluginName。</li></ul><p>Ionic整合的太多了，又是AngularJS,又是Cordova的，实际的选择是Cordova+Vue&#x2F;React</p><p>参考链接：<br><a href="https://blog.csdn.net/xiaolinlife/article/details/73548938?utm_source=copy">https://blog.csdn.net/xiaolinlife/article/details/73548938?utm_source&#x3D;copy</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>cordova小知识</title>
+    <link href="/2016/11/24/cordova/cordova-tips/"/>
+    <url>/2016/11/24/cordova/cordova-tips/</url>
+    
+    <content type="html"><![CDATA[<h1 id="cordova小知识"><a href="#cordova小知识" class="headerlink" title="cordova小知识"></a>cordova小知识</h1><h3 id="一、概念知识"><a href="#一、概念知识" class="headerlink" title="一、概念知识"></a>一、概念知识</h3><ul><li>Cordova：Cordova 能够将你的 HTML&#x2F;JS 代码打包在一个原生的容器中运行，并且可以调用系统的各类软硬件接口（JavaScript API）。我们将这种架构称之为 hybrid app , 得益于这种架构，我们能将前端代码跨平台运行，并且得到接近原生应用的系统特性。最终发布到各大应用市场，包括苹果的 App Store。</li><li>Cordova插件：Cordova 通过插件的生态系统为开发者提供了广泛的软硬件接口支持，诸如文件读写、推送通知、解压缩、通讯录等等。这种方式保证了在开发过程中按需引入相应的功能插件，同时也加快了插件的更新维护，减少代码冗余。Cordova 插件使用 CLI 的方式经过 NPM 管理依赖并安装，十分方便。</li><li>Cross-walk：Cross-walk 是英特尔开发的一款为HTML应用提供运行时环境的开源项目，它基于最新的 Chromium 核心开发，可以提供最新的 Web 特性和一致的兼容性。随着 Cordova Android 4.0.0+ 引入了对嵌入式 webview 的支持，现在你可以方便地在你的 Cordova 应用上使用 Crosswalk 的 webview。通过使用 Crosswalk 的 webview 插件，开发者可以享用远程调试的功能，前沿的 HTML5 特性，例如WebGL, WebAudio 和 WebRTC，以及在包括 Android 4.0 Ice Cream Sandwich(ICS) 在内的 Android 设备上性能的显著提升。</li><li>CodePush：CodePush 是微软提供的一项云服务，它为开发者提供了直接向用户推送热更新 (Hot-Code-Update) 的软件支持和 CDN 分发网络。CodePush 为 Cordova 开发者提供了插件，我们可以快速地植入应用中。它提供的特性包括：版本管理、灰度更新、紧急回滚、增量更新 (Diff) 等等。它的 CDN 是世界上最大的 CDN 服务商 Akamai 提供的，稳定性和速度可想而知。未来可能收费</li></ul><h3 id="二、创建并运行项目"><a href="#二、创建并运行项目" class="headerlink" title="二、创建并运行项目"></a>二、创建并运行项目</h3><p>官方文档地址：<a href="https://cordova.apache.org/">https://cordova.apache.org/</a></p><p>安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova create hello com.example.hello HelloWorld<br><span class="hljs-comment"># hello是文件夹</span><br><span class="hljs-comment"># com.example.hello 是包名</span><br><span class="hljs-comment"># helloworld是app名字</span><br></code></pre></td></tr></table></figure><p>1、运行ios模拟器时，需要指定版本</p><p>查看当前的模拟器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./platforms/ios/cordova/lib/list-emulator-images<br>iPhone-4s<br>iPhone-5<br>iPhone-5s<br>iPhone-6-PlusiPhone-6<br>iPad-2<br><br>iPad-Retina<br><br>iPad-Air<br>Resizable-iPhone<br>Resizable-iPad<br></code></pre></td></tr></table></figure><p>使用命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --target  iPhone-5<br><span class="hljs-comment">#iPhone 总是会不小心写错成 iphone</span><br></code></pre></td></tr></table></figure><p>2、使用ios真机调试必须先安装ios-deploy但是sudo npm install -g ios-deploy是报错的，issue参靠链接：</p><p><a href="https://github.com/phonegap/ios-deploy/issues/188">https://github.com/phonegap/ios-deploy/issues/188</a></p><p>你要是懒得看英文，那就这个吧：</p><p><a href="http://blog.csdn.net/cooldragon/article/details/50925633">http://blog.csdn.net/cooldragon/article/details/50925633</a></p><p>最终安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo npm install -g ios-deploy --unsafe-perm=<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure><p>如果你安装过ios-deploy,使用模拟器就必加–emulator命令，示例：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --emulator --target  iPhone-5<br></code></pre></td></tr></table></figure><h3 id="三、使用-Cordova-插件引入-Cross-walk-webview"><a href="#三、使用-Cordova-插件引入-Cross-walk-webview" class="headerlink" title="三、使用 Cordova 插件引入 Cross-walk webview"></a>三、使用 Cordova 插件引入 Cross-walk webview</h3><p>在实际开发中，会遇到 Android 系统版本落后，原生 webview 性能差兼容性差的问题，所以我们要用 Cross-walk 替换原生的 Android webview 来运行我们的项目。 Cross-walk 开发社区已经为我们准备好了 Cordova 插件，只需要运行：  </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-crosswalk-webview@latest —save  <br></code></pre></td></tr></table></figure><p>成功安装后再次 cordova build android ，你会发现输出了两个 apk 文件，一个对应 arm 平台，一个对应 x86 平台，体积相较原来的文件增加了 20M 左右，多出来的体积便是 crosswalk-webview 的 runtime。 </p><p>你也可以在项目的 config.xml 中设置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;plugin name=<span class="hljs-string">&quot;cordova-plugin-crosswalk-webview&quot;</span> spec=<span class="hljs-string">&quot;~2.2.0&quot;</span>&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_VERSION&quot;</span> value=<span class="hljs-string">&quot;22+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_LITEVERSION&quot;</span> value=<span class="hljs-string">&quot;xwalk_core_library_canary:17+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_COMMANDLINE&quot;</span> value=<span class="hljs-string">&quot;--disable-pull-to-refresh-effect&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MODE&quot;</span> value=<span class="hljs-string">&quot;embedded&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MULTIPLEAPK&quot;</span> value=<span class="hljs-string">&quot;true&quot;</span> /&gt;<br>&lt;/plugin&gt;<br></code></pre></td></tr></table></figure><p>把 XWALK_MULTIPLEAPK 的 value 设置为 false，即可打包出一个整合两个平台的 apk 包，当然，体积会暴增至 40M+。</p><h3 id="四、使用-Chrome-调试-Cross-walk-webview-中的项目"><a href="#四、使用-Chrome-调试-Cross-walk-webview-中的项目" class="headerlink" title="四、使用 Chrome 调试 Cross-walk webview 中的项目"></a>四、使用 Chrome 调试 Cross-walk webview 中的项目</h3><p>由于 Cross-walk 基于 Chromium，天生便具有了 Chrome 远程调试的功能。 电脑连接 Android 手机并开启 USB 调试模式，打开你的 Cordova 项目后，在 Chrome 浏览器地址栏中输入 chrome:&#x2F;&#x2F;inspect ，选择你的设备，即可打开远程控制台，真机调试变得十分方便。Vue Devtool 同样可以在此使用。</p><h3 id="五、iOS-的小优化-将-UIWebView-替换为-WKWebView"><a href="#五、iOS-的小优化-将-UIWebView-替换为-WKWebView" class="headerlink" title="五、iOS 的小优化 将 UIWebView 替换为 WKWebView"></a>五、iOS 的小优化 将 UIWebView 替换为 WKWebView</h3><p>WKWebView 是苹果在 iOS 8 中引入的新组件，目的是给出一个新的高性能的 Web View 解决方案，摆脱过去 UIWebView 的老旧笨重特别是内存占用量巨大的问题（打开一个示例项目，WKWebView 占用23M，而 UIWebView 占用85M）。 </p><p>在这里我们将使用 WKWebView 替换 Cordova 默认的 UIWebView： </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-wkwebview-engine@latest --save<br></code></pre></td></tr></table></figure><p> 并在 config.xml 的 <platform name="ios"> 中添加：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;feature name=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span>&gt;<br>    &lt;param name=<span class="hljs-string">&quot;ios-package&quot;</span> value=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span> /&gt;<br>&lt;/feature&gt;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cordova</tag>
       
     </tags>
     

@@ -23,11 +23,16 @@
 <meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
 <meta property="og:description" content="Flutter 的两种编译模式使用 Flutter 构建过 App 的人一定有一个困惑，就是 Flutter 编译出的产物到底是什么玩意。有时候分为几个文件，有时候是一个动态库，真的叫人摸不着头脑。 本文详细解释一下 Flutter 的编译模式。  编译模式的分类编程语言要达到可运行的目的需要经过编译，一般地来说，编译模式分为两类：JIT 和 AOT。 JIT JIT 全称 Just In Tim">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bestkele.cn/image/article/flutter/flutter-compiler/1.jpeg">
+<meta property="og:image" content="http://bestkele.cn/image/article/flutter/flutter-compiler/2.jpeg">
+<meta property="og:image" content="http://bestkele.cn/image/article/flutter/flutter-compiler/3.jpeg">
+<meta property="og:image" content="http://bestkele.cn/image/article/flutter/flutter-compiler/4.jpeg">
 <meta property="article:published_time" content="2019-10-23T10:33:45.000Z">
-<meta property="article:modified_time" content="2023-08-14T05:55:20.253Z">
+<meta property="article:modified_time" content="2023-08-14T06:44:11.690Z">
 <meta property="article:author" content="kele">
 <meta property="article:tag" content="Flutter">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://bestkele.cn/image/article/flutter/flutter-compiler/1.jpeg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -262,7 +267,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          3k 字
         
       </span>
     
@@ -273,7 +278,7 @@
         
         
         
-          31 分钟
+          25 分钟
         
       </span>
     
@@ -320,6 +325,14 @@
           <article class="post-content mx-auto">
             <h1 id="seo-header">Flutter的两种编译模式</h1>
             
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年8月14日 下午
+                  
+                
+              </p>
+            
             
               <div class="markdown-body">
                 
@@ -344,7 +357,7 @@
 <p>通过这种数据启动会更快。不过值得一提的是这种模式是区分架构的，在 x64 上生成的数据不可以给 arm 使用;</p>
 <p>AOT：AOT模式，直接将 Dart 源码编译出 .S 文件，然后通过汇编器生成对应架构的代码。</p>
 <p>总结一下刚才的列表，可以发现：</p>
-<p><a target="_blank" rel="noopener" href="https://img-blog.csdn.net/20180802154943293?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802154943293?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p>
+<p><img src="/image/article/flutter/flutter-compiler/1.jpeg" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="Flutter的编译模式"><a href="#Flutter的编译模式" class="headerlink" title="Flutter的编译模式"></a><strong>Flutter的编译模式</strong></h3><p>Flutter 完全采用了 Dart，按道理来说编译模式一致才是，但是事实并不是这样。由于 Android 和 iOS平台的生态差异，Flutter 也衍生出了非常丰富的编译模式。</p>
 <p>Script：同 Dart Script 模式一致，虽然 Flutter 支持，但暂未看到使用，毕竟影响启动速度；</p>
@@ -365,10 +378,10 @@
 <p>编译版本有关。固定，业务无关代码；</p>
 <p>vm_snapshot_data: 用于加速 Dart VM 启动的产物，业务无关代码，仅和 flutter engine 版本有关；</p>
 <p>kernel_blob.bin：业务代码产物</p>
-<p><a target="_blank" rel="noopener" href="https://img-blog.csdn.net/201808021553413?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/201808021553413?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p>
+<p><img src="/image/article/flutter/flutter-compiler/2.jpeg" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="生产阶段的编译模式"><a href="#生产阶段的编译模式" class="headerlink" title="生产阶段的编译模式"></a><strong>生产阶段的编译模式</strong></h3><p>在生产阶段，应用需要的是非常快的速度，所以 Android 和 iOS target 毫无意外地都选择了 AOT 打包。不过由于平台特性不同，打包模式也是天壤之别。</p>
-<p><a target="_blank" rel="noopener" href="https://img-blog.csdn.net/20180802155358158?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802155358158?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p>
+<p><img src="/image/article/flutter/flutter-compiler/3.jpeg" srcset="/img/loading.gif" lazyload></p>
 <p>首先我们很容易认识到 iOS 平台上做法的原因：App Store 审核条例不允许动态下发可执行二进制代码。</p>
 <p>所以在 iOS 上，除了 JavaScript，其他语言运行时的实现都选择了 AOT（比如 OpenJDK 在 iOS 实现就是 AOT）。</p>
 <p>在 Android 上，Flutter 的做法有点意思：支持了两种不同的路子。</p>
@@ -377,7 +390,7 @@
 <hr>
 <h3 id="Flutter-Engine-对编译模式的支持"><a href="#Flutter-Engine-对编译模式的支持" class="headerlink" title="Flutter Engine 对编译模式的支持"></a><strong>Flutter Engine 对编译模式的支持</strong></h3><p>在我的上篇文章：Flutter原理简解 中提到，Engine 承载了 Dart 运行时，毫无疑问 Engine 需要和打包出来的代码对的上号才行。</p>
 <p>在 Engine 的编译模式中，Flutter 是这样选择的：</p>
-<p><a target="_blank" rel="noopener" href="https://img-blog.csdn.net/20180802155448379?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">https://img-blog.csdn.net/20180802155448379?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA5NjAyNjU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70</a></p>
+<p><img src="/image/article/flutter/flutter-compiler/4.jpeg" srcset="/img/loading.gif" lazyload></p>
 <p>所以我们可以看到，Flutter 的编译模式是完全根据 Engine 的支持度来设计的。</p>
 <hr>
 <h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><strong>结论</strong></h3><p>Flutter 是一种高性能的、可跨平台的、动态化应用开发方案。</p>
