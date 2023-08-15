@@ -18,9 +18,32 @@
     </categories>
     
     
+  </entry>
+  
+  
+  
+  <entry>
+    <title>数学表达式解析</title>
+    <link href="/2023/07/26/investigation/expression/"/>
+    <url>/2023/07/26/investigation/expression/</url>
+    
+    <content type="html"><![CDATA[<h1 id="数学表达式解析"><a href="#数学表达式解析" class="headerlink" title="数学表达式解析"></a>数学表达式解析</h1><p>要做一个解析字符串表达式的东西，解析之后给前端或者后端函数计算用；</p><p>要求能解析基本的加减乘除数学表达式，并且支持自定义函数；</p><ol><li><p>先看java的：</p><p> 1、exp4j</p><p> 官网：<a href="https://www.objecthunter.net/exp4j/#Custom_functions">https://www.objecthunter.net/exp4j/#Custom_functions</a><br> 最后一版是2017-01-30，属实挺老的<br> 参考链接，下面有内置函数列表，竟然没有sum：<br> <a href="https://ibit.tech/archives/exp4j-introduction">https://ibit.tech/archives/exp4j-introduction</a><br> 这里有个坑爹的地方，这个Function必须是exp4j的格式，它要求必须定义参数个数，<br> 那么我想实现一个可变参数的sum就不行了<br> 除了这个问题，其他都是满足要求的</p><p> 2、JEP</p><p> 最新版本是2021-04-06<br> 官网：<a href="https://www.singularsys.com/jep/doc/html/usage.html#gettingstarted">https://www.singularsys.com/jep/doc/html/usage.html#gettingstarted</a></p><p> 看了下例子，语法有点难受，不用</p><p> 3、ibit-exp4j</p><p> 地址：<a href="https://github.com/ibit-tech/ibit-exp4j">https://github.com/ibit-tech/ibit-exp4j</a></p><p> 他是在exp4j基础上封装了一版，简化参数，我一看，比不封装还难用呢</p> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//矮子里面拔高个，选exp4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-type">Function</span> <span class="hljs-variable">sumFn</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Funct</span>、ion(<span class="hljs-string">&quot;sum&quot;</span>,<span class="hljs-number">3</span>) &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-type">double</span> <span class="hljs-title function_">apply</span><span class="hljs-params">(<span class="hljs-type">double</span>... args)</span> &#123;<br>            <span class="hljs-type">double</span> <span class="hljs-variable">sumResult</span> <span class="hljs-operator">=</span> <span class="hljs-number">0.0</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">double</span> number : args) &#123;<br>                sumResult += number;<br>            &#125;<br>            <span class="hljs-keyword">return</span> sumResult;<br>        &#125;<br>    &#125;;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Expression</span> <span class="hljs-variable">expression</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExpressionBuilder</span>(<span class="hljs-string">&quot;2 * sum(2,sum(4,5,1),2) - x&quot;</span>)<br>                .function(sumFn)<br>                .variables(<span class="hljs-string">&quot;x&quot;</span>)<br>                .build()<br>                .setVariable(<span class="hljs-string">&quot;x&quot;</span>, <span class="hljs-number">2</span>);<br><br>        <span class="hljs-type">double</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> expression.evaluate();<br>        System.out.println(<span class="hljs-string">&quot;Result: &quot;</span> + result); <span class="hljs-comment">//26</span><br>    &#125;<br></code></pre></td></tr></table></figure></li><li><p>python的</p><p> python有个内置的函数eval可以解析表达式</p><p> global_vars和local_vars是定义全局和局部变量的参数，视具体情况而定，一般情况下不写这两个参数就是默认使用全局的自定义函数</p> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义两个函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">x, y</span>):<br>    <span class="hljs-keyword">return</span> x + y<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sub</span>(<span class="hljs-params">x, y</span>):<br>    <span class="hljs-keyword">return</span> x - y<br><span class="hljs-comment"># 全局命名空间，</span><br>global_vars = &#123;<span class="hljs-string">&#x27;add&#x27;</span>: add, <span class="hljs-string">&#x27;sub&#x27;</span>: sub&#125;<br><span class="hljs-comment"># 局部命名空间</span><br>local_vars = &#123;<span class="hljs-string">&#x27;x&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;y&#x27;</span>: <span class="hljs-number">4</span>&#125;<br><span class="hljs-comment"># 要执行的表达式</span><br>expression = <span class="hljs-string">&quot;sub(5, 4) + add(x, y)*2&quot;</span><br><span class="hljs-comment"># 执行表达式，返回结果</span><br>result = <span class="hljs-built_in">eval</span>(expression, global_vars, local_vars)<br><span class="hljs-built_in">print</span>(result)  <span class="hljs-comment"># 输出 15</span><br></code></pre></td></tr></table></figure></li><li><p>javascript</p><p> 搜了一会看到一个js的表达式解析，牛逼的math.js：</p><p> 官网：<a href="https://mathjs.org/docs/expressions/parsing.html">https://mathjs.org/docs/expressions/parsing.html</a></p> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// create a parser</span><br><span class="hljs-keyword">const</span> parser = math.<span class="hljs-title function_">parser</span>()<br><br><span class="hljs-comment">// evaluate expressions</span><br>parser.evaluate(<span class="hljs-string">&#x27;sqrt(3^2 + 4^2)&#x27;</span>)      <span class="hljs-comment">// 5</span><br>parser.evaluate(<span class="hljs-string">&#x27;sqrt(-4)&#x27;</span>)             <span class="hljs-comment">// 2i</span><br>parser.evaluate(<span class="hljs-string">&#x27;2 inch to cm&#x27;</span>)         <span class="hljs-comment">// 5.08 cm</span><br>parser.evaluate(<span class="hljs-string">&#x27;cos(45 deg)&#x27;</span>)          <span class="hljs-comment">// 0.7071067811865476</span><br><br><span class="hljs-comment">// define variables and functions</span><br>parser.evaluate(<span class="hljs-string">&#x27;x = 7 / 2&#x27;</span>)            <span class="hljs-comment">// 3.5</span><br>parser.evaluate(<span class="hljs-string">&#x27;x + 3&#x27;</span>)                <span class="hljs-comment">// 6.5</span><br>parser.evaluate(<span class="hljs-string">&#x27;f(x, y) = x^y&#x27;</span>)        <span class="hljs-comment">// f(x, y)</span><br>parser.evaluate(<span class="hljs-string">&#x27;f(2, 3)&#x27;</span>)              <span class="hljs-comment">// 8</span><br><br><span class="hljs-comment">// get and set variables and functions</span><br><span class="hljs-keyword">const</span> x = parser.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;x&#x27;</span>)               <span class="hljs-comment">// x = 3.5</span><br><span class="hljs-keyword">const</span> f = parser.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;f&#x27;</span>)               <span class="hljs-comment">// function</span><br><span class="hljs-keyword">const</span> g = <span class="hljs-title function_">f</span>(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)                       <span class="hljs-comment">// g = 27</span><br>parser.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;h&#x27;</span>, <span class="hljs-number">500</span>)<br>parser.evaluate(<span class="hljs-string">&#x27;h / 2&#x27;</span>)                <span class="hljs-comment">// 250</span><br>parser.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;hello&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">name</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;hello, &#x27;</span> + name + <span class="hljs-string">&#x27;!&#x27;</span><br>&#125;)<br>parser.evaluate(<span class="hljs-string">&#x27;hello(&quot;user&quot;)&#x27;</span>)        <span class="hljs-comment">// &quot;hello, user!&quot;</span><br><br><span class="hljs-comment">// clear defined functions and variables</span><br>parser.<span class="hljs-title function_">clear</span>()<br></code></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
     <tags>
       
-      <tag>imagination</tag>
+      <tag>javascript</tag>
+      
+      <tag>python</tag>
+      
+      <tag>java</tag>
       
     </tags>
     
@@ -45,9 +68,28 @@
     
     <tags>
       
-      <tag>RabbitMQ</tag>
+      <tag>java</tag>
       
     </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>git仓库迁移</title>
+    <link href="/2022/09/07/investigation/git-move/"/>
+    <url>/2022/09/07/investigation/git-move/</url>
+    
+    <content type="html"><![CDATA[<h1 id="git仓库迁移"><a href="#git仓库迁移" class="headerlink" title="git仓库迁移"></a>git仓库迁移</h1><hr><p>今天学到个新知识，仓库迁移的，遇到一个问题是希望把gitee上面的代码迁移到内网的gitlab上，当然是包括所有的历史记录和分支，tag等等；</p><p>主要用法是这样：</p><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">1</span>、克隆远程仓库镜像到本地<br><span class="hljs-string">git</span> <span class="hljs-string">clone</span> <span class="hljs-built_in">--mirror</span> 仓库地址<br><span class="hljs-string">2</span>、切换至文件夹<br><span class="hljs-string">cd</span> <span class="hljs-string">dir</span><br><span class="hljs-string">3</span>、设置<span class="hljs-string">remote</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 新代码仓库地址<br><span class="hljs-string">4</span>、推送镜像到新仓库<br><span class="hljs-string">git</span> <span class="hljs-string">push</span> –-<span class="hljs-string">mirror</span><br></code></pre></td></tr></table></figure><p>注意事项：</p><p>一、第一步拉原始仓库镜像，保险起见，最好是找个新文件夹操作，不要影响以前的本地仓库；</p><p>我想既然可以拉ssh和http，是不是本地也可以，果然！！</p><p>我是这么写的，拉的本地文件夹：</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">git clone --mirror D:<span class="hljs-regexp">/workspace/</span>java<span class="hljs-regexp">/backend2/</span>.git<br></code></pre></td></tr></table></figure><p>这里涉及另一个知识点，clone有三种方式 ：</p><p>举个具体的例子：gitlab远程仓库有master，a，b三个分支；</p><p>D盘的本地仓库有，master，a，两个本地分支，一个remote的b分支，当前在a分支</p><p><strong>1、git  clone  url</strong></p><p>这是我们最常用的方法，</p><p><em>clone远程仓库会有一个master本地分支，a，b两个remote关联远程分支；</em></p><p><em>clone本地仓库会有一个本地当前分支a，master，b两个remote关联远程分支</em></p><p><strong>2、git clone –bare url</strong></p><p>称为裸仓库克隆；</p><p>clone远程仓库会有一个master，a，b三个本地分支；</p><p>clone本地仓库会有master，a两个本地分支，b丢失；</p><p><strong>3、git clone –mirror url</strong></p><p>称为镜像仓库克隆</p><p>clone远程仓库会有一个master，a，b三个本地分支；</p><p>clone本地仓库会有master，a两个本地分支，一个remote的b分支；</p><p>所以说mirror是最完美的复刻</p><p>二、设置remote</p><p>这一步git remote set-url  —push origin url；</p><p>其中—push 是设置推送的远程地址，还可以设置—fetch的地址，如果两个一致，那就直接：<br>git remote set-url origin url 就行了。</p><p>设置不同的地址之后是这样：</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">$ git remote -v<br>origin  D:<span class="hljs-regexp">/workspace/</span>java<span class="hljs-regexp">/backend2/</span>.git (fetch)<br>origin  ssh:<span class="hljs-regexp">//gi</span>t@<span class="hljs-number">192.168</span>.<span class="hljs-number">1.100</span>:<span class="hljs-number">20222</span><span class="hljs-regexp">/backenddevelopergroup/</span>xiao.git  (push)<br></code></pre></td></tr></table></figure><p>三、推送镜像到gitlab上一个新的空仓库</p><p>用新仓库，不然的话，如果是已存在分支的仓库，他会删除你已存在的分支，再推送自己的分支；</p><p>这里我又遇到一个报错：deny updating hidden ref</p><p>原因是我拉的是本地仓库，会有一些本地分支和remote的远程分支，本地分支能推上去，而这些远程关联的分支称为hidden ref，</p><p>它是不允许推到仓库的，这一点我没搞明白，不知道是gitlab设置的原因还是什么；</p><p>我的做法是在本地手动checkout 一下这些hidden ref，相当于把他们都变成了本地分支，然后就能推上去了，over！</p><p>参考链接：</p><p><a href="https://blog.csdn.net/shouhuzhezhishen/article/details/126012426">https://blog.csdn.net/shouhuzhezhishen/article/details/126012426</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
     
   </entry>
   
@@ -81,6 +123,81 @@
   
   
   <entry>
+    <title>ios callkit</title>
+    <link href="/2022/03/29/investigation/ios-callkit/"/>
+    <url>/2022/03/29/investigation/ios-callkit/</url>
+    
+    <content type="html"><![CDATA[<h1 id="ios-callkit"><a href="#ios-callkit" class="headerlink" title="ios callkit"></a>ios callkit</h1><p>一、基本概念</p><p>        CallKit是iOS10系统推出的一个系统级别的功能，它的主要作用是提供了一些Api供拥有语音和视频通话功能的App（VoIP功能）在使用语音和视频功能的时候能够使用系统的通话界面进行接听，同时在手机通话记录中会存在本次记录，点击记录还能够直接回拨。</p><p>        Android有个类似的功能叫做：Android ConnectionService</p><p>二、个中曲折</p><p>        CallKit功能推出后，反响很好，各大网络电话App那是相当开心，微信还出了一个版本拥有这个功能，但是好景不长，2018年，工信部就出面在大陆地区的App Store中的应用必须删除CallKit功能，一是动了三大运营商的奶酪，二是通话记录会被监听。</p><p>        上架App Store就会出现下面的提示：</p><p><img src="/image/article/investigation/ios-callkit/4a1f1b45-fe30-4589-8988-ca56099dc5b5.png"></p><p>三、其他问题</p><p>1、据说国内下载的微信登录海外账号还是可以支持CallKit的，飞书也有，可能是因为它们体量大，有特殊渠道；</p><p>2、android的实现技术实际上是一个后台常驻服务，但是现在Android管的也比较严，所以在App杀掉进程之后会不支持；</p><p>3、我暂时想到的场景就是通过CallKit实现火警客服电话的呼入和呼出，避免运营商屏蔽和备注骚扰电话的问题；</p><p>4、在自家App拥有VoIP网络电话的功能之后，使用CallKit是锦上添花的功能，否则CallKit就是不必要的。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ios</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>一些前端项目转换工具</title>
+    <link href="/2022/03/03/investigation/transition/"/>
+    <url>/2022/03/03/investigation/transition/</url>
+    
+    <content type="html"><![CDATA[<h1 id="一些前端项目转换工具"><a href="#一些前端项目转换工具" class="headerlink" title="一些前端项目转换工具"></a>一些前端项目转换工具</h1><p><img src="/image/article/investigation/transition/c7898cf8-fbb4-47ae-9ed5-0449a7c18329.jpg"></p><p><img src="/image/article/investigation/transition/3dd4907e-a404-4193-b626-c59c09f75c9d.png"></p><p>mpvue：star 20.4k  mini program  vue</p><p>文档：<a href="http://mpvue.com/">http://mpvue.com/</a></p><p>原理：<a href="https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86">https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86</a></p><p>美团出品，实现使用vue语法规范书写页面，可同时转化为H5和微信小程序，新版本也支持其他平台小程序。</p><p>先说下vue的编译原理，</p><p>1、vue-loader加载vue文件解析成js文件；</p><p>2、js经过vue的vue-template-compiler处理成ast语法树（这个语法树可以在下一步生成vue的VNode，也可以是weex的组件，这就是多端实现的底层逻辑）；</p><p>3、ast经过vue的creatElement处理再结合data数据变成VNode，就是虚拟Dom，虚拟dom就可以用diff了（有些文章这一步叫做生成render function，实际上render function返回的就是vnode）；</p><p>4、vue的render方法最后会把VNode转换为实际的dom结构</p><p>mpvue干了什么呢？</p><p>1、首先它修改了vue的runtime，vue的runtime支持生成vue的结构和weex的结构，现在加上了生成小程序的结构；</p><p>2、mpvue使用自己的模板加载器 mpvue-template-compiler直接生成了ast和render function，这里的ast和render function就跟vue的有点不一样了，但是和VNode基本类似；</p><p>3、再下一步用 mpvue-template-compiler的compileToWxml生成wxml，就是小程序的模板。</p><p>这里解释了模板的转化，生命周期，data数据的转化我就不说了（我不懂啊）；</p><p>提一嘴腾讯出的wepy框架，也是vue模板生成小程序，但是语法是vue语法加上自定义的规范，学习成本高一些，也没有mpvue好用，但是他是最早的小程序框架，值得夸奖；</p><p>wepy文档：<a href="https://wepyjs.github.io/wepy-docs/2.x/#/base/intro">https://wepyjs.github.io/wepy-docs/2.x/#/base/intro</a></p><p>个人感觉：mpvue出的比较早，是个很伟大的尝试，但是也因为出的比较早，局限性就大一些，项目立项之初，它主要考虑的是微信小程序，所以内部很多逻辑是和微信绑定的，实际上只是写法上利用了vue，其他的比如路由跳转还是要用小程序的，组件库可以用小程序的，第三方ui组件库的必须支持mpvue的一些特殊要求才行，还是很有局限性的；但是主要的局限性是不能生成APP。</p><p>trao：star 30.6k   因为部门是叫做凹凸实验室，谐音和奥特曼很像。当时就决定以后有新的开源项目，就以奥特曼来命名，所以 Taro（泰罗）是第一个。</p><p>文档：<a href="https://taro-docs.jd.com/taro/docs/">https://taro-docs.jd.com/taro/docs/</a></p><p>原理介绍：<a href="https://blog.csdn.net/sinat_17775997/article/details/103391294">https://blog.csdn.net/sinat_17775997&#x2F;article&#x2F;details&#x2F;103391294</a></p><p>京东出品，最新的trao3可以使用react&#x2F;vue等框架，同时生成H5，微信京东字节小程序，RN等，尼玛，真牛逼！</p><p>1、trao支持的小程序众多，意味着内部封装继承的程度就更高，不同的客户端小程序在转换之前都必须支持统一的组件写法和api；</p><p>2、在页面组件转化逻辑上，它的本质也是上面的转化图，vue或者react编写的代码转化为ast，再根据不同的小程序端逻辑处理，生成不同端的页面代码；</p><p>3、在路由和api层面，参考对标的也是微信小程序，所以你不能用vue和react的路由；</p><p>4、taro有自己封装的组件库，是以微信小程序为标准设计的（其实我感觉广大的小程序都是依据微信小程序的理念设计的，本质上也就是h5加一部分原生的hybrid），当然api也是自己封装过的；</p><p>5、taro也支持vuex和redux，牛逼牛逼！</p><p>这里提到了一些babel的知识，挺有意思的：</p><ul><li>Babel 可以解析还没有进入 ECMAScript 规范的语法。例如装饰器这样的提案，虽然现在没有进入标准但是已经广泛使用有一段时间了；</li><li>Babel 提供插件机制解析 TypeScript、Flow、JSX这样的 JavaScript 超集，不必单独处理这些语言；</li><li>Babel 拥有庞大的生态，有非常多的文档和样例代码可供参考；除去 parser 本身，Babel 还提供各种方便的工具库可以优化、生成、调试代码…</li></ul><p>我个人的简单理解就是babel是一个function，一个转化工具，输入原始js，输出你想要的的结构化js，比如输入es6输出es5，输入jsx输出js等等，另外注意一下babel是plugin插件可以作用于webpack的各个阶段（注意和loader的区别）；</p><p>由此又引申出一个polyfill垫片，babel的作用一般是把高级js写法变成低级的，polyfill垫片顾名思义是垫平各个浏览器的差异，是个兼容性处理插件，比如ie或者firefox不支持某个方法，polyfill就增加兼容性处理。</p><p>总结：taro真是个很牛逼的框架，我只搜了几篇文章看看原理就觉得很复杂，可想而知具体转化抹平差异的工作量有多大。taro的优势是可以使用vue或者react和其他前端框架写页面，这样群众基础就扩大了，支持转化的客户端类型也很多，估计大部分使用react的玩家都会选择taro，更何况还支持RN。</p><p>uni-app：star 36.1k  uni，读 you ni，是统一的意思。</p><p><a href="https://uniapp.dcloud.io/history.html">https://uniapp.dcloud.io/history.html</a></p><p>DCloud出品(就是那个Hbuilder工具的开发组织)， 开发者使用 Vue 语法编写代码，uni-app 框架将其编译到 小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;字节跳动&#x2F;QQ&#x2F;快手&#x2F;钉钉）、App（iOS&#x2F;Android）、H5等多个平台；</p><p>DCloud网站有这么一段：“ 很多人以为小程序是微信先推出的，其实，DCloud才是这个行业的开创者。”</p><p>是的，这是真的，当初DCloud刚推出流应用的时候，我还做了一个关于流应用的技术分享会，流应用更像是微信公众号，页面是H5，再加上一点原生API的加持，而微信小程序则是自己制定了一套规则和写法。我个人一直不喜欢小程序，我认为小程序本质上是Hybrid，没有什么新奇的技术，而且自定义语法规则更像是为了打造技术壁垒和生态环境，出发点就不单纯。好了，打住！</p><p>1、uni-app的原理真没找到具体的文章，个人感觉也是ast语法树的转化；</p><p>2、uni-app可以转化为android和ios app，支持两种模式，一种webview加载的hybird，另一种是weex；</p><p>3、uni-app有自己的一套页面组件，可以运行于各个平台，还有vue的组件，但是只能运行在App和H5（这是必然的）；</p><p>总结：uni-app和taro才具有可比性，taro的优势是支持react和vue语法规则，uni-app的优势我认为是webview加载模式，因为RN和Weex毕竟有平台差异，论一致性还是webview有优势，但是webview的性能比较比不上RN和Weex。总体差异倒是不大。两者都很优秀，看个人取舍吧！</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>vue</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>苹果ABM商务应用</title>
+    <link href="/2022/02/16/investigation/ABM/"/>
+    <url>/2022/02/16/investigation/ABM/</url>
+    
+    <content type="html"><![CDATA[<h1 id="苹果ABM商务应用"><a href="#苹果ABM商务应用" class="headerlink" title="苹果ABM商务应用"></a>苹果ABM商务应用</h1><p>ios应用的几种安装方式：</p><p>1、App Store：传统方式上架发布，审核严格，账号每年99美元；</p><p>2、企业版 In-house：通过二维码下载，不需要审核，账号每年299美元，目前苹果正在收紧企业版账号的申请，需要验证企业缴纳社保人数大于100人；</p><p>3、内测版 testFlight：和App Store相似，app发布为内测版，通过testFlight下载，app有效期90天。</p><p>4、超级签名：费用比较高，把用户的设备uuid获取到之后重新签名打包，只能有100台设备，所以每台设备安装的费用大概是1美元，</p><p>5、Apple Business Manager：ABM的方式就是为了解决高度相似的定制版本无法通过审核而存在的，应用无法在App Store显示，</p><p>下载方式是在 App Store点击头像使用兑换码下载应用或者扫描二维码通过iTunes Store下载应用。</p><p>App Store和ABM对比：</p><p>一、传统的App Store的开发和下载方式：</p><p>1、企业注册一个Apple Id，然后该id申请一个99美元每年的开发者账号；</p><p>2、开发者账号开发一个应用，发布商店审核，通过后显示在App Store；</p><p>3、任意客户通过 App Store下载。</p><p>二、Apple Business Manager的开发和下载方式：</p><p>1、企业注册一个Apple Id，然后该id申请一个99美元每年的开发者账号；</p><p>2、企业重新申请一个Apple Id，使用该id申请一个Apple Business Manager账号（ABM组织），该账号免费；</p><p>3、开发者账号开发一个应用，发布时选择分发给指定组织，就是第二步注册是ABM组织，商店审核，通过后显示在ABM组织内部（必须是新应用）；</p><p>4、ABM组织批量购买应用，每周最多25000份，兑换码可通过excel的方式下载；</p><p>5、用户可以在 App Store点击头像使用兑换码下载应用或者扫描二维码通过iTunes Store下载应用（第二种方式本质上也是兑换码，只是省略了手动输入，但是需要额外安装iTunes Store）。</p><p>下载地址： <a href="https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/freeProductCodeWizard?code=4RFFN69R6L66">https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/freeProductCodeWizard?code=4RFFN69R6L66</a> 后面的code是变化的</p><p>ABM方式的优缺点：</p><p>优点：</p><p>1、不用担心应用查重问题，审核比较快；</p><p>缺点：</p><p>1、不显示在App Store；</p><p>2、两种下载方式都不太友好，手动输入太复杂，二维码下载需要额外安装iTunes Store；</p><p>3、在App Store已安装的应用列表里显示应用详情不确定能不能看到开发者信息，但是绝对看不到ABM组织的信息（已电话咨询ABM官方客服：4006033565）；</p><p>其他小知识：</p><p>fir和蒲公英分发平台的原理：</p><p><a href="https://blog.csdn.net/u014600626/article/details/114129947">https://blog.csdn.net/u014600626/article/details/114129947</a></p><p><a href="https://www.jianshu.com/p/60d99fc36084">https://www.jianshu.com/p/60d99fc36084</a></p><p>1、上传的ipa文件必须是已经签名过的；</p><p>2、分发平台会自动生成一个plist文件，这个文件包含ipa文件和icon的下载地址，plist文件地址必须是https的；</p><p>3、必须访问plist，使用safari浏览器的itms-services协议才能触发ios系统的ipa文件安装（itms-services:&#x2F;&#x2F;&#x2F;?action&#x3D;download-manifest&amp;url&#x3D;plist的https地址）；</p><p>4、信任设备。</p><p>参考链接：</p><p><a href="https://www.jianshu.com/p/c8361a83a338">https://www.jianshu.com/p/c8361a83a338</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ios</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>GetX--Flutter开发框架</title>
     <link href="/2022/01/10/flutter/GetX/"/>
     <url>/2022/01/10/flutter/GetX/</url>
@@ -100,6 +217,25 @@
       <tag>Flutter</tag>
       
     </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Fusion Design框架的调研</title>
+    <link href="/2021/10/14/investigation/Fusion-Design/"/>
+    <url>/2021/10/14/investigation/Fusion-Design/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Fusion-Design框架的调研"><a href="#Fusion-Design框架的调研" class="headerlink" title="Fusion Design框架的调研"></a>Fusion Design框架的调研</h1><h2 id="Fusion框架介绍"><a href="#Fusion框架介绍" class="headerlink" title="Fusion框架介绍"></a>Fusion框架介绍</h2><p>Fusion Design框架主要包含四个部分：</p><p>一、组件库 @alifd&#x2F;next</p><p>仓库：<a href="https://github.com/alibaba-fusion/next">https://github.com/alibaba-fusion/next</a></p><p>文档： <a href="https://fusion.design/pc/doc/component/102?themeid=1">https://fusion.design/pc/doc/component/102?themeid=1</a></p><p>有50多个组件，和Element，Ant Design相比没有太大差别，能够满足业务开发的需要</p><p>二、Fusion 站点</p><p>这是个后台系统，在这里配置组件大小，圆角，颜色等等自定义组件样式的东西，然后点击发布，这一整套主题就会发布到npm仓库(java script包管理工具)，前端React项目就可以安装使用这个主题包</p><p>三、FusionCool Sketch 插件</p><p>引入Sketch插件后，在Fusion站点配置的组件会同步过来，这样设计稿的组件和前端开发时使用的组件就是高度一致的了</p><p>四、Iceworks 客户端</p><p>这个客户端是Fusion Design生态系统的一部分，主要功能有两个，第一是提供模板快速创建项目，第二是可以通过拖拽组件的方式快速生成页面</p><p>通过模板快速创建项目是个很好的尝试，icework不仅创建了项目结构而且创建了很多页面，不过现实情况是大部分项目页面结构各不相同，最好的做法是只创建项目结构，安装好必要的依赖，具体的页面结构自定义开发，如果有一些赶工的临时项目，这倒是个解决方案。</p><p>拖拽组件创建页面我也试了一下，现在还不成熟，不好用，等等看吧。</p><h2 id="关于主题部分的调研"><a href="#关于主题部分的调研" class="headerlink" title="关于主题部分的调研"></a>关于主题部分的调研</h2><p>一、其他组件主题样式是怎么处理的</p><p>1、Element是饿了么团队开发的组件库，处理主题有两种方式：，第一种是在项目中通过覆盖定义样式变量的值直接起作用；第二种是通过一个在线工具，调整各种组件的颜色值，然后下载到本地引入，本质也是覆盖定义。element的主题可以自定义圆角大小，字体大小，颜色等等，这个方式还不错。</p><p><a href="https://element.eleme.cn/#/zh-CN/theme/preview">https://element.eleme.cn/#/zh-CN/theme/preview</a></p><p>2、Ant Design是蚂蚁团队开发的组件库，处理主题和Element第一种方式一样，自定义颜色值，覆盖原始值，这个比较low</p><p>二、Fusion Design框架主题的使用步骤</p><p>1、首先在后台配置组件的主题，颜色，大小等等，然后发布到npm仓库；</p><p>2、其次ui在sketch中安装Fusion插件，使用发布的组件设计页面，</p><p>3、最后前端人员在项目中安装主题库，拼接组件，创建页面。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>前端开发大概是四步：</p><p>1、拼接组件，页面布局</p><p>2、按照ui设计还原组件大小颜色等属性</p><p>3、点击事件页面逻辑等</p><p>4、接口调试</p><p>Fusion Design框架主要解决第二个步骤，另外，统一的组件库和风格会加快开发进度。</p><p>这个框架是基于React做的，目前公司主要的技术栈是Vue，React的项目比较少，所以已经存在的vue项目是不能使用这个框架的，暂时就不用了。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
     
   </entry>
   
@@ -131,6 +267,25 @@
   
   
   <entry>
+    <title>可视化看板大屏</title>
+    <link href="/2021/08/03/investigation/visualization/"/>
+    <url>/2021/08/03/investigation/visualization/</url>
+    
+    <content type="html"><![CDATA[<h1 id="可视化看板大屏"><a href="#可视化看板大屏" class="headerlink" title="可视化看板大屏"></a>可视化看板大屏</h1><p>大屏可视化看板的应用场景是这样的：</p><p>1、客户对大屏业务操作几乎没有要求（实际上大屏没几个支持操作的，就只能看）；</p><p>2、开发周期短；</p><p>3、期望先出效果再谈后续业务的。</p><p>在这样的情况下，可视化拖拽的大屏就是很合适的，节约成本，皆大欢喜。</p><p>目前可视化大屏还挺多，挑几个写写。</p><p>一、dataV</p><p><a href="https://www.aliyun.com/activity/intelligent/datavedition">https://www.aliyun.com/activity/intelligent/datavedition</a></p><p>阿里出品，我们使用过一段时间企业版5千多一年，20个大屏额度，能满足基本需求，就是有点卡。</p><p>3d的部分看到文档里有说3d地图，但是必须升级到2万4一年的专业版(支持40个大屏 )才能看效果，看不了，告辞。</p><p>二、51word</p><p><a href="https://wdp.51aes.com/">https://wdp.51aes.com/</a></p><p>国内的，云渲染技术的三维模型，大屏的内容有两个，底层模型和上层图层；</p><p>底层模型不支持自定义上传，因为人家就是靠定制化建模赚钱的；</p><p>上层的图层可以加图表啊什么的，这个和datav类似</p><p>也可以通过按钮定义事件，操作图表或者操作下层模型的api，按钮事件的绑定通过拖拽式操作，挺有意思的；</p><p>这些操作都需要在客户端操作，发布之后通过网页链接访问；</p><p>上层图表比较少，主要卖点是下层的模型，不太适合。</p><p>三、rayData</p><p>腾讯旗下的一款可视化数据看板，和datav很类似，价格也类似，可能因为我不是设计师，说不上来啥，就是感觉还不如datav呢；</p><p>四、easyV</p><p>瑞眼目前在用的大屏技术。1980一个月</p><p>五、metabase</p><p><a href="https://github.com/metabase/metabase">https://github.com/metabase/metabase</a></p><p>国外的产品，开源可独立部署，数据源支持挺多：</p><p>Postgres、MySQL、Druid、SQL Server、ClickHouse、MongoDB、BigQuery、Oracle、Vertica、Presto、Snowflake、Spark</p><p>付费版有更多的功能：</p><p>1、一个列表，有行级别的显示权限；</p><p>2、去掉logo,自定义logo，字体，颜色等；</p><p>3、客户分析功能（访问分析，哪些客户下载了哪些数据分析）;</p><p>4、跟踪用户大屏访问数据(怎么感觉还是上面那个)；</p><p>总的来说就是：1、权限更精细；2、UI定制程度更高；3、客户行为分析。</p><p>图表设置界面(17种图表类型)：</p><p><img src="/image/article/investigation/visualization/1.png"></p><p>价格：</p><p><img src="/image/article/investigation/visualization/2.png"></p><p>手动设置sql，不太懂sql的也能操作</p><p>优点：</p><p>1、svg技术，图表会很流畅；</p><p>2、看板支持拖拽调整位置；</p><p>缺点：</p><p>1、开源版本不能去掉logo；</p><p>2、不能设置单个图表的刷新时间，只能设置大屏整体定时刷新；</p><p>3、只能从数据源拿数据，不能是已存在的http接口；</p><p>4、不能在数据源之后处理数据，比如格式化一个数据；</p><p>5、图表只能设置线条颜色，其他自定义颜色字体都是付费功能；</p><p>6、图表类型只有17种；</p><p>六、datagear</p><p><a href="https://gitee.com/datagear/datagear">https://gitee.com/datagear/datagear</a></p><p>国内一款开源的产品，作为开源产品还是很不错的，开源可独立部署；</p><p>数据集是手写原生sql。可以设置项目，把图表和看板加入项目中，可分类(实际上并没有什么卵用，没有权限判断，只能算个分类标签)；数据存储位置：[~&#x2F;.datagear]</p><p>优点：</p><p>1、支持图表73种；</p><p>2、可以设置单个图表的刷新时间；</p><p>3、可以设置csv，http接口作为数据集；</p><p>4、可以设置主题颜色等等，也可以手动修改源码；</p><p>5、有模板，可快速配置；</p><p>6、可以手动选择时机渲染图表；</p><p>7、可以通过其他页面传值动态设置sql或者http数据集的参数；</p><p>8、可以在接口返回值之后修改返回值仔渲染，非常牛逼；</p><p>缺点：</p><p>1、不支持非关系型数据库Mongo等作为数据源（它只支持jdbc连接的数据库，jdbc特指关系型数据库连接方式）；</p><p>七、Datart</p><p><a href="https://running-elephant.gitee.io/datart-docs/">https://running-elephant.gitee.io/datart-docs/</a></p><p>不好用，丑，而且才两三个组件就卡了</p><p>目前的选择是datagear</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>http缓存</title>
     <link href="/2021/07/22/concept/cache/"/>
     <url>/2021/07/22/concept/cache/</url>
@@ -148,8 +303,6 @@
     <tags>
       
       <tag>http</tag>
-      
-      <tag>cache</tag>
       
     </tags>
     
@@ -208,12 +361,43 @@
   
   
   <entry>
+    <title>可拖拽小程序</title>
+    <link href="/2020/12/25/investigation/mini-program/"/>
+    <url>/2020/12/25/investigation/mini-program/</url>
+    
+    <content type="html"><![CDATA[<h1 id="可拖拽小程序"><a href="#可拖拽小程序" class="headerlink" title="可拖拽小程序"></a>可拖拽小程序</h1><p>一、有赞和微盟这样的saas平台解决了什么问题：</p><p>1、没有研发资源，软件外包的价格又太贵，维护升级也很麻烦</p><p>2、没有推广经验，无法引流，获客成本高，运营成本高</p><p>3、客户管理，统计分析，解决方案</p><p>4、当然还有其他的，不列举了</p><p>二、实践</p><p>本次调研两个平台，微盟和有赞，基本可以代表托管式小程序的业界水平了，我主要尝试了拖拽组件生成H5，和小程序步骤是一样的，小程序还要申请和授权，上线还需要审核，太麻烦了</p><p>1、微盟</p><p>1.1、15天免费试用，年费模式，每年大概1万左右，免费使用店铺模板，不提供源代码，可额外付费推广，运营，接入第三方外送等服务，直接通过微信商户平台，微盟不参与商户的订单费用结算问题</p><p>1.2、建立自己的店铺，基本是都是需要店铺模板，比如电商，外卖，服饰，生鲜等等品类，如果你选择了某一类别，基本上只需要对这些模板的图片，价格，描述等属性进行维护就行了，因为包括商品展示页，详情页，购物车页，个人中心都是一整套，能提供的修改很少，也就改改一行几个的布局，颜色值等等</p><p><img src="/image/article/investigation/mini-program/27cb7283-4d8d-46f2-9ba1-60c8c28fdf28.png"></p><p><img src="/image/article/investigation/mini-program/997a59b0-3a6d-4417-b419-ab0f99585a4e.png"></p><p>1.3、如果不满意这些模板，需要自己定制化页面，我看了提供拖拽的组件库，那真是少得可怜，只有图片类型才能添加跳转链接，关键的button也没有啊，可以联系微盟定制化开发，具体价格看需求情况</p><p><img src="/image/article/investigation/mini-program/09cd7b91-8b61-4e7d-8dab-90da81bcdaea.png"></p><p>1.4、其实，如果没有定制化的需求，不考虑千篇一律的风格问题，这些默认的模板还挺好用的，改改基本属性就能上线了，</p><p>2、有赞</p><p>1、7天试用期，模板是收费的，30-90不等，年费6800.12800.26800不等，高价格的年费主要提供热力图分析，商品订单分析，推广分析等等BI的玩意儿</p><p>2、模式和微盟是一样的，基本不存在自定义页面的情况，要么购买模板，要么定制开发</p><p>三、总结</p><p>有赞和微盟基本上是一样的，如果不考虑定制化的需求，不考虑拓展，或者定制化成本可以接受，这些商城类的模板就能满足基本需求，因为面向的是普通小商户小企业，所以即使技术允许，也不太可能出现事件绑定，自定义事件这样的组件提供给用户，小商户只要配置页面，接入微信支付商户号就行了。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>weChat</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>hexo博客系统搭建简易教程</title>
     <link href="/2020/08/08/other/start/"/>
     <url>/2020/08/08/other/start/</url>
     
     <content type="html"><![CDATA[<h3 id="博客系统搭建"><a href="#博客系统搭建" class="headerlink" title="博客系统搭建"></a>博客系统搭建</h3><p><a href="https://hexo.io/zh-cn/docs/">Hexo传送门</a></p><p>hexo博客系统可以部署在github上，写的md文件部署后全部转化为静态html文件，不需要服务器，实乃懒人穷鬼之首选</p><h4 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装node</h4><p><del>过程略</del></p><h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p><del>过程略</del></p><h4 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g hexo-cli<br></code></pre></td></tr></table></figure><p>用 hexo -v 查看一下版本</p><h4 id="初始化Hexo项目"><a href="#初始化Hexo项目" class="headerlink" title="初始化Hexo项目"></a>初始化Hexo项目</h4><p>找个合适的地方初始化项目  </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init [name] <br><span class="hljs-built_in">cd</span> [name] <br>yarn<br>hexo s <span class="hljs-comment">#本地运行</span><br></code></pre></td></tr></table></figure><p>至此，你的博客系统本地版本就完成了,你可以在source&#x2F;_posts下写文章，hexo s本地运行。<br>这时候你也可以选择生成静态文件，然后部署到自己的服务器上，生成静态文件命令如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g<br></code></pre></td></tr></table></figure><h4 id="部署到github-可选"><a href="#部署到github-可选" class="headerlink" title="部署到github(可选)"></a>部署到github(可选)</h4><ul><li>注册github账号</li><li>添加ssh key</li><li>在github上新建项目 </li><li><em>注意你的项目名为 [username].github.io</em> 其中[username]是你github的账户名</li><li>配置本地项目发布地址,修改配置文件：项目根目录&#x2F;_config.yml<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">type</span>: git<br>repository: [gitUrl]   <span class="hljs-comment">#发布到github</span><br>branch: master<br></code></pre></td></tr></table></figure></li><li>推送文章上去<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g  //生成静态部署文件<br>hexo d  //发布<br></code></pre></td></tr></table></figure>现在你可以用[username].github.io访问你的博客了</li></ul><h4 id="配置私有域名-可选"><a href="#配置私有域名-可选" class="headerlink" title="配置私有域名(可选)"></a>配置私有域名(可选)</h4><ul><li>首先你要买个域名</li><li>域名指向你github域名的ip</li><li>source文件夹下新建 CNAME 文件，没有后缀，里面写上你的域名(不需要带http:&#x2F;&#x2F;,示例: bestkele.cn)</li><li>发布项目后，过一会你就可以通过自己的域名访问了(实际上就是通过域名访问了github静态项目的ip)</li></ul><h3 id="主题系统"><a href="#主题系统" class="headerlink" title="主题系统"></a>主题系统</h3><p>默认的hexo长得太丑了，我们需要一个好看的主题，这里我选择了next主题，还有很多其他的主题，可以自己去找找看，这里不做介绍了<br><a href="https://github.com/theme-next/hexo-theme-next.git">NEXT传送门</a><br>有一点注意的地方是，使用了next主题，项目的language配置要和theme&#x2F;next里面一致，没有用主题前中文是 zh-Hans ，next主题下是 zh-CN</p><h3 id="底部动漫插件"><a href="#底部动漫插件" class="headerlink" title="底部动漫插件"></a>底部动漫插件</h3><p><a href="https://github.com/EYHN/hexo-helper-live2d#readme">博客系统的灵魂</a></p><p>参考链接：<br><a href="https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html">https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html</a></p>]]></content>
     
+    
+    <categories>
+      
+      <category>随手记</category>
+      
+    </categories>
     
     
   </entry>
@@ -239,8 +423,6 @@
       
       <tag>Flutter</tag>
       
-      <tag>mac</tag>
-      
     </tags>
     
   </entry>
@@ -265,8 +447,6 @@
     <tags>
       
       <tag>http</tag>
-      
-      <tag>eventLoop</tag>
       
     </tags>
     
@@ -479,23 +659,73 @@
   
   
   <entry>
-    <title>cordova加载远程网页调用原生api</title>
-    <link href="/2019/03/20/cordova/cordova-webview/"/>
-    <url>/2019/03/20/cordova/cordova-webview/</url>
+    <title>code-push私有部署</title>
+    <link href="/2019/09/06/investigation/code-push-deploy/"/>
+    <url>/2019/09/06/investigation/code-push-deploy/</url>
     
-    <content type="html"><![CDATA[<h1 id="cordova加载远程网页调用原生api"><a href="#cordova加载远程网页调用原生api" class="headerlink" title="cordova加载远程网页调用原生api"></a>cordova加载远程网页调用原生api</h1><p>截止目前为止，普遍的做法都是使用静态资源h5做好功能之后放在本地cordova项目里运行，那么既然是h5，是不是也可以放在服务器上，这样就实现了动态更新app,而不必使用codepush了。</p><p>调研了一番，有三个问题需要解决：</p><ol><li><p>ios上架审核问题</p><p> 每次都是加载远程网页，这可不一定能过审啊，如何审核人员测试你断网情况下的报错情况，页面出不来，那大概率是过不了，解决办法吗，可能是必须有个静态的首页还是放在cordova的安装包里面，后面再加其他策略跳转到你网页的地址，好多不可描述的app不都是这么做的吗。这里引申出另一个问题，远程加载的网页遇到网络波动肯定没有本地的效果好，调优是另一个问题了。</p></li><li><p>新开一个webview窗口</p><p> 在主体webview中加一个iframe加载远程地址不就行了？但是需要使用postmessage这样的跨页面通讯，费劲的一笔，而且iframe的页面事件穿透比如手指滑动事件就会有很多奇奇怪怪的问题，我吃过亏也不想再用这种方式，还不如新开一个webview呢，使用 cordova-plugin-inappbrowser就可以了</p></li><li><p>调用原生api</p><p> 这个需求不容易搞定,因为inappbrowser的实现默认是不允许使用cordova的任何资源,只是提供用新webview实例来加载一个纯的网页,所以需要对inAPPbrowser进行改造，简单来说就是注入cordova.js，这段我没试验，懒得弄了，应该是可以的，看下面的链接吧</p></li></ol><p>        </p><p>参考文章： </p><p><a href="https://www.jianshu.com/p/31b28b8661c5">https://www.jianshu.com/p/31b28b8661c5</a></p><p><a href="https://www.jianshu.com/p/0fd4e99acef3">https://www.jianshu.com/p/0fd4e99acef3</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="code-push私有部署"><a href="#code-push私有部署" class="headerlink" title="code-push私有部署"></a>code-push私有部署</h1><p>由于code-push服务器是在国外，微软这货又不开源服务器代码，国内有些用户更新的时候卡到生活不能自理</p><p>万能的git上有个大神搭建了code-push的私服：</p><p><a href="https://github.com/lisong/code-push-server/">https://github.com/lisong/code-push-server/</a></p><p>一开始我在windows上搭建好了，不过真的很麻烦，很多命令windows是不支持的，而且还要开ngrok域名，最好还是在linux上弄吧</p><p>按照文档安装还是比较顺利的</p><p>1、安装新版的node</p><p>     linux上的node版本可能是老的，我们去官网<a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a>下载linux二进制的对应版本</p><p>     wget <a href="https://nodejs.org/dist/v6.11.3/node-v6.11.3-linux-x64.tar.xz">https://nodejs.org/dist/v6.11.3/node-v6.11.3-linux-x64.tar.xz</a></p><p>     解压命令</p><p>        xz -d ****        xz文件先解压成tar文件</p><p>        tar -xvf ****    解压tar文件</p><p>     然后把node的主文件夹加到环境变量里</p><p>     echo $PATH</p><p>     vim ~&#x2F;.bashrc  </p><p>     在文件末尾加这句：export PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;node&#x2F;bin:$PATH</p><p>     source ~&#x2F;.bashrc #刷新环境变量</p><p>     网上有人说只需建立快捷方式在&#x2F;usr&#x2F;local&#x2F;bin文件夹即可，</p><p>     ln -s &#x2F;usr&#x2F;local&#x2F;node&#x2F;bin&#x2F;node  &#x2F;usr&#x2F;local&#x2F;bin</p><p>     因为这个文件夹在path中，亲测可行，但是后面安装nrm，code-push等等全部要快捷方式一遍</p><p>     TIPS:后面安装cnpm和nrm时需要设置node文件夹的权限，不是很懂这个1，2，4的权限，大力出奇迹 sudo chmod 777 node </p><p>2、按照readme文档安装code-push-server</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ npm install code-push-server -g <span class="hljs-comment">#安装</span><br>$ code-push-server-db init --dbhost localhost --dbuser root --dbpassword ****** --dbport 33308 <span class="hljs-comment">#初始化mysql数据库</span><br></code></pre></td></tr></table></figure><p>     </p><p>3、配置</p><p>     vim config&#x2F;config.js</p><p>     配置数据库的连接参数</p><p>     配置热更新压缩包存储方式，common中storageType，默认local，支持七牛云，亚马逊s3,阿里云oss，local</p><p>     配置local存储的文件夹和下载地址（文件夹需要手动新建 ）</p><p>     common的dataDir好像是增量更新用的，cordova目前还不支持，RN的热更新支持</p><p>     sudo chmod 777 codepushworkspace</p><p><img src="/image/article/investigation/code-push-deploy/bdc3b186-9816-47cc-b688-6309b9763fea.png"></p><p>4、插件安装</p><p>     我这里只能说说cordova的相关内容，等啥时候玩RN再来补充（像我这么懒得，这句话还是当没看见好了）</p><p>     插件地址：<a href="https://github.com/Microsoft/cordova-plugin-code-push">https://github.com/Microsoft/cordova-plugin-code-push</a></p><p>     原始的是这样子的：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;platform name=<span class="hljs-string">&quot;android&quot;</span>&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushDeploymentKey&quot;</span> value=<span class="hljs-string">&quot;YOUR-ANDROID-DEPLOYMENT-KEY&quot;</span> /&gt;<br>&lt;/platform&gt;<br>&lt;platform name=<span class="hljs-string">&quot;ios&quot;</span>&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushDeploymentKey&quot;</span> value=<span class="hljs-string">&quot;YOUR-IOS-DEPLOYMENT-KEY&quot;</span> /&gt;<br>&lt;/platform&gt;<br></code></pre></td></tr></table></figure><p>     使用自己服务器的是这样子的：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;platform name=<span class="hljs-string">&quot;android&quot;</span>&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushDeploymentKey&quot;</span> value=<span class="hljs-string">&quot;nVHPr6asLSusnWoLBNCSktk9FWbiqLF160UDg&quot;</span> /&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushServerUrl&quot;</span> value=<span class="hljs-string">&quot;http://115.29.200.95:9000/&quot;</span> /&gt;<br>&lt;/platform&gt;<br>&lt;platform name=<span class="hljs-string">&quot;ios&quot;</span>&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushDeploymentKey&quot;</span> value=<span class="hljs-string">&quot;Iw5DMZSIrCOS7hbLsY5tHAHNITFQqLF160UDg&quot;</span> /&gt;<br>    &lt;preference name=<span class="hljs-string">&quot;CodePushServerUrl&quot;</span> value=<span class="hljs-string">&quot;http://115.29.200.95:9000/&quot;</span> /&gt;<br>&lt;/platform&gt;<br></code></pre></td></tr></table></figure><p>5、命令行提交版本</p><p>     基本上和code-push的命令一直，也有不一样的地方</p><p>     1、登录</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">code-push login <span class="hljs-comment">#默认是这样，登录是微软的地址</span><br><span class="hljs-comment">#我们这样写</span><br>code-push login http://ip:port<br></code></pre></td></tr></table></figure><p>     2、app的名字</p><p>          code-push app add ioetest  #正常命令</p><p>          code-push-server的app名字必须包含android或者ios字段（不知道为什么这么玩）</p><p>            后面还要加上平台和cordova</p><p>          例如：code-push app add ioeandroid android cordova</p><p>            code-push app add ioeios ios cordova</p><p>6、其他问题</p><p>     1、用户和密码问题</p><p>          安装好的code-push-server里面只有一个用户 admin     123456</p><p>          如果希望新增或者更换用户的话可以使用web版本操作，我没装这个，因为用处不是很大，也有bug，后台返回了更新包的信息，页面却没有显示</p><p>          由于跨域，web无法正常使用，需要更改server版本的app.js，app.all那里的环境判断注释掉就行了</p><p>          所以这个web也就操作用户信息还比较有用</p><p>          也可以直接用命令行改密码：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -X PATCH -H <span class="hljs-string">&quot;Authorization: Bearer mytoken&quot;</span> -H <span class="hljs-string">&quot;Accept: application/json&quot;</span> -H <span class="hljs-string">&quot;Content-Type:application/json&quot;</span> -d <span class="hljs-string">&#x27;&#123;&quot;oldPassword&quot;:&quot;123456&quot;,&quot;newPassword&quot;:&quot;654321&quot;&#125;&#x27;</span> http://127.0.0.1:3000/users/password<br></code></pre></td></tr></table></figure><p>     2、端口和启动问题</p><p>          默认的server端口是3000，也可以改，在bin&#x2F;www里面</p><p>          不过一般我们使用pm2来管理，文件在docs&#x2F;process.json，只需执行pm2 start process.json即可</p><p>          里面的命令实际上我并不懂</p><p>               “instances”：”max”好像是根据cpu核心数量来启动相应多个实例</p><p>          这里面可以直接改端口号</p><p>            env里面的config指的是config&#x2F;config.js</p><p>            最好是用全路径，这样就可以在根目录建快捷方式了</p><p>            ln -s  &#x2F;etc&#x2F;node&#x2F;lib&#x2F;node_modules&#x2F;code-push-server&#x2F;docs&#x2F;process.json  &#x2F;process.json</p><p>            release的时候会报无法解析response的错，但是是成功的，等待code-push-server更新吧</p><p>          TIPS：pm2 stop是挂起程序，pm2 delete是kill程序</p><p>模拟请求</p><p><a href="http://ip:port/updateCheck?gldeploymentKey=mbmYKM8kQkAYkhJMQEe358XgfuY74ksvOXqog&appVersion=3.6.26">http://ip:port/updateCheck?gldeploymentKey=mbmYKM8kQkAYkhJMQEe358XgfuY74ksvOXqog&amp;appVersion=3.6.26</a></p><p>一段时间遇到一个新问题：</p><p>之前搭建的私服停了，然后竟然logout出不来，删除access-key也不行，只能卸载了</p><p>目录：&#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules    全名叫code-push-cli</p><p>我太天真了，卸载完重装依旧不行</p><p>我去lisong大神的code-push-server那里提了个issuse，回复说用户目录下有个隐藏文件</p><p>.code-push.config用来保存登录信息的，删除之，done！！！</p><p>结论：和wkwebview插件冲突</p><p>一年之后我又回来了，捣鼓了好久还是没找到和wkwebview冲突的解决办法，查看了我之前提的issue，竟然有人回答解决了，在code-push-server根目录下app.js中增加了一些http头就好了</p><p>x-codepush-plugin-name,x-codepush-plugin-version,x-codepush-sdk-version</p><p><img src="/image/article/investigation/code-push-deploy/1940538f-5506-4061-baf2-8ec83896649e.png"></p><p>我懒得再配置nginx转发了，就注释掉了env的环境判断</p><p>学到一个小知识 ：pm2查看错误日志 pm2 log servername</p>]]></content>
     
     
     <categories>
       
-      <category>cordova</category>
+      <category>技术调研</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>sinopia私有仓库</title>
+    <link href="/2019/09/06/investigation/sinopia/"/>
+    <url>/2019/09/06/investigation/sinopia/</url>
+    
+    <content type="html"><![CDATA[<h1 id="sinopia私有仓库"><a href="#sinopia私有仓库" class="headerlink" title="sinopia私有仓库"></a>sinopia私有仓库</h1><h3 id="sinopia-是一个零配置的私有的带缓存功能的npm包管理工具"><a href="#sinopia-是一个零配置的私有的带缓存功能的npm包管理工具" class="headerlink" title="sinopia 是一个零配置的私有的带缓存功能的npm包管理工具"></a>sinopia 是一个零配置的私有的带缓存功能的npm包管理工具</h3><p>一般我们开发的前端依赖包是要发到npm的，但是有些是私有的，就需要sinopia这样的仓库来存储，如果不使用仓库，也不希望发布到npm，那么就只能每次手动粘贴了</p><p>使用sinopia，你不用安装CouchDB或MYSQL之类的数据库，Sinopia有自己的迷你数据库，如果要下载的包不存在，它将自动去你配置的npm地址上去下载，而且硬盘中只缓存你下载过的包，以节省空间。</p><p><strong>为什么选择sinopia</strong></p><p>sinopia有以下几个优势值得关注：</p><ol><li>不同步拉取npm库，占据大量硬盘，没有硬盘被撑爆的问题；</li><li>安装配置极其简单,不需要数据库；</li><li>支持配置上游registry配置，一次拉取即缓存；</li><li>支持forever及pm2守护进程管理；</li></ol><p>安装配置：</p><p>       1、安装node，npm（略 ，嘿嘿）</p><p>       2、安装sinopia      npm i -g sinopia</p><p>       3、安装位置自己找一下  which sinopia</p><p>       4、配置文件在   .&#x2F;sinopia&#x2F;config.yaml</p><p>添加源地址：</p><ol><li>安装nrm  npm i nrm </li><li>添加源地址 nrm add [name]  [<a href="http://ip:port]">http://ip:port]</a>  &#x2F;&#x2F;这个是部署sinopia的地址</li><li>使用该地址 nrm use [name]</li></ol><p>推送package:</p><ol><li>npm adduser  &#x2F;&#x2F;(填写用户名密码邮箱，如果已经有用户了，npm login，一样填写用户名密码邮箱)</li><li>npm publish</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术调研</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>node</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Cordova加载远程网页调用原生api</title>
+    <link href="/2019/03/20/cordova/cordova-webview/"/>
+    <url>/2019/03/20/cordova/cordova-webview/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Cordova加载远程网页调用原生api"><a href="#Cordova加载远程网页调用原生api" class="headerlink" title="Cordova加载远程网页调用原生api"></a>Cordova加载远程网页调用原生api</h1><p>截止目前为止，普遍的做法都是使用静态资源h5做好功能之后放在本地cordova项目里运行，那么既然是h5，是不是也可以放在服务器上，这样就实现了动态更新app,而不必使用codepush了。</p><p>调研了一番，有三个问题需要解决：</p><ol><li><p>ios上架审核问题</p><p> 每次都是加载远程网页，这可不一定能过审啊，如何审核人员测试你断网情况下的报错情况，页面出不来，那大概率是过不了，解决办法吗，可能是必须有个静态的首页还是放在cordova的安装包里面，后面再加其他策略跳转到你网页的地址，好多不可描述的app不都是这么做的吗。这里引申出另一个问题，远程加载的网页遇到网络波动肯定没有本地的效果好，调优是另一个问题了。</p></li><li><p>新开一个webview窗口</p><p> 在主体webview中加一个iframe加载远程地址不就行了？但是需要使用postmessage这样的跨页面通讯，费劲的一笔，而且iframe的页面事件穿透比如手指滑动事件就会有很多奇奇怪怪的问题，我吃过亏也不想再用这种方式，还不如新开一个webview呢，使用 cordova-plugin-inappbrowser就可以了</p></li><li><p>调用原生api</p><p> 这个需求不容易搞定,因为inappbrowser的实现默认是不允许使用cordova的任何资源,只是提供用新webview实例来加载一个纯的网页,所以需要对inAPPbrowser进行改造，简单来说就是注入cordova.js，这段我没试验，懒得弄了，应该是可以的，看下面的链接吧</p></li></ol><p>        </p><p>参考文章： </p><p><a href="https://www.jianshu.com/p/31b28b8661c5">https://www.jianshu.com/p/31b28b8661c5</a></p><p><a href="https://www.jianshu.com/p/0fd4e99acef3">https://www.jianshu.com/p/0fd4e99acef3</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Cordova</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Cordova</tag>
       
     </tags>
     
@@ -513,14 +743,14 @@
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
       
     </tags>
     
@@ -538,7 +768,7 @@
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
@@ -546,8 +776,6 @@
     <tags>
       
       <tag>Cordova</tag>
-      
-      <tag>PhoneGap</tag>
       
     </tags>
     
@@ -570,14 +798,6 @@
     </categories>
     
     
-    <tags>
-      
-      <tag>chrome</tag>
-      
-      <tag>webkit</tag>
-      
-    </tags>
-    
   </entry>
   
   
@@ -599,9 +819,7 @@
     
     <tags>
       
-      <tag>webkit</tag>
-      
-      <tag>node</tag>
+      <tag>javascript</tag>
       
     </tags>
     
@@ -644,14 +862,14 @@
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
       
     </tags>
     
@@ -660,23 +878,23 @@
   
   
   <entry>
-    <title>cordova项目打包步骤</title>
+    <title>Cordova项目打包步骤</title>
     <link href="/2017/03/20/cordova/cordova-build/"/>
     <url>/2017/03/20/cordova/cordova-build/</url>
     
-    <content type="html"><![CDATA[<h1 id="cordova项目打包步骤"><a href="#cordova项目打包步骤" class="headerlink" title="cordova项目打包步骤"></a>cordova项目打包步骤</h1><p>Android:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build android</li><li>检查AndroidManifest.xml版本号versionName和build号versionCode</li><li>打包APK，记得检查签名</li></ul><p>IOS:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build ios</li><li>检查JPushConfig.plist文件下的AppKey</li><li>检查项目General目录下的版本号和build号</li><li>检查Capabilities目录下的Push Notifications开关状态</li><li>如果是发布appStore的话， 检查   Info.list下的权限备注写了没</li><li>打包，记得检查签名</li></ul><p>tip：</p><p>     查看当前插件版本：cordova plugin ls</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Cordova项目打包步骤"><a href="#Cordova项目打包步骤" class="headerlink" title="Cordova项目打包步骤"></a>Cordova项目打包步骤</h1><p>Android:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build android</li><li>检查AndroidManifest.xml版本号versionName和build号versionCode</li><li>打包APK，记得检查签名</li></ul><p>IOS:</p><ul><li>打包h5项目</li><li>检查index.html里面的viewport和cordova.js</li><li>复制到cordova项目中www文件夹下</li><li>检查config.xml里面的版本号，codepush环境</li><li>cordova build ios</li><li>检查JPushConfig.plist文件下的AppKey</li><li>检查项目General目录下的版本号和build号</li><li>检查Capabilities目录下的Push Notifications开关状态</li><li>如果是发布appStore的话， 检查   Info.list下的权限备注写了没</li><li>打包，记得检查签名</li></ul><p>tip：</p><p>     查看当前插件版本：cordova plugin ls</p>]]></content>
     
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
       
     </tags>
     
@@ -685,7 +903,32 @@
   
   
   <entry>
-    <title>Ionic和cordova的关系</title>
+    <title>CodePush</title>
+    <link href="/2017/02/09/concept/code-push/"/>
+    <url>/2017/02/09/concept/code-push/</url>
+    
+    <content type="html"><![CDATA[<h1 id="code-push"><a href="#code-push" class="headerlink" title="code-push"></a>code-push</h1><p>CodePush是一个微软开发的云服务器。通过它，开发者可以直接在用户的设备上部署手机应用更新。CodePush相当于一个中心仓库，开发者可以推送当前的更新（包括JS&#x2F;HTML&#x2F;CSS&#x2F;IMAGE等）到CoduPush，然后应用将会查询是否有更新。</p><p>一、安装CodePush CLI管理 CodePush 账号需要通过 NodeJS-based CLI.</p><p>只需要在控制台输入 npm install -g code-push-cli，就可以安装了。</p><p>安装完毕后，输入 code-push -v查看版本代表成功。</p><p>目前我的版本是 1.1.1-beta</p><hr><p>二、创建CodePush账号在控制台输入 code-push register 后，将会打开一个网页进行注册</p><p>CodePush账号支持 github和 Microsofe，选其中一个就可以了。</p><p>我选择的是 github，授权完毕后，网页将会显示一个token，复制它到控制台的中就成功了。成功登陆后，你的session文件将会写在 &#x2F;Users&#x2F;guanMac&#x2F;.code-push.config。相关命令</p><ul><li>code-push login 登陆</li><li>code-push loout 注销</li><li>code-push access-key ls 列出登陆的token</li><li>code-push access-key rm <accessKye> 删除某个 access-key</li></ul><hr><p>三、在CodePush服务器上注册app为了让codePush服务器知道你的app，我们需要向它注册app： code-push app add <appName>，就可以了。CODE-PUSH APP相关命令</p><ul><li>add 在账号里面添加一个新的app</li><li>remove 或者 rm 在账号里移除一个app</li><li>rename 重命名一个存在app</li><li>list 或则 ls 列出账号下面的所有app</li></ul><p>transfer 把app的所有权转移到另外一个账号</p><p>四、在app中添加SDK</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-code-push@latest --save<br></code></pre></td></tr></table></figure><p>     配置config.xml</p><p>     在你的 index.html 中允许安全策略，添加 <a href="https://codepush.azurewebsites.net/">https://codepush.azurewebsites.net</a> 的域名：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;meta http-equiv=<span class="hljs-string">&quot;Content-Security-Policy&quot;</span> content=<span class="hljs-string">&quot;default-src https://codepush.azurewebsites.net ... /&gt;</span><br><span class="hljs-string">部署APP相关命令</span><br></code></pre></td></tr></table></figure><ul><li>code-push deployment add <appName> 部署</li><li>code-push deployment rename <appName> 重命名</li><li>code-push deployment rm <appName> 删除部署</li><li>code-push deployment ls <appName> 列出应用的部署情况</li><li>code-push deployment ls <appName> -k 查看部署的key</li></ul><p>五、发布</p><p>     release有很多种形式</p><p>     我们用code-push release-cordova <appName> <platform> –deploymentName Production –description 我是备注</p><p><img src="/image/article/concept/code-push/2a41fd03-c725-439b-a217-0c8dc1b508c8.png"></p><p>我测试的时候使用的是ios，没想到android还不一样，下面的博客是这么写的，有时间我需要试一下</p><p><img src="/image/article/concept/code-push/b4d0e928-574d-4e69-8477-17ad466d8f7f.png"></p><p>隔了一星期，试了一下，发现这篇文章是针对react的code-push</p><p>我们使用的是cordova的code-push，还是不一样的，</p><p>尝试的结果是android和ios都是基于cordova的config文件的版本号更新的</p><p>下面是自定义的下载进程：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;div&gt;<br><br>&#123;&#123;(new Number(current/total*100)).toFixed(2)+<span class="hljs-string">&quot;%&quot;</span>&#125;&#125;<br><br>&lt;/div&gt;<br><br>const downloadProgress = (progress) =&gt; &#123;<br><br>// console.log(`Downloaded <span class="hljs-variable">$&#123;progress.receivedBytes&#125;</span> of <span class="hljs-variable">$&#123;progress.totalBytes&#125;</span>`);<br><br>self.current = progress.receivedBytes;<br><br>self.total = progress.totalBytes;<br><br>&#125;<br><br>codePush.<span class="hljs-built_in">sync</span>( null, &#123;updateDialog: <span class="hljs-literal">true</span>, installMode:InstallMode.IMMEDIATE, mandatoryInstallMode: InstallMode.IMMEDIATE&#125;, downloadProgress );<br></code></pre></td></tr></table></figure><p>参考链接：</p><p><a href="http://bbs.reactnative.cn/topic/725/code-push-%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E%E5%92%8C%E6%95%99%E7%A8%8B/2">http://bbs.reactnative.cn/topic/725/code-push-%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E%E5%92%8C%E6%95%99%E7%A8%8B/2</a></p><p><a href="https://github.com/Microsoft/code-push/tree/master/cli#releasing-updates-general">https://github.com/Microsoft/code-push/tree/master/cli#releasing-updates-general</a></p><p><a href="https://microsoft.github.io/code-push/docs/cordova.html#link-5">https://microsoft.github.io/code-push/docs/cordova.html#link-5</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>概念知识</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Cordova</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ionic和Cordova的关系</title>
     <link href="/2016/11/28/cordova/Ionic-cordova/"/>
     <url>/2016/11/28/cordova/Ionic-cordova/</url>
     
@@ -694,14 +937,14 @@
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
       
     </tags>
     
@@ -710,25 +953,44 @@
   
   
   <entry>
-    <title>cordova小知识</title>
+    <title>Cordova小知识</title>
     <link href="/2016/11/24/cordova/cordova-tips/"/>
     <url>/2016/11/24/cordova/cordova-tips/</url>
     
-    <content type="html"><![CDATA[<h1 id="cordova小知识"><a href="#cordova小知识" class="headerlink" title="cordova小知识"></a>cordova小知识</h1><h3 id="一、概念知识"><a href="#一、概念知识" class="headerlink" title="一、概念知识"></a>一、概念知识</h3><ul><li>Cordova：Cordova 能够将你的 HTML&#x2F;JS 代码打包在一个原生的容器中运行，并且可以调用系统的各类软硬件接口（JavaScript API）。我们将这种架构称之为 hybrid app , 得益于这种架构，我们能将前端代码跨平台运行，并且得到接近原生应用的系统特性。最终发布到各大应用市场，包括苹果的 App Store。</li><li>Cordova插件：Cordova 通过插件的生态系统为开发者提供了广泛的软硬件接口支持，诸如文件读写、推送通知、解压缩、通讯录等等。这种方式保证了在开发过程中按需引入相应的功能插件，同时也加快了插件的更新维护，减少代码冗余。Cordova 插件使用 CLI 的方式经过 NPM 管理依赖并安装，十分方便。</li><li>Cross-walk：Cross-walk 是英特尔开发的一款为HTML应用提供运行时环境的开源项目，它基于最新的 Chromium 核心开发，可以提供最新的 Web 特性和一致的兼容性。随着 Cordova Android 4.0.0+ 引入了对嵌入式 webview 的支持，现在你可以方便地在你的 Cordova 应用上使用 Crosswalk 的 webview。通过使用 Crosswalk 的 webview 插件，开发者可以享用远程调试的功能，前沿的 HTML5 特性，例如WebGL, WebAudio 和 WebRTC，以及在包括 Android 4.0 Ice Cream Sandwich(ICS) 在内的 Android 设备上性能的显著提升。</li><li>CodePush：CodePush 是微软提供的一项云服务，它为开发者提供了直接向用户推送热更新 (Hot-Code-Update) 的软件支持和 CDN 分发网络。CodePush 为 Cordova 开发者提供了插件，我们可以快速地植入应用中。它提供的特性包括：版本管理、灰度更新、紧急回滚、增量更新 (Diff) 等等。它的 CDN 是世界上最大的 CDN 服务商 Akamai 提供的，稳定性和速度可想而知。未来可能收费</li></ul><h3 id="二、创建并运行项目"><a href="#二、创建并运行项目" class="headerlink" title="二、创建并运行项目"></a>二、创建并运行项目</h3><p>官方文档地址：<a href="https://cordova.apache.org/">https://cordova.apache.org/</a></p><p>安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova create hello com.example.hello HelloWorld<br><span class="hljs-comment"># hello是文件夹</span><br><span class="hljs-comment"># com.example.hello 是包名</span><br><span class="hljs-comment"># helloworld是app名字</span><br></code></pre></td></tr></table></figure><p>1、运行ios模拟器时，需要指定版本</p><p>查看当前的模拟器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./platforms/ios/cordova/lib/list-emulator-images<br>iPhone-4s<br>iPhone-5<br>iPhone-5s<br>iPhone-6-PlusiPhone-6<br>iPad-2<br><br>iPad-Retina<br><br>iPad-Air<br>Resizable-iPhone<br>Resizable-iPad<br></code></pre></td></tr></table></figure><p>使用命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --target  iPhone-5<br><span class="hljs-comment">#iPhone 总是会不小心写错成 iphone</span><br></code></pre></td></tr></table></figure><p>2、使用ios真机调试必须先安装ios-deploy但是sudo npm install -g ios-deploy是报错的，issue参靠链接：</p><p><a href="https://github.com/phonegap/ios-deploy/issues/188">https://github.com/phonegap/ios-deploy/issues/188</a></p><p>你要是懒得看英文，那就这个吧：</p><p><a href="http://blog.csdn.net/cooldragon/article/details/50925633">http://blog.csdn.net/cooldragon/article/details/50925633</a></p><p>最终安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo npm install -g ios-deploy --unsafe-perm=<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure><p>如果你安装过ios-deploy,使用模拟器就必加–emulator命令，示例：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --emulator --target  iPhone-5<br></code></pre></td></tr></table></figure><h3 id="三、使用-Cordova-插件引入-Cross-walk-webview"><a href="#三、使用-Cordova-插件引入-Cross-walk-webview" class="headerlink" title="三、使用 Cordova 插件引入 Cross-walk webview"></a>三、使用 Cordova 插件引入 Cross-walk webview</h3><p>在实际开发中，会遇到 Android 系统版本落后，原生 webview 性能差兼容性差的问题，所以我们要用 Cross-walk 替换原生的 Android webview 来运行我们的项目。 Cross-walk 开发社区已经为我们准备好了 Cordova 插件，只需要运行：  </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-crosswalk-webview@latest —save  <br></code></pre></td></tr></table></figure><p>成功安装后再次 cordova build android ，你会发现输出了两个 apk 文件，一个对应 arm 平台，一个对应 x86 平台，体积相较原来的文件增加了 20M 左右，多出来的体积便是 crosswalk-webview 的 runtime。 </p><p>你也可以在项目的 config.xml 中设置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;plugin name=<span class="hljs-string">&quot;cordova-plugin-crosswalk-webview&quot;</span> spec=<span class="hljs-string">&quot;~2.2.0&quot;</span>&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_VERSION&quot;</span> value=<span class="hljs-string">&quot;22+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_LITEVERSION&quot;</span> value=<span class="hljs-string">&quot;xwalk_core_library_canary:17+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_COMMANDLINE&quot;</span> value=<span class="hljs-string">&quot;--disable-pull-to-refresh-effect&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MODE&quot;</span> value=<span class="hljs-string">&quot;embedded&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MULTIPLEAPK&quot;</span> value=<span class="hljs-string">&quot;true&quot;</span> /&gt;<br>&lt;/plugin&gt;<br></code></pre></td></tr></table></figure><p>把 XWALK_MULTIPLEAPK 的 value 设置为 false，即可打包出一个整合两个平台的 apk 包，当然，体积会暴增至 40M+。</p><h3 id="四、使用-Chrome-调试-Cross-walk-webview-中的项目"><a href="#四、使用-Chrome-调试-Cross-walk-webview-中的项目" class="headerlink" title="四、使用 Chrome 调试 Cross-walk webview 中的项目"></a>四、使用 Chrome 调试 Cross-walk webview 中的项目</h3><p>由于 Cross-walk 基于 Chromium，天生便具有了 Chrome 远程调试的功能。 电脑连接 Android 手机并开启 USB 调试模式，打开你的 Cordova 项目后，在 Chrome 浏览器地址栏中输入 chrome:&#x2F;&#x2F;inspect ，选择你的设备，即可打开远程控制台，真机调试变得十分方便。Vue Devtool 同样可以在此使用。</p><h3 id="五、iOS-的小优化-将-UIWebView-替换为-WKWebView"><a href="#五、iOS-的小优化-将-UIWebView-替换为-WKWebView" class="headerlink" title="五、iOS 的小优化 将 UIWebView 替换为 WKWebView"></a>五、iOS 的小优化 将 UIWebView 替换为 WKWebView</h3><p>WKWebView 是苹果在 iOS 8 中引入的新组件，目的是给出一个新的高性能的 Web View 解决方案，摆脱过去 UIWebView 的老旧笨重特别是内存占用量巨大的问题（打开一个示例项目，WKWebView 占用23M，而 UIWebView 占用85M）。 </p><p>在这里我们将使用 WKWebView 替换 Cordova 默认的 UIWebView： </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-wkwebview-engine@latest --save<br></code></pre></td></tr></table></figure><p> 并在 config.xml 的 <platform name="ios"> 中添加：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;feature name=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span>&gt;<br>    &lt;param name=<span class="hljs-string">&quot;ios-package&quot;</span> value=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span> /&gt;<br>&lt;/feature&gt;<br></code></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<h1 id="Cordova小知识"><a href="#Cordova小知识" class="headerlink" title="Cordova小知识"></a>Cordova小知识</h1><h3 id="一、概念知识"><a href="#一、概念知识" class="headerlink" title="一、概念知识"></a>一、概念知识</h3><ul><li>Cordova：Cordova 能够将你的 HTML&#x2F;JS 代码打包在一个原生的容器中运行，并且可以调用系统的各类软硬件接口（JavaScript API）。我们将这种架构称之为 hybrid app , 得益于这种架构，我们能将前端代码跨平台运行，并且得到接近原生应用的系统特性。最终发布到各大应用市场，包括苹果的 App Store。</li><li>Cordova插件：Cordova 通过插件的生态系统为开发者提供了广泛的软硬件接口支持，诸如文件读写、推送通知、解压缩、通讯录等等。这种方式保证了在开发过程中按需引入相应的功能插件，同时也加快了插件的更新维护，减少代码冗余。Cordova 插件使用 CLI 的方式经过 NPM 管理依赖并安装，十分方便。</li><li>Cross-walk：Cross-walk 是英特尔开发的一款为HTML应用提供运行时环境的开源项目，它基于最新的 Chromium 核心开发，可以提供最新的 Web 特性和一致的兼容性。随着 Cordova Android 4.0.0+ 引入了对嵌入式 webview 的支持，现在你可以方便地在你的 Cordova 应用上使用 Crosswalk 的 webview。通过使用 Crosswalk 的 webview 插件，开发者可以享用远程调试的功能，前沿的 HTML5 特性，例如WebGL, WebAudio 和 WebRTC，以及在包括 Android 4.0 Ice Cream Sandwich(ICS) 在内的 Android 设备上性能的显著提升。</li><li>CodePush：CodePush 是微软提供的一项云服务，它为开发者提供了直接向用户推送热更新 (Hot-Code-Update) 的软件支持和 CDN 分发网络。CodePush 为 Cordova 开发者提供了插件，我们可以快速地植入应用中。它提供的特性包括：版本管理、灰度更新、紧急回滚、增量更新 (Diff) 等等。它的 CDN 是世界上最大的 CDN 服务商 Akamai 提供的，稳定性和速度可想而知。未来可能收费</li></ul><h3 id="二、创建并运行项目"><a href="#二、创建并运行项目" class="headerlink" title="二、创建并运行项目"></a>二、创建并运行项目</h3><p>官方文档地址：<a href="https://cordova.apache.org/">https://cordova.apache.org/</a></p><p>安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova create hello com.example.hello HelloWorld<br><span class="hljs-comment"># hello是文件夹</span><br><span class="hljs-comment"># com.example.hello 是包名</span><br><span class="hljs-comment"># helloworld是app名字</span><br></code></pre></td></tr></table></figure><p>1、运行ios模拟器时，需要指定版本</p><p>查看当前的模拟器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./platforms/ios/cordova/lib/list-emulator-images<br>iPhone-4s<br>iPhone-5<br>iPhone-5s<br>iPhone-6-PlusiPhone-6<br>iPad-2<br><br>iPad-Retina<br><br>iPad-Air<br>Resizable-iPhone<br>Resizable-iPad<br></code></pre></td></tr></table></figure><p>使用命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --target  iPhone-5<br><span class="hljs-comment">#iPhone 总是会不小心写错成 iphone</span><br></code></pre></td></tr></table></figure><p>2、使用ios真机调试必须先安装ios-deploy但是sudo npm install -g ios-deploy是报错的，issue参靠链接：</p><p><a href="https://github.com/phonegap/ios-deploy/issues/188">https://github.com/phonegap/ios-deploy/issues/188</a></p><p>你要是懒得看英文，那就这个吧：</p><p><a href="http://blog.csdn.net/cooldragon/article/details/50925633">http://blog.csdn.net/cooldragon/article/details/50925633</a></p><p>最终安装命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo npm install -g ios-deploy --unsafe-perm=<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure><p>如果你安装过ios-deploy,使用模拟器就必加–emulator命令，示例：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova run ios --emulator --target  iPhone-5<br></code></pre></td></tr></table></figure><h3 id="三、使用-Cordova-插件引入-Cross-walk-webview"><a href="#三、使用-Cordova-插件引入-Cross-walk-webview" class="headerlink" title="三、使用 Cordova 插件引入 Cross-walk webview"></a>三、使用 Cordova 插件引入 Cross-walk webview</h3><p>在实际开发中，会遇到 Android 系统版本落后，原生 webview 性能差兼容性差的问题，所以我们要用 Cross-walk 替换原生的 Android webview 来运行我们的项目。 Cross-walk 开发社区已经为我们准备好了 Cordova 插件，只需要运行：  </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-crosswalk-webview@latest —save  <br></code></pre></td></tr></table></figure><p>成功安装后再次 cordova build android ，你会发现输出了两个 apk 文件，一个对应 arm 平台，一个对应 x86 平台，体积相较原来的文件增加了 20M 左右，多出来的体积便是 crosswalk-webview 的 runtime。 </p><p>你也可以在项目的 config.xml 中设置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;plugin name=<span class="hljs-string">&quot;cordova-plugin-crosswalk-webview&quot;</span> spec=<span class="hljs-string">&quot;~2.2.0&quot;</span>&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_VERSION&quot;</span> value=<span class="hljs-string">&quot;22+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_LITEVERSION&quot;</span> value=<span class="hljs-string">&quot;xwalk_core_library_canary:17+&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_COMMANDLINE&quot;</span> value=<span class="hljs-string">&quot;--disable-pull-to-refresh-effect&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MODE&quot;</span> value=<span class="hljs-string">&quot;embedded&quot;</span> /&gt;<br>    &lt;variable name=<span class="hljs-string">&quot;XWALK_MULTIPLEAPK&quot;</span> value=<span class="hljs-string">&quot;true&quot;</span> /&gt;<br>&lt;/plugin&gt;<br></code></pre></td></tr></table></figure><p>把 XWALK_MULTIPLEAPK 的 value 设置为 false，即可打包出一个整合两个平台的 apk 包，当然，体积会暴增至 40M+。</p><h3 id="四、使用-Chrome-调试-Cross-walk-webview-中的项目"><a href="#四、使用-Chrome-调试-Cross-walk-webview-中的项目" class="headerlink" title="四、使用 Chrome 调试 Cross-walk webview 中的项目"></a>四、使用 Chrome 调试 Cross-walk webview 中的项目</h3><p>由于 Cross-walk 基于 Chromium，天生便具有了 Chrome 远程调试的功能。 电脑连接 Android 手机并开启 USB 调试模式，打开你的 Cordova 项目后，在 Chrome 浏览器地址栏中输入 chrome:&#x2F;&#x2F;inspect ，选择你的设备，即可打开远程控制台，真机调试变得十分方便。Vue Devtool 同样可以在此使用。</p><h3 id="五、iOS-的小优化-将-UIWebView-替换为-WKWebView"><a href="#五、iOS-的小优化-将-UIWebView-替换为-WKWebView" class="headerlink" title="五、iOS 的小优化 将 UIWebView 替换为 WKWebView"></a>五、iOS 的小优化 将 UIWebView 替换为 WKWebView</h3><p>WKWebView 是苹果在 iOS 8 中引入的新组件，目的是给出一个新的高性能的 Web View 解决方案，摆脱过去 UIWebView 的老旧笨重特别是内存占用量巨大的问题（打开一个示例项目，WKWebView 占用23M，而 UIWebView 占用85M）。 </p><p>在这里我们将使用 WKWebView 替换 Cordova 默认的 UIWebView： </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cordova plugin add cordova-plugin-wkwebview-engine@latest --save<br></code></pre></td></tr></table></figure><p> 并在 config.xml 的 <platform name="ios"> 中添加：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;feature name=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span>&gt;<br>    &lt;param name=<span class="hljs-string">&quot;ios-package&quot;</span> value=<span class="hljs-string">&quot;CDVWKWebViewEngine&quot;</span> /&gt;<br>&lt;/feature&gt;<br></code></pre></td></tr></table></figure>]]></content>
     
     
     <categories>
       
-      <category>cordova</category>
+      <category>Cordova</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>cordova</tag>
+      <tag>Cordova</tag>
       
     </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>常用的git命令</title>
+    <link href="/2016/04/06/other/git-bash/"/>
+    <url>/2016/04/06/other/git-bash/</url>
+    
+    <content type="html"><![CDATA[<h1 id="常用的git命令"><a href="#常用的git命令" class="headerlink" title="常用的git命令"></a>常用的git命令</h1><p>1、创建分支</p><p>     git branch temp</p><p>     或者git checkout -b temp</p><p>2、推送本地分支到远程</p><p>     git push origin temp</p><p>3、删除本地分支</p><p>     git branch -d temp</p><p>     有时候你可能需要一个大写的D</p><p>4、删除远程分支</p><p>     git v1.7.0之后可以用 </p><p>               git push origin –delete temp</p><p>    通用做法是(推动一个空分支覆盖远程分支)</p><p>            git push origin :temp</p><p>5、撤销错误的提交</p><p>     1、本地代码还原至老版本</p><p>          git reset –hard <commit-hash></p><p>     2、强制提交覆盖</p><p>          git push -f origin temp</p><p>6、创建标签</p><p>      创建普通标签</p><p>          git tag v2.3.1</p><p>     创建带注释的标签</p><p>           git tag -a v2.3.1 -m “2.3.1源码”</p><p>           git tag 是打标签的命令，-a 是添加标签，其后要跟新标签号，-m 及后面的字符串是对该标签的注释。</p><p>7、操作标签</p><p>      显示本地所有标签</p><p>          git tag</p><p>      提交标签</p><p>           git push origin v2.3.1</p><p>      一次性提交所有标签</p><p>          git push origin  –tags</p><p>      删除本地标签</p><p>          git tag -d v2.3.1</p><p>      删除远程标签</p><p>          git push origin :refs&#x2F;tags&#x2F;v2.3.1 </p><p>          或者git v1.7.0 以后和删除分支一样</p><p>          git push origin –delete v2.3.1</p><p>    拉取远程tag</p><p>        git fetch origin tag <tagname></p><p>8、直接创建并拉取远程分支，然后切换到这个分支 </p><p>   git checkout -t origin&#x2F;temp</p><p>9、远程分支已经删除了，可是本地缓存还是显示这个分支</p><p>     查看remote地址，远程分支，还有本地分支与之相对应关系 </p><p>          git remote show origin</p><p>    删除远程仓库已经不存在的分支</p><p>          git remote prune origin</p><p>10.gitignore忽略的文件还是会被提交是git缓存的问题</p><p>        git rm -r –cached .</p><p>        git add .</p><p>        git commit -m ‘update .gitignore’</p><p>11、更新remote</p><p>修改命令  git remote origin set-url URL</p><p>           先删后加</p><p>                git remote rm origin</p><p>                git remote add origin <a href="mailto:git@github.com">git@github.com</a>:Liutos&#x2F;foobar.git</p><p>           git gui</p><p>12、有一次报错，本地分支和远程分支未关联，代码拉不下来</p><p>git pull origin master –allow-unrelated-histories</p><p><img src="/image/article/other/git-bash/61ed5d55-83ea-472e-87ec-ebab70281cea.png"></p><p>13、切换git用户</p><p>先更换用户</p><p>$ git config –global user.name “your_email_prefix”</p><p>$ git config –global user.email  “your_email”</p><p>重新生成sshkey</p><p>$ ssh-keygen -t rsa -C “your_email”</p><p>把key添加到git个人信息(mac地址： ~&#x2F;.ssh&#x2F;id_rsa.pub )</p><p>把key添加到ssh agent</p><p>$ ssh-agent bash</p><p>$ ssh-add ~&#x2F;.ssh&#x2F;id_rsa</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>随手记</category>
+      
+    </categories>
+    
     
   </entry>
   
