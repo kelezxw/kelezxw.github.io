@@ -1,0 +1,834 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Object.defineProperty 是什么鬼假设我们有个对象 user ; 我们要给它增加一个属性 name , 我们会这么做 123var user &#x3D; &amp;#123;&amp;#125;;user.name&#x3D;&quot;狂奔的蜗牛&quot;;console.log(user);&#x2F;&#x2F;&amp;#123;name: &quot;狂奔的蜗牛&quot;&amp;#125;  如果想要增加一个sayHi方法呢？ 12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Object.defineProperty是什么">
+<meta property="og:url" content="http://bestkele.com/2021/06/28/concept/Object-defineProperty/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="Object.defineProperty 是什么鬼假设我们有个对象 user ; 我们要给它增加一个属性 name , 我们会这么做 123var user &#x3D; &amp;#123;&amp;#125;;user.name&#x3D;&quot;狂奔的蜗牛&quot;;console.log(user);&#x2F;&#x2F;&amp;#123;name: &quot;狂奔的蜗牛&quot;&amp;#125;  如果想要增加一个sayHi方法呢？ 12">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bestkele.com/image/article/concept/Object-defineProperty/723c0f9b-8cd1-4cd0-b554-2d882cf1d68b.png">
+<meta property="og:image" content="http://bestkele.com/image/article/concept/Object-defineProperty/e63b0606-fe5e-4af8-b19b-c89341a07984.png">
+<meta property="og:image" content="http://bestkele.com/image/article/concept/Object-defineProperty/b28f4855-4ace-4a3d-a454-518a17a23a73.png">
+<meta property="og:image" content="http://bestkele.com/image/article/concept/Object-defineProperty/1e0d44ad-8633-48a8-a6c9-253bcec3c1f8.jpg">
+<meta property="article:published_time" content="2021-06-28T11:25:32.000Z">
+<meta property="article:modified_time" content="2023-08-14T11:51:15.366Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://bestkele.com/image/article/concept/Object-defineProperty/723c0f9b-8cd1-4cd0-b554-2d882cf1d68b.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Object.defineProperty是什么 - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Object.defineProperty是什么"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-06-28 19:25" pubdate>
+          2021年6月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Object.defineProperty是什么</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年8月14日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Object-defineProperty-是什么鬼"><a href="#Object-defineProperty-是什么鬼" class="headerlink" title="Object.defineProperty 是什么鬼"></a>Object.defineProperty 是什么鬼</h1><p>假设我们有个对象 user ; 我们要给它增加一个属性 name , 我们会这么做</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user = &#123;&#125;;<br>user.<span class="hljs-property">name</span>=<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">//&#123;name: &quot;狂奔的蜗牛&quot;&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>如果想要增加一个sayHi方法呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript">user.<span class="hljs-property">sayHi</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123; <br>	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hi !&quot;</span>) <br>&#125;;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">//&#123;name: &quot;狂奔的蜗牛&quot;, sayHi: ƒn&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>Object.defineProperty 就是做这个的</p>
+<p><strong>那么Object.defineProperty 怎么用？</strong></p>
+<p>Object.defineProperty 需要三个参数（object , propName , descriptor）</p>
+<ul>
+<li>object 对象 &#x3D;&gt; 给谁加</li>
+<li>propName 属性名 &#x3D;&gt; 要加的属性的名字 【类型：String】</li>
+<li>descriptor 属性描述 &#x3D;&gt; 加的这个属性有什么样的特性【类型：Object】</li>
+</ul>
+<h3 id="那么descriptor这个是个对象-，他有那些属性呢-别着急我们一个一个说；"><a href="#那么descriptor这个是个对象-，他有那些属性呢-别着急我们一个一个说；" class="headerlink" title="那么descriptor这个是个对象 ，他有那些属性呢 ? 别着急我们一个一个说；"></a>那么descriptor这个是个对象 ，他有那些属性呢 ? 别着急我们一个一个说；</h3><h3 id="1、writable"><a href="#1、writable" class="headerlink" title="1、writable"></a>1、writable</h3><p>既然可以给一个对象增加属性，那么我们用它来做一下给 user添加 name属性，代码是这样的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user = &#123;&#125;;<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;name&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125;);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">//&#123;name: &quot;狂奔的蜗牛&quot;&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>说明 是的还是那个经典的value属性，他就是设置属性值的。</p>
+<p>等等，属性值只能为字符串吗？我们的 number function Object boolean 等呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user = &#123;&#125;;<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;name&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125;)<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;isSlow&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-literal">true</span>&#125;)<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;sayHi&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123; <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hi !&quot;</span>) &#125;&#125;)<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-number">12</span>&#125;)<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;birth&quot;</span>,&#123; <span class="hljs-attr">value</span>:&#123;  <span class="hljs-attr">date</span>:<span class="hljs-string">&quot;2018-06-29&quot;</span>,  <span class="hljs-attr">hour</span>:<span class="hljs-string">&quot;15:30&quot;</span> &#125;&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<br></code></pre></td></tr></table></figure>
+
+<p><img src="/image/article/concept/Object-defineProperty/723c0f9b-8cd1-4cd0-b554-2d882cf1d68b.png" srcset="/img/loading.gif" lazyload></p>
+<p>说明 事实证明任何类型的数据都是可以的哦~</p>
+<p>问题又来了，如果 user对象已经有了name属性，我们可以通过Object.defineProperty改变这个值吗？我们来试试:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user = &#123;&#125;;<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;name&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<br>user.<span class="hljs-property">name</span>=<span class="hljs-string">&quot;新=&gt;狂奔的蜗牛&quot;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<br></code></pre></td></tr></table></figure>
+
+<p>咦？？为什么我改了没作用勒？？</p>
+<p>原因：上边说了descriptor有很多属性，除了value属性还有个 writable【顾名思义属性是否可以被重新赋值】接受数据类型为 boolean（默认为false） true &#x3D;&gt; 支持被重新赋值 false&#x3D;&gt;只读</p>
+<p>哦哦，原来如果我没设置writable值的时候就默认只读啊，所以才改不掉</p>
+<p>那我们看看，设置为true，是不是就可以改掉了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user = &#123;&#125;;<br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;name&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>, <span class="hljs-attr">writable</span>:<span class="hljs-literal">true</span>&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<br>user.<span class="hljs-property">name</span>=<span class="hljs-string">&quot;新=&gt;狂奔的蜗牛&quot;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<br></code></pre></td></tr></table></figure>
+
+<p><img src="/image/article/concept/Object-defineProperty/e63b0606-fe5e-4af8-b19b-c89341a07984.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2、enumerable"><a href="#2、enumerable" class="headerlink" title="2、enumerable"></a>2、enumerable</h3><p>enumerable【顾名思义属性是否可以被枚举】接受数据类型为 boolean（默认为false） true &#x3D;&gt; 支持被枚举 false&#x3D;&gt;不支持</p>
+<p>额。。。枚举？？什….什么意思？</p>
+<p>假设我们想知道这个 user对象有哪些属性我们一般会这么做</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>, <span class="hljs-attr">age</span>:<span class="hljs-number">25</span>&#125; ; <br><span class="hljs-comment">//es6</span><br><span class="hljs-keyword">var</span> keys=<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(user)<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(keys);<span class="hljs-comment">// [&#x27;name&#x27;,&#x27;age&#x27;]</span><br><span class="hljs-comment">//es5</span><br><span class="hljs-keyword">var</span> keys=[];<span class="hljs-keyword">for</span>(key <span class="hljs-keyword">in</span> user)&#123;<br> keys.<span class="hljs-title function_">push</span>(key);<br>&#125;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(keys);<span class="hljs-comment">// [&#x27;name&#x27;,&#x27;age&#x27;]</span><br></code></pre></td></tr></table></figure>
+
+<p>如果我们使用 Object.的方式定义属性会发生什么呢？我们来看下输出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>, <span class="hljs-attr">age</span>:<span class="hljs-number">25</span>&#125; ;<br><span class="hljs-comment">//定义一个性别 可以被枚举</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;gender&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;男&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">true</span>&#125;) <br><span class="hljs-comment">//定义一个出生日期 不可以被枚举</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;birth&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;1956-05-03&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">false</span>&#125;) <br><span class="hljs-comment">//es6</span><br><span class="hljs-keyword">var</span> keys=<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(user)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(keys);<span class="hljs-comment">// [&quot;name&quot;, &quot;age&quot;, &quot;gender&quot;] </span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">// &#123;name: &quot;狂奔的蜗牛&quot;, age: 25, gender: &quot;男&quot;, birth: &quot;1956-05-03&quot;&#125;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">birth</span>);<span class="hljs-comment">// 1956-05-03</span><br></code></pre></td></tr></table></figure>
+
+<p>很明显，我们定义为　enumerable&#x3D;false的birth属性并没有被遍历出来，遍历 &#x3D;&gt; 其实就是枚举（个人理解啦，不喜勿喷哦~）</p>
+<p><strong>总结：</strong>enumerable 属性取值为 布尔类型 true | false 默认值为 false，为真属性可以被枚举；反之则不能。此设置不影响属性的调用和 查看对象的值。</p>
+<h3 id="3、configurable"><a href="#3、configurable" class="headerlink" title="3、configurable"></a>3、configurable</h3><p>configurable 是接下来我们要讲的一个属性，这个属性有两个作用：</p>
+<p>1 属性是否可以被删除</p>
+<p>2 属性的特性在第一次设置之后可否被重新定义特性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>, <span class="hljs-attr">age</span>:<span class="hljs-number">25</span>&#125; ;<br><span class="hljs-comment">//定义一个性别 不可以被删除和重新定义特性</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;gender&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;男&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>:<span class="hljs-literal">false</span>&#125;) <br><span class="hljs-comment">//删除一下</span><br><span class="hljs-keyword">delete</span> user.<span class="hljs-property">gender</span>;<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">//&#123;name: &quot;狂奔的蜗牛&quot;, age: 25, gender: &quot;男&quot;&#125; </span><br><span class="hljs-comment">//重新定义特性</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;gender&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;男&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>:<span class="hljs-literal">true</span>&#125;)<br><span class="hljs-comment">// Uncaught TypeError: Cannot redefine property: gender//会报错，如下图</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/image/article/concept/Object-defineProperty/b28f4855-4ace-4a3d-a454-518a17a23a73.png" srcset="/img/loading.gif" lazyload></p>
+<p>设置为 true</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>, <span class="hljs-attr">age</span>:<span class="hljs-number">25</span>&#125;;<br><span class="hljs-comment">//定义一个性别 可以被删除和重新定义特性</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;gender&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;男&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>:<span class="hljs-literal">true</span>&#125;) <br><span class="hljs-comment">//删除前</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">// &#123;name: &quot;狂奔的蜗牛&quot;, age: 25, gender: &quot;男&quot;&#125; </span><br><span class="hljs-comment">//删除一下</span><br><span class="hljs-keyword">delete</span> user.<span class="hljs-property">gender</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">// &#123;name: &quot;狂奔的蜗牛&quot;, age: 25&#125; </span><br><span class="hljs-comment">//重新定义特性</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;gender&quot;</span>,&#123; <span class="hljs-attr">value</span>:<span class="hljs-string">&quot;男&quot;</span>, <span class="hljs-attr">enumerable</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>:<span class="hljs-literal">false</span>&#125;) <br><span class="hljs-comment">//删除前</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">// &#123;name: &quot;狂奔的蜗牛&quot;, age: 25, gender: &quot;男&quot;&#125;</span><br><span class="hljs-comment">//删除一下 删除失败</span><br><span class="hljs-keyword">delete</span> user.<span class="hljs-property">gender</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user);<span class="hljs-comment">// &#123;name: &quot;狂奔的蜗牛&quot;, age: 25, gender: &quot;男&quot;&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4、Set和Get"><a href="#4、Set和Get" class="headerlink" title="4、Set和Get"></a>4、Set和Get</h3><p>最后我们来说说，最重要的两个属性 set和get（即存取器描述：定义属性如何被存取），这两个属性是做什么用的呢？我们通过代码来看看</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125; ;<br><span class="hljs-keyword">var</span> count = <span class="hljs-number">12</span>;<br><span class="hljs-comment">//定义一个age 获取值时返回定义好的变量count</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <span class="hljs-attr">get</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;  <span class="hljs-keyword">return</span> count; &#125;&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//12 </span><br><span class="hljs-comment">//如果我每次获取的时候返回count+1呢</span><br><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125; ;<br><span class="hljs-keyword">var</span> count = <span class="hljs-number">12</span>;<br><span class="hljs-comment">//定义一个age 获取值时返回定义好的变量count</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <span class="hljs-attr">get</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;  <span class="hljs-keyword">return</span> count+<span class="hljs-number">1</span>; &#125;&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//13</span><br></code></pre></td></tr></table></figure>
+
+<p>接下来我不用解释了吧，你想在获取该属性的时候对值做什么随你咯~</p>
+<p>来来来，我们看看 set，不多说上代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125; ;<br><span class="hljs-keyword">var</span> count = <span class="hljs-number">12</span>;<br><span class="hljs-comment">//定义一个age 获取值时返回定义好的变量count</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <span class="hljs-attr">get</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;  <span class="hljs-keyword">return</span> count; &#125;, <span class="hljs-attr">set</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">newVal</span>)&#123;  count=newVal; &#125;&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//12</span><br>user.<span class="hljs-property">age</span>=<span class="hljs-number">145</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//145</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count);<span class="hljs-comment">//145 </span><br><span class="hljs-comment">//等等，如果我想设置的时候是 自动加1呢？我设置145 实际上设置是146 </span><br><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125; ;<br><span class="hljs-keyword">var</span> count = <span class="hljs-number">12</span>;<br><span class="hljs-comment">//定义一个age 获取值时返回定义好的变量count</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <br>	<span class="hljs-attr">get</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;  <span class="hljs-keyword">return</span> count; &#125;, <br>	<span class="hljs-attr">set</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">newVal</span>)&#123;  count=newVal+<span class="hljs-number">1</span>; &#125;<br>&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//12</span><br>user.<span class="hljs-property">age</span>=<span class="hljs-number">145</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//146</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count);<span class="hljs-comment">//146</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong>注意：当使用了getter或setter方法，不允许使用writable和value这两个属性(如果使用，会直接报错滴)</p>
+<p>get 是获取值的时候的方法，类型为 function ，获取值的时候会被调用，不设置时为 undefined</p>
+<p>set 是设置值的时候的方法，类型为 function ，设置值的时候会被调用，undefined</p>
+<p>get或set不是必须成对出现，任写其一就可以</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> user =&#123; <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;狂奔的蜗牛&quot;</span>&#125; ;<br><span class="hljs-keyword">var</span> count = <span class="hljs-number">12</span>;<br><span class="hljs-comment">//定义一个age 获取值时返回定义好的变量count</span><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(user,<span class="hljs-string">&quot;age&quot;</span>,&#123; <br>	<span class="hljs-attr">get</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;这个人来获取值了！！&quot;</span>);  <span class="hljs-keyword">return</span> count; &#125;, <br>	<span class="hljs-attr">set</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">newVal</span>)&#123;  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;这个人来设置值了！！&quot;</span>);  count=newVal+<span class="hljs-number">1</span>; &#125;<br>&#125;)<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">age</span>);<span class="hljs-comment">//12user.age=145;console.log(user.age);//146</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/image/article/concept/Object-defineProperty/1e0d44ad-8633-48a8-a6c9-253bcec3c1f8.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><strong>【完结】</strong></p>
+<p>Object.defineProperty方法直接在一个对象上定义一个新属性，或者修改一个已经存在的属性， 并返回这个对象</p>
+<ul>
+<li>value: 设置属性的值</li>
+<li>writable: 值是否可以重写。true | false</li>
+<li>enumerable: 目标属性是否可以被枚举。true | false</li>
+<li>configurable: 目标属性是否可以被删除或是否可以再次修改特性 true | false</li>
+<li>set: 目标属性设置值的方法</li>
+<li>get：目标属性获取值的方法</li>
+</ul>
+<p>原文链接：<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6519575e05">https://www.jianshu.com/p/6519575e05</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%A6%82%E5%BF%B5%E7%9F%A5%E8%AF%86/" class="category-chain-item">概念知识</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/javascript/" class="print-no-link">#javascript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Object.defineProperty是什么</div>
+      <div>http://bestkele.com/2021/06/28/concept/Object-defineProperty/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年6月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/07/22/concept/cache/" title="http缓存">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">http缓存</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/18/flutter/flutter-umeng/" title="Flutter友盟统计插件">
+                        <span class="hidden-mobile">Flutter友盟统计插件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"},"pageview":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

@@ -1,0 +1,801 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一些前端项目转换工具  mpvue：star 20.4k  mini program  vue 文档：http:&#x2F;&#x2F;mpvue.com&#x2F; 原理：https:&#x2F;&#x2F;www.bookstack.cn&#x2F;read&#x2F;CS-Interview-Knowledge-Map&#x2F;spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86 美团出品，实现使用vue语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些前端项目转换工具">
+<meta property="og:url" content="http://bestkele.com/2022/03/03/investigation/transition/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="一些前端项目转换工具  mpvue：star 20.4k  mini program  vue 文档：http:&#x2F;&#x2F;mpvue.com&#x2F; 原理：https:&#x2F;&#x2F;www.bookstack.cn&#x2F;read&#x2F;CS-Interview-Knowledge-Map&#x2F;spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86 美团出品，实现使用vue语">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bestkele.com/image/article/investigation/transition/c7898cf8-fbb4-47ae-9ed5-0449a7c18329.jpg">
+<meta property="og:image" content="http://bestkele.com/image/article/investigation/transition/3dd4907e-a404-4193-b626-c59c09f75c9d.png">
+<meta property="article:published_time" content="2022-03-03T11:18:15.000Z">
+<meta property="article:modified_time" content="2023-08-15T06:39:02.768Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://bestkele.com/image/article/investigation/transition/c7898cf8-fbb4-47ae-9ed5-0449a7c18329.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>一些前端项目转换工具 - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="一些前端项目转换工具"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-03 19:18" pubdate>
+          2022年3月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">一些前端项目转换工具</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年8月15日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一些前端项目转换工具"><a href="#一些前端项目转换工具" class="headerlink" title="一些前端项目转换工具"></a>一些前端项目转换工具</h1><p><img src="/image/article/investigation/transition/c7898cf8-fbb4-47ae-9ed5-0449a7c18329.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/image/article/investigation/transition/3dd4907e-a404-4193-b626-c59c09f75c9d.png" srcset="/img/loading.gif" lazyload></p>
+<p>mpvue：star 20.4k  mini program  vue</p>
+<p>文档：<a target="_blank" rel="noopener" href="http://mpvue.com/">http://mpvue.com/</a></p>
+<p>原理：<a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86">https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/spilt.16.MP-mp-ch.md#%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86</a></p>
+<p>美团出品，实现使用vue语法规范书写页面，可同时转化为H5和微信小程序，新版本也支持其他平台小程序。</p>
+<p>先说下vue的编译原理，</p>
+<p>1、vue-loader加载vue文件解析成js文件；</p>
+<p>2、js经过vue的vue-template-compiler处理成ast语法树（这个语法树可以在下一步生成vue的VNode，也可以是weex的组件，这就是多端实现的底层逻辑）；</p>
+<p>3、ast经过vue的creatElement处理再结合data数据变成VNode，就是虚拟Dom，虚拟dom就可以用diff了（有些文章这一步叫做生成render function，实际上render function返回的就是vnode）；</p>
+<p>4、vue的render方法最后会把VNode转换为实际的dom结构</p>
+<p>mpvue干了什么呢？</p>
+<p>1、首先它修改了vue的runtime，vue的runtime支持生成vue的结构和weex的结构，现在加上了生成小程序的结构；</p>
+<p>2、mpvue使用自己的模板加载器 mpvue-template-compiler直接生成了ast和render function，这里的ast和render function就跟vue的有点不一样了，但是和VNode基本类似；</p>
+<p>3、再下一步用 mpvue-template-compiler的compileToWxml生成wxml，就是小程序的模板。</p>
+<p>这里解释了模板的转化，生命周期，data数据的转化我就不说了（我不懂啊）；</p>
+<p>提一嘴腾讯出的wepy框架，也是vue模板生成小程序，但是语法是vue语法加上自定义的规范，学习成本高一些，也没有mpvue好用，但是他是最早的小程序框架，值得夸奖；</p>
+<p>wepy文档：<a target="_blank" rel="noopener" href="https://wepyjs.github.io/wepy-docs/2.x/#/base/intro">https://wepyjs.github.io/wepy-docs/2.x/#/base/intro</a></p>
+<p>个人感觉：mpvue出的比较早，是个很伟大的尝试，但是也因为出的比较早，局限性就大一些，项目立项之初，它主要考虑的是微信小程序，所以内部很多逻辑是和微信绑定的，实际上只是写法上利用了vue，其他的比如路由跳转还是要用小程序的，组件库可以用小程序的，第三方ui组件库的必须支持mpvue的一些特殊要求才行，还是很有局限性的；但是主要的局限性是不能生成APP。</p>
+<p>trao：star 30.6k   因为部门是叫做凹凸实验室，谐音和奥特曼很像。当时就决定以后有新的开源项目，就以奥特曼来命名，所以 Taro（泰罗）是第一个。</p>
+<p>文档：<a target="_blank" rel="noopener" href="https://taro-docs.jd.com/taro/docs/">https://taro-docs.jd.com/taro/docs/</a></p>
+<p>原理介绍：<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_17775997/article/details/103391294">https://blog.csdn.net/sinat_17775997&#x2F;article&#x2F;details&#x2F;103391294</a></p>
+<p>京东出品，最新的trao3可以使用react&#x2F;vue等框架，同时生成H5，微信京东字节小程序，RN等，尼玛，真牛逼！</p>
+<p>1、trao支持的小程序众多，意味着内部封装继承的程度就更高，不同的客户端小程序在转换之前都必须支持统一的组件写法和api；</p>
+<p>2、在页面组件转化逻辑上，它的本质也是上面的转化图，vue或者react编写的代码转化为ast，再根据不同的小程序端逻辑处理，生成不同端的页面代码；</p>
+<p>3、在路由和api层面，参考对标的也是微信小程序，所以你不能用vue和react的路由；</p>
+<p>4、taro有自己封装的组件库，是以微信小程序为标准设计的（其实我感觉广大的小程序都是依据微信小程序的理念设计的，本质上也就是h5加一部分原生的hybrid），当然api也是自己封装过的；</p>
+<p>5、taro也支持vuex和redux，牛逼牛逼！</p>
+<p>这里提到了一些babel的知识，挺有意思的：</p>
+<ul>
+<li>Babel 可以解析还没有进入 ECMAScript 规范的语法。例如装饰器这样的提案，虽然现在没有进入标准但是已经广泛使用有一段时间了；</li>
+<li>Babel 提供插件机制解析 TypeScript、Flow、JSX这样的 JavaScript 超集，不必单独处理这些语言；</li>
+<li>Babel 拥有庞大的生态，有非常多的文档和样例代码可供参考；除去 parser 本身，Babel 还提供各种方便的工具库可以优化、生成、调试代码…</li>
+</ul>
+<p>我个人的简单理解就是babel是一个function，一个转化工具，输入原始js，输出你想要的的结构化js，比如输入es6输出es5，输入jsx输出js等等，另外注意一下babel是plugin插件可以作用于webpack的各个阶段（注意和loader的区别）；</p>
+<p>由此又引申出一个polyfill垫片，babel的作用一般是把高级js写法变成低级的，polyfill垫片顾名思义是垫平各个浏览器的差异，是个兼容性处理插件，比如ie或者firefox不支持某个方法，polyfill就增加兼容性处理。</p>
+<p>总结：taro真是个很牛逼的框架，我只搜了几篇文章看看原理就觉得很复杂，可想而知具体转化抹平差异的工作量有多大。taro的优势是可以使用vue或者react和其他前端框架写页面，这样群众基础就扩大了，支持转化的客户端类型也很多，估计大部分使用react的玩家都会选择taro，更何况还支持RN。</p>
+<p>uni-app：star 36.1k  uni，读 you ni，是统一的意思。</p>
+<p><a target="_blank" rel="noopener" href="https://uniapp.dcloud.io/history.html">https://uniapp.dcloud.io/history.html</a></p>
+<p>DCloud出品(就是那个Hbuilder工具的开发组织)， 开发者使用 Vue 语法编写代码，uni-app 框架将其编译到 小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;字节跳动&#x2F;QQ&#x2F;快手&#x2F;钉钉）、App（iOS&#x2F;Android）、H5等多个平台；</p>
+<p>DCloud网站有这么一段：“ 很多人以为小程序是微信先推出的，其实，DCloud才是这个行业的开创者。”</p>
+<p>是的，这是真的，当初DCloud刚推出流应用的时候，我还做了一个关于流应用的技术分享会，流应用更像是微信公众号，页面是H5，再加上一点原生API的加持，而微信小程序则是自己制定了一套规则和写法。我个人一直不喜欢小程序，我认为小程序本质上是Hybrid，没有什么新奇的技术，而且自定义语法规则更像是为了打造技术壁垒和生态环境，出发点就不单纯。好了，打住！</p>
+<p>1、uni-app的原理真没找到具体的文章，个人感觉也是ast语法树的转化；</p>
+<p>2、uni-app可以转化为android和ios app，支持两种模式，一种webview加载的hybird，另一种是weex；</p>
+<p>3、uni-app有自己的一套页面组件，可以运行于各个平台，还有vue的组件，但是只能运行在App和H5（这是必然的）；</p>
+<p>总结：uni-app和taro才具有可比性，taro的优势是支持react和vue语法规则，uni-app的优势我认为是webview加载模式，因为RN和Weex毕竟有平台差异，论一致性还是webview有优势，但是webview的性能比较比不上RN和Weex。总体差异倒是不大。两者都很优秀，看个人取舍吧！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E8%B0%83%E7%A0%94/" class="category-chain-item">技术调研</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/vue/" class="print-no-link">#vue</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>一些前端项目转换工具</div>
+      <div>http://bestkele.com/2022/03/03/investigation/transition/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/29/investigation/ios-callkit/" title="ios callkit">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ios callkit</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/16/investigation/ABM/" title="苹果ABM商务应用">
+                        <span class="hidden-mobile">苹果ABM商务应用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"},"pageview":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

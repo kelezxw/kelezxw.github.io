@@ -1,0 +1,858 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="为什么说Flutter是革命性的？Flutter 是什么？ Flutter 移动应用程序 SDK 是为开发人员提供一种创建快捷、美观的应用程序的新方式，从而摆脱过去那种千篇一律的 app，尝试过 Flutter 的人都会真的爱上它。 与任何新系统一样，用户想知道 Flutter 有什么与众不同之处，“Flutter 有什么新的或者令人兴奋的东西吗？”，这是一个合理的问题，本文将从技术的角度回答 F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么说Flutter是革命性的">
+<meta property="og:url" content="http://bestkele.com/2019/10/22/flutter/flutter-revolution/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="为什么说Flutter是革命性的？Flutter 是什么？ Flutter 移动应用程序 SDK 是为开发人员提供一种创建快捷、美观的应用程序的新方式，从而摆脱过去那种千篇一律的 app，尝试过 Flutter 的人都会真的爱上它。 与任何新系统一样，用户想知道 Flutter 有什么与众不同之处，“Flutter 有什么新的或者令人兴奋的东西吗？”，这是一个合理的问题，本文将从技术的角度回答 F">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-22T12:34:25.000Z">
+<meta property="article:modified_time" content="2023-08-14T11:33:42.275Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>为什么说Flutter是革命性的 - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="为什么说Flutter是革命性的"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-10-22 20:34" pubdate>
+          2019年10月22日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          80 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">为什么说Flutter是革命性的</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年8月14日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="为什么说Flutter是革命性的？"><a href="#为什么说Flutter是革命性的？" class="headerlink" title="为什么说Flutter是革命性的？"></a>为什么说Flutter是革命性的？</h1><p><strong>Flutter 是什么？</strong></p>
+<p>Flutter 移动应用程序 SDK 是为开发人员提供一种创建快捷、美观的应用程序的新方式，从而摆脱过去那种千篇一律的 app，尝试过 Flutter 的人都会真的爱上它。</p>
+<p>与任何新系统一样，用户想知道 Flutter 有什么与众不同之处，“Flutter 有什么新的或者令人兴奋的东西吗？”，这是一个合理的问题，本文将从技术的角度回答 Flutter 有什么东西让人兴奋，而且给出它为什么让人兴奋的原因。</p>
+<p>但首先，先讲一小段历史。</p>
+<p><strong>移动开发的简史</strong></p>
+<p>移动开发是一个较新的领域，开发者们开始涉足移动开发时间尚不足十年，所以移动开发的工具仍然在发展当中，这并不奇怪。</p>
+<p>OEM SDKs</p>
+<p>苹果的 iOS SDKs 发布于 2008 年，谷歌的 Android 软件开发工具包发布于 2009 年，这两种工具包基于不同的编程语言，分别是 Objective-C 和 Java。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-a2198197cce08f8d?imageMogr2/auto-orient/strip%7CimageView2/2/w/524/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-a2198197cce08f8d?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;524&#x2F;format&#x2F;webp</a></p>
+<p>通过这些 SDK，你的应用可以与系统通信，以创建 UI 组件或访问系统相机。这些组件被渲染到手机屏幕，而相应的事件则被传回给组件。这个架构足够简单，但你仍然不得不为每个平台开发单独的 App，因为这些系统组件都是不一样的，更不用提开发语言的不同了。</p>
+<p>WebView</p>
+<p>第一个跨平台的框架基于 JavaScript 和 WebView，例如 Titanium 和 一系列相关的框架：PhoneGap, Apache Cordova, Ionic 等，在苹果发布 iOS 之前，他们鼓励第三方开发者为 iPhone 构建网页应用程序，因此使用 Web 技术构建跨平台应用程序是顺理成章的一步。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-14e487d96768657a?imageMogr2/auto-orient/strip%7CimageView2/2/w/631/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-14e487d96768657a?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;631&#x2F;format&#x2F;webp</a></p>
+<p>你的应用程序可以创建 HTML 并将其显示在平台的 WebViews 上，请注意像 JavaScript 这样的语言很难直接与本地代码（例如服务）进行通信，因此他们会通过一个在 JavaScript 代码和原生代码的“桥梁”进行上下文切换，因为平台服务通常不会经常被调用，所以这并不会导致太大的性能问题。</p>
+<p>响应式视图</p>
+<p>像 ReactJS 或 其他 的响应式编程框架已经变得很流行了，主要是因为他们通过使用从响应式编程中借用的编程模式来简化 Web 视图的创建过程。2015 年， React Native 将响应式视图的许多优势带给了移动应用程序。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-ec3f3cef6b1932b1?imageMogr2/auto-orient/strip%7CimageView2/2/w/630/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-ec3f3cef6b1932b1?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;630&#x2F;format&#x2F;webp</a></p>
+<p>React Native 是非常受欢迎的（这是它应得的），但是因为 JavaScript 访问了原生 UI 组件，所以它也必须经过这些“桥接器”，界面上的 UI 控件通常被频繁地访问（在动画、转化或者用户用手指“滑动”屏幕上的某些东西时，每秒被访问高达 60 次），因此这很可能会导致性能问题。正如 关于 React Native 的一篇文章 所说：</p>
+<p>这是理解 React Native 性能的其中一个关键，JS 代码和原生代码本身都是很快的，瓶颈经常发生在当我们视图从一边转向另一边时。未来构建高质量的应用程序时，我们必须将使用桥接的次数控制到最小。</p>
+<p>Flutter</p>
+<p>和 React Native 一样，Flutter 也提供响应式的视图，Flutter 采用不同的方法避免由 JavaScript 桥接器引起的性能问题，即用名为 Dart 的程序语言来编译。Dart 是用预编译的方式编译多个平台的原生代码，这允许 Flutter 直接与平台通信，而不需要通过执行上下文切换的 JavaScript 桥接器。编译为原生代码也可以加快应用程序的启动时间。</p>
+<p>实际上，Flutter 是唯一提供响应式视图而不需要 JavaScript 桥接器的移动 SDK，这就足以让 Fluttter 变得有趣而值得一试，但 Flutter 还有一些革命性的东西，即它是如何实现 UI 组件的？</p>
+<p>组件（Widgets）</p>
+<p>Widgets 是影响和控制应用程序的视图和界面的元素，说这些组件是移动应用中最重要的部分之一，这并不夸张，事实上，UI 表现如何，可以成就或毁掉一款 App。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-fec98d333436e5da?imageMogr2/auto-orient/strip%7CimageView2/2/w/211/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-fec98d333436e5da?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;211&#x2F;format&#x2F;webp</a></p>
+<p>Widgets 的外观和给人的感觉是至关重要的，Widgets 需要看起来不错，包 括各种屏幕的尺寸，也需要有自然的感觉。Widgets 必须快速执行：创建或扩展 UI 控件（实例化他们的 Widgets），将其放在屏幕上，渲染他们，或者（尤其是）将其动画化。对现代的应用程序来说，Widgets 应该是可扩展和可定制的，开发人员希望能够添加讨人喜欢的新的 UI 组件，并自定义所有 Widgets 以匹配各种品牌的应有程序。</p>
+<p>Flutter 的系统架构包含大量赏心悦目、快速、可定制、可扩展的 Widgets。没错，Flutter 不需要使用系统 UI 组件（或 DOM WebViews），它自带了 Widgets。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-bbc0eee967535d84?imageMogr2/auto-orient/strip%7CimageView2/2/w/628/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-bbc0eee967535d84?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;628&#x2F;format&#x2F;webp</a></p>
+<p>Flutter 将 UI 组件和渲染器从平台移动到应用程序中，这使得它们可以自定义和可扩展。Flutter 唯一要求系统提供的是 canvas，以便定制的 UI 组件可以出现在设备的屏幕上，以及访问事件（触摸，定时器等）和服务（位置、相机等）。</p>
+<p>Dart 程序（绿色）和执行数据编码和解码的原生平台代码（蓝色，适用于 iOS 或 Android）之间仍然有一个接口，但这能比 JavaScript 桥接器快几个数量级。</p>
+<p>将 UI 组件和渲染器移动到应用程序中确实会影响应用程序的大小。Android 上的 Flutter 应用程序的的初始大小约为 6.7M，这与类似的工具构建的最小应用程序的大小相似，您可以决定 Flutter 的优势是否值得权衡，因此本文的余下部分将讨论这些优势。</p>
+<p><strong>布局</strong></p>
+<p>Flutter 最大的改进之一就是它的布局，布局是基于一组规则（也称约束）来决定 UI 组件的大小和位置。</p>
+<p>传统上，布局使用大量可以应用于任何 UI 组件的规则。这些规则实现多种布局方法，我们就以众所周知的 CSS 布局为例（尽管 Android 和 iOS 中的布局基本相似）。CSS 具有适用于 HTML 元素（UI 组件）的属性（规则）， CSS3 定义了 375 个属性。</p>
+<p>CSS 包含大量的布局模型，如多种箱模型、浮动元素、表、多列文本、分页媒介等。还有像 flexbox 和 grid 的布局模型在之后也被添加进去，因为开发人员和设计人员需要对布局进行更多地控制，而不得不使用表格和透明图像来获取他们想要的布局。在传统布局中，开发人员无法添加新的布局模型，因此必须将 flexbox 和 grid 添加到 CSS 中并在所有浏览器上实现。</p>
+<p>传统布局的另一个问题是规则可以相互影响甚至发生冲突，通常有几十种规则元素的规则应用于他们，这使得布局变慢。更糟糕的是，布局性能通常为指数性下降，因此，随着元件数量的增加，布局变慢得更快。</p>
+<p>Flutter 最开始是 Google Chrome 浏览器小组成员进行的实验项目，我们想看看如果我们忽略了传统的布局模式，是否可以构建更快的渲染器。几周后，我们在性能上取得了显著增长，我们发现：</p>
+<p>大多数的布局是相对简单的，例如：滚动页面上的文本，其大小和位置只取决于显示大小的固定矩形，还有一些表格，浮动元素等。大部分布局只作用于 UI 组件树的一部分，并且这子树通常使用一个布局模型，因此这些 UI 组件只需要少量的规则。</p>
+<p>我们意识到如果完全改变以前的布局模式，布局就可以大大被简化：</p>
+<p>每个 UI 组件都将指定自己简单的布局模型，而不是拥有可以应用于任何 UI 组件的一整套布局规则。因为每个 UI 组件都有一个更小的一套布局需要考虑，所以布局可以大量优化。为了进一步简化布局，我们几乎将所有内容都转换为 UI 组件。</p>
+<p>这里是用 Flutter 代码来创建的一个带有布局的简单 UI 组件。</p>
+<p>new Center ( child: new Column( children:[ new Text (‘Hello, World!’)), new Icon (Icons.star, color: Colors.green) ] )</p>
+<p>这段代码在语义上足够清晰。您可以轻松地想象它将会生成什么。运行这段代码的显示结果如下：</p>
+<p>Hello, World!</p>
+<p>在这段代码中，所有的组成部分都是一个 UI 组件，包括布局。 Center UI 组件将其子组件集中在其母组件内（如屏幕）。ColumnUI 组件垂直排列其子组件（UI 组件列表）。该列表包含一个 Text 和一个 Icon 控件（具有一个颜色属性）。</p>
+<p>在 Flutter 中，居中显示和 padding 都是 widgets，主题是适用于它们子组件的 UI 控件，甚至应用程序和导航也是 widgets。</p>
+<p>Flutter 包括很多用于布局的 widgets，不仅仅含有列，还包括行、网格、列表等。 此外，Flutter 还有一个独特的布局模型，我们称之为用于滚动的“长条布局模型 (sliver layout model)”。Flutter 中的布局非常快，可用于滚动。试想一下，滚动必须如此快速平滑，以至于让用户感觉当他们在物理屏幕上拖动时，屏幕图像就像和他们的手指相连一样。</p>
+<p>通过使用布局进行滚动，Flutter 可以实现高级滚动，如下所示。请注意，这些是 GIF 动画，真正的 Flutter 应用程序更加平滑。您可以（并且应该）自己运行这些应用程序，请参阅本文末尾的参考资料部分。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-cc62789093722bb5?imageMogr2/auto-orient/strip%7CimageView2/2/w/360/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-cc62789093722bb5?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;360&#x2F;format&#x2F;webp</a></p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-860c115d76246b61?imageMogr2/auto-orient/strip%7CimageView2/2/w/274/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-860c115d76246b61?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;274&#x2F;format&#x2F;webp</a></p>
+<p>在大多数情况下，Flutter 仅需一次传递即可完成布局，这意味着布局所花的时间是线性增长的，所以它可以处理大量的 widgets。Flutter 也可以利用缓存或其他功能来避免重复的布局。</p>
+<p><strong>定制设计</strong></p>
+<p>因为 UI 组件现在是应用程序的一部分，你可以添加新的 UI 组件，并且可以自定义现有的 UI 组件，以使其具有不同的外观或感觉，或匹配公司的品牌，移动设计的趋势正在与几年前普遍使用的千篇一律的应用程序背离，开始走向让用户愉悦的定制设计。</p>
+<p>Flutter 配有丰富的可定制的 Android、iOS 和 Material Design 组件（实际上，我们已经被告知 Flutter 是 Material Design 中具有最高保真度之一的实现），我们使用 Flutter 的可定制特点来构建这些组件库，以匹配多个平台上的原生组件的外观和感觉。程序开发人员可以使用相似的可定制性功能进一步调整小组件以满足他们的需求。</p>
+<p><strong>更多关于响应式视图</strong></p>
+<p>现有的响应式 web 视图库都引入了 虚拟 DOM，DOM 代表 HTML 的文档对象模型。JavaScript 用 DOM 提供的 API 来操纵表现为一个元素树的 HTML 文档。虚拟 DOM 是使用编程语言中的对象（在这种情况下为 JavaScript）创建的 DOM 的抽象版本。</p>
+<p>在响应式 Web 视图（由 ReactJS 和其他系统实现）中，虚拟 DOM 是不可变的，每次更改，所有的东西都得重建。系统将虚拟 DOM 与真正的 DOM 进行比较，生成一组最小的更改，然后执行这些更改，以更新真正的 DOM。最后，平台重新绘制真实的 DOM 到画布中。 </p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-a2f71649f7b0090f?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-a2f71649f7b0090f?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;640&#x2F;format&#x2F;webp</a></p>
+<p>这听起来增加了很多额外的工作，但它是值得的，因为 操纵 HTML DOM 是非常耗费系统资源的。</p>
+<p>React Native 也做类似的工作，但是是在移动应用程序当中进行的。它会操控移动平台上的原生组件而不是 DOM。它构建一个 UI 组件的虚拟树，与原生组件进行比较，并只更新已更改的部件。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-4c51cbee8af5ed24?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-4c51cbee8af5ed24?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;640&#x2F;format&#x2F;webp</a></p>
+<p>请记住，React Native 必须通过桥接器与原生部件进行通信，因此，UI 组件的虚拟树可以帮助保持传递桥的最小值，同时还允许使用原生部件。最后，一旦更新了本机部件，平台就会将它们渲染到画布上。</p>
+<p>React Native 是移动开发的一大进步，并且是 Flutter 的灵感来源，但 Flutter 更进一步。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-b92a0618b2495efb?imageMogr2/auto-orient/strip%7CimageView2/2/w/342/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-b92a0618b2495efb?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;342&#x2F;format&#x2F;webp</a></p>
+<p>回想一下，在 Flutter 中，UI 组件和渲染器已经从平台中集成到用户的应用程序中。没有系统 UI 组件可以操作，所以原来虚拟控件树的地方现在是真实的控件树。Flutter 渲染 UI 控件树并将其绘制到平台画布上。这很好，既简单又快。 此外，动画发生在用户空间中，因此应用程序（因此开发人员）可以对其进行更多的控制。</p>
+<p>Flutter 渲染器本身很有趣：它使用几个内部树结构来渲染只需要在屏幕上更新的 UI 组件。例如，渲染器使用“ 使用 合成的结构重绘”(这意味着比使用屏幕上的矩形区域更有效）。不变的 UI 控件，即使是那些已经移动的 UI 控件，仅需在内存中做极其细微的改动，速度当然超级快。这就是为什么 Flutter 的滚动性能如此之高，即使在很复杂的滚动场景中。</p>
+<p>要进一步了解 Flutter 渲染器，我 推荐这个视频。你也可以看看代码，因为 Flutter 是开源 的。当然，您可以自定义或甚至替换整个堆栈，包括渲染器，合成器，动画，手势识别器，当然还有 widgets。</p>
+<p>Dart 编程语言</p>
+<p>因为 Flutter 像使用响应式视图的其他系统一样，刷新每个新框架的视图树，它会创建许多只能在一帧（六十分之一秒）内存在的对象。幸运的是，Dart 使用“generational garbage collection ”对于这样的系统来说是非常有效的，因为对象（特别是寿命短的）消耗资源相对较少。此外，可以使用单个 pointer bump 来完成对象的分配。这是一个快速且不需要锁定的 pointer bump。这有助于避免 UI 卡顿。</p>
+<p>Dart 还有一个“tree shaking ”编译器，它只包含你在应用程序中需要的代码。 即使您只需要一个或两个，您也可以随意使用大型的 UI 控件库。</p>
+<p>热重载</p>
+<p>Flutter 最受欢迎的功能之一是其快速，保留程序状态的热重载 （hot reload）。 您可以在 Flutter 应用程序运行时对其进行更改，重新加载应用程序的代码，将其从之前的操作位置继续下去。一次热重载通常用不到一秒钟。 如果您的应用遇到错误，您通常可以修复错误，然后继续，就像错误从未发生过。 即使你必须完全重新加载，它也是很快速的。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-9a6296412bd3a7b9?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-9a6296412bd3a7b9?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;640&#x2F;format&#x2F;webp</a></p>
+<p>开发人员告诉我们，这可以让他们“绘制”他们的应用程序，一次更改，然后几乎立即可以看到结果，而无需重新启动应用程序。</p>
+<p>兼容性</p>
+<p>因为 UI 组件（和这些 UI 组件的渲染器）是您的应用程序的一部分，而不是平台的一部分，不需要“兼容库 ”。 您的应用程序不仅可以正常工作，而且在最近的操作系统版本 Jelly Bean 以后的安卓系统和 8.0 以后的 iOS 系统上也是一样的 。 这显著降低了在旧版本操作系统上测试应用程序的需求。 此外，你的 App 有很大可能与未来的操作系统版本兼容。</p>
+<p>我们曾被问到一个潜在的问题。 由于 Flutter 不使用原生 UI 组件，因此，当新的 iOS 或 Android 版本出现时，Flutter UI 组件是否需要更新才能支持新的部件，或更改现有部件的外观或行为吗？</p>
+<p>首先，Google 是 Flutter 的内部的一个大用户，所以我们有很大的动机来更新 UI 组件，使其保持最新状态并尽可能接近当前的原生 UI 组件。</p>
+<p>如果有一段时间我们在更新一个 UI 组件时太慢，Google 并不是 Flutter 唯一一个保持 UI 组件最新的用户。Flutter 的 UI 组件是可扩展和可定制的，任何人都可以更新它们，包括你自己， 甚至不需要提交一个请求。 你永远不必等待 Flutter 自己更新。</p>
+<p>只有当您想要在应用中反映出新的更改时，上述要点才适用。 如果您不想要更改影响您的应用程序的外观或工作方式，那么就没有必要使用上面所说的。 UI 组件是您的应用程序的一部分，所以 UI 永远不会在你不知情的情况下擅自改变，并使您的应用程序看起来不好（或更糟的是，破坏您的应用程序）。</p>
+<p>还有一个额外的好处，您可以编写您的应用程序，以便即使在较旧的操作系统版本上也能使用新的 UI 组件。</p>
+<p>其他优势</p>
+<p>Flutter 的简单性使其运行很快，但它的可定制性和可扩展性，保持简单的同时拥有强大功能。</p>
+<p>Dart 拥有一个 软件包仓库。您可以用这些软件包扩展应用程序的功能。 例如，有许多软件包可以轻松访问 Firebase，以便您可以构建“无服务器”应用程序。 外部贡献者创建了一个可让您访问 Redux data store 的软件包。 还有一些称为“ plugins ”的软件包，可以以独立于操作系统的方式轻松访问平台服务和硬件，例如加速度计或相机。</p>
+<p>当然，Flutter 也是一个 开放源码 的项目 ，加上 Flutter 渲染堆栈是您应用程序的一部分，这意味着您可以自定义几乎任何您想要的应用程序。 该图中绿色的部分您都可以定制：</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-d56ee9334c8a4c62?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-d56ee9334c8a4c62?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;640&#x2F;format&#x2F;webp</a></p>
+<p>那么，“Flutter 有什么新鲜又令人兴奋的”呢？</p>
+<p>如果有人问你 Flutter，现在你知道如何回答他们了：</p>
+<p>响应式视图的优点，不需要 JavaScript 的桥接器</p>
+<p>快速，流畅，可预测 ; 代码将 AOT 编译为本机（ARM）代码</p>
+<p>开发人员完全控制 UI 组件和布局</p>
+<p>配有美观，可定制的 UI 组件</p>
+<p>强大的开发者工具，惊人的热重新加载</p>
+<p>性能更好，兼容性更好，开发起来更有乐趣</p>
+<p>你注意到我把什么移出这个名单吗？ 这是通常人们在谈论 Flutter 时提到的第一件事，但对我来说，这是 Flutter 中最不重要的事情之一。</p>
+<p>这就是，Flutter 可以从单个代码库为多个平台构建漂亮而快速的应用程序。 当然这应该列出来的！ 它的可定制性和可扩展性可以轻松将 Flutter 定位到多个平台，而不会牺牲性能或功耗。</p>
+<p><strong>Flutter 的革命性</strong></p>
+<p>我还没有完全解释为什么 Flutter 是“革命性”的。 这其实是一个很合适的评价，因为外部开发人员用 Flutter 构建的 第一个主要应用程序 之一是描述美国独立战争时期的《 汉密尔顿：美国音乐剧 》的官方应用程序。 《汉密尔顿》是百老汇最受欢迎的音乐剧之一。</p>
+<p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5676002-c27a7aa0d8de86c7?imageMogr2/auto-orient/strip%7CimageView2/2/w/562/format/webp">https://upload-images.jianshu.io/upload_images&#x2F;5676002-c27a7aa0d8de86c7?imageMogr2&#x2F;auto-orient&#x2F;strip|imageView2&#x2F;2&#x2F;w&#x2F;562&#x2F;format&#x2F;webp</a></p>
+<p>该应用的开发团队 Posse 表示，他们选择了 Flutter 是因为他们需要在 短短的三个月内 构建应用程序。 他们称之为“一个革命性表演的革命性应用程序”，并说“Flutter 是美观，高性能，品牌驱动的移动体验的绝佳选择”。该应用程序在 Android 和 iOS 的应用商店上都可下载，并且得到了越来越多的好评。</p>
+<p>加入革命！</p>
+<p>Flutter 目前是 Alpha 版本。 我们还在增加更多的功能，并且我们有更多的优化计划。 然而，Google 内部和外部的群组已经在使用它来构建任务关键型应用程序。</p>
+<p>如果您对 Flutter 感兴趣， 您可以 安装它，并体验 随附安装 的一些示例应用程序 ， 注意一定要试一下热重载。</p>
+<p>如果您不是开发人员或只想看到某些应用程序，则可以安装使用 Flutter 构建的应用程序，并查看它们的外观和性能。 我推荐 汉密尔顿应用程序 ，但还有其他应用程序 。 您还应该观看来自 Google I &#x2F; O 的视频 ，他们在那里直播 Flutter 应用程序的编译过程。</p>
+<p>原文链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/31fda5322f53">https://www.jianshu.com/p/31fda5322f53</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Flutter/" class="category-chain-item">Flutter</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Flutter/" class="print-no-link">#Flutter</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>为什么说Flutter是革命性的</div>
+      <div>http://bestkele.com/2019/10/22/flutter/flutter-revolution/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/23/flutter/flutter-compiler/" title="Flutter的两种编译模式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Flutter的两种编译模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/09/06/investigation/code-push-deploy/" title="code-push私有部署">
+                        <span class="hidden-mobile">code-push私有部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"},"pageview":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

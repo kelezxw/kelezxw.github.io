@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="GetXGetX是个Flutter开发框架，当你用原生Flutter开发一个APP，受尽折磨之后，你就能体会到这个框架的优雅了，真香！ 1、路由 123456789101112&#x2F;&#x2F;&#x2F; 新开页面dddGet.toNamed(&amp;#x27;&#x2F;ddd&amp;#x27;);&#x2F;&#x2F;&#x2F; replaceGet.offNamed(&amp;#x27;&#x2F;ddd&amp;#x27;);&#x2F;&#x2F;&#x2F; 返回Get.back();&#x2F;&#x2F;&#x2F; 新开bbb，清空">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GetX--Flutter开发框架">
+<meta property="og:url" content="http://bestkele.com/2022/01/10/flutter/GetX/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="GetXGetX是个Flutter开发框架，当你用原生Flutter开发一个APP，受尽折磨之后，你就能体会到这个框架的优雅了，真香！ 1、路由 123456789101112&#x2F;&#x2F;&#x2F; 新开页面dddGet.toNamed(&amp;#x27;&#x2F;ddd&amp;#x27;);&#x2F;&#x2F;&#x2F; replaceGet.offNamed(&amp;#x27;&#x2F;ddd&amp;#x27;);&#x2F;&#x2F;&#x2F; 返回Get.back();&#x2F;&#x2F;&#x2F; 新开bbb，清空">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-10T12:14:24.000Z">
+<meta property="article:modified_time" content="2023-08-14T05:42:45.788Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>GetX--Flutter开发框架 - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="GetX--Flutter开发框架"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-10 20:14" pubdate>
+          2022年1月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          45 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">GetX--Flutter开发框架</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年8月14日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="GetX"><a href="#GetX" class="headerlink" title="GetX"></a>GetX</h1><p>GetX是个Flutter开发框架，当你用原生Flutter开发一个APP，受尽折磨之后，你就能体会到这个框架的优雅了，真香！</p>
+<p>1、路由</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">///<span class="language-markdown"> 新开页面ddd</span></span><br>Get.toNamed(<span class="hljs-string">&#x27;/ddd&#x27;</span>);<br><span class="hljs-comment">///<span class="language-markdown"> replace</span></span><br>Get.offNamed(<span class="hljs-string">&#x27;/ddd&#x27;</span>);<br><span class="hljs-comment">///<span class="language-markdown"> 返回</span></span><br>Get.back();<br><span class="hljs-comment">/// <span class="language-markdown">新开bbb，清空aaa之后的路由栈</span></span><br>Get.offNamedUntil(<span class="hljs-string">&#x27;/bbb&#x27;</span>, ModalRoute.withName(<span class="hljs-string">&#x27;/aaa&#x27;</span>));<br><span class="hljs-comment">/// <span class="language-markdown">返回bbb，清空bbb之后的路由栈</span></span><br>Get.until(ModalRoute.withName(<span class="hljs-string">&#x27;/bbb&#x27;</span>));<br><span class="hljs-comment">/// <span class="language-markdown">新开bbb，清空所有路由栈</span></span><br>Get.offAllNamed(<span class="hljs-string">&#x27;/bbb&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>2、状态管理</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-number">1</span>、obs配合obx<br><span class="hljs-comment">///<span class="language-markdown"> view</span></span><br>Obx(() &#123;<span class="hljs-keyword">return</span> Text(<span class="hljs-string">&#x27;我是数据<span class="hljs-subst">$&#123;state.ob[<span class="hljs-string">&#x27;a&#x27;</span>]&#125;</span>&#x27;</span>);&#125;),<br><span class="hljs-comment">///<span class="language-markdown"> model数据监听</span></span><br><span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">String</span>,<span class="hljs-built_in">dynamic</span>&gt; ob = &#123;<br>  <span class="hljs-string">&#x27;a&#x27;</span>:<span class="hljs-number">55</span>,<br>  <span class="hljs-string">&#x27;b&#x27;</span>:<span class="hljs-number">66</span><br>&#125;.obs;<br><span class="hljs-number">2</span>、update配合getbuilder<br><span class="hljs-comment">/// <span class="language-markdown">view</span></span><br>GetBuilder&lt;PageaaaLogic&gt;(builder: (logic) &#123;<span class="hljs-keyword">return</span> Text(<span class="hljs-string">&#x27;我是数据<span class="hljs-subst">$&#123;state.aNumber&#125;</span>&#x27;</span>);&#125;),<br><span class="hljs-comment">/// <span class="language-markdown">model 关键词 update</span></span><br><span class="hljs-keyword">void</span> setNumber()&#123;<br>  state.aNumber+=<span class="hljs-number">5</span>;<br>  update();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>3、跨页面通信</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">///<span class="language-markdown"> 页面B正常写，页面C有点不一样</span></span><br><span class="hljs-comment">///<span class="language-markdown"> 取到B的logic</span></span><br><span class="hljs-keyword">final</span> bLogic = Get.find&lt;PagebbbLogic&gt;();<br><span class="hljs-comment">///<span class="language-markdown">操作B的方法</span></span><br>ElevatedButton(<br>  child: <span class="hljs-keyword">new</span> Text(<span class="hljs-string">&#x27;在页面上调用B的方法，更新B页面数据&#x27;</span>),<br>  onPressed: () &#123;<br>    bLogic.setNumber();<br>  &#125;,<br>),<br><span class="hljs-comment">///<span class="language-markdown">真尼玛简单</span></span><br></code></pre></td></tr></table></figure>
+
+<p>4、全局变量和数据固化</p>
+<p>嗯，还是 SharedPreferences  永远的神</p>
+<p>5、弹框</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/169af33a5994">https://www.jianshu.com/p/169af33a5994</a></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">///<span class="language-markdown"> 类似应用内部的自定义推送，挺好看，可以自定义内容，但是只能在top和bottom，还可以设置点击事件</span></span><br>Get.snackbar(<span class="hljs-string">&quot;Snackbar 标题&quot;</span>, <span class="hljs-string">&quot;欢迎使用Snackbar&quot;</span>,backgroundColor:Colors.cyan,snackPosition: SnackPosition.TOP);<br><span class="hljs-comment">///<span class="language-markdown"> 弹框，不需要context，自定义内容，按钮等等，好用极了，关闭的时候就是Get.back()</span></span><br>Get.defaultDialog();<br><span class="hljs-comment">///<span class="language-markdown"> bottomSheet，是要做actionsheet吗？要自己写全套，这只是个弹出层</span></span><br>Get.bottomSheet();<br></code></pre></td></tr></table></figure>
+
+<p>6、主题</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">///<span class="language-markdown"> 真尼玛简单啊</span></span><br><span class="hljs-comment">///<span class="language-markdown"> 搞个theme文件，指定背景，状态栏，按钮等等，之前我以为只是一个颜色，肤浅了！！！</span></span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Themes</span> </span>&#123;<br>  <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> green = ThemeData.light().copyWith(<br>    scaffoldBackgroundColor: Colors.green,<br>    appBarTheme: <span class="hljs-keyword">const</span> AppBarTheme(<br>        backgroundColor: Colors.green,<br>        toolbarTextStyle:TextStyle(color: Colors.white, fontSize: <span class="hljs-number">30</span>)),<br>  );<br>  <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> yellow = ThemeData.light().copyWith(<br>      scaffoldBackgroundColor: Colors.yellow,<br>      appBarTheme: <span class="hljs-keyword">const</span> AppBarTheme(<br>          backgroundColor: Colors.yellow,<br>          toolbarTextStyle:TextStyle(color: Colors.white, fontSize: <span class="hljs-number">30</span>)),<br>          elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange))));<br>&#125;<br><span class="hljs-comment">///<span class="language-markdown"> 感觉main.dart写不写没啥关系啊</span></span><br><span class="hljs-keyword">return</span> GetMaterialApp(<br>  title: <span class="hljs-string">&#x27;Flutter Demo&#x27;</span>,<br>  theme: ThemeData(<br>    primarySwatch: Colors.blue,<br>  ),<br>)<br><span class="hljs-comment">///<span class="language-markdown"> 关键的就这么一句</span></span><br>Get.changeTheme(Themes.yellow);<br></code></pre></td></tr></table></figure>
+
+<p>7、网络</p>
+<p>还是用dio，术业有专攻吧，感觉GetConnect的错误处理不如dio</p>
+<p>8、插件介绍</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7005003323753365517">https://juejin.cn/post/7005003323753365517</a>—文件生成器介绍篇</p>
+<p>easy模式就够我们用了</p>
+<p>pageview要特殊处理一下</p>
+<p>9、api</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">///<span class="language-markdown"> 我就想知道find和put的区别，其他的还是看文档吧</span></span><br><span class="hljs-comment">///<span class="language-markdown"> https://juejin.cn/post/6910920929199521800  这个就很不错</span></span><br><span class="hljs-comment">/// <span class="language-markdown">依赖注入是什么---本来接受各种参数来构造一个对象，现在只接受一个参数——已经实例化的对象。</span></span><br><span class="hljs-comment">///<span class="language-markdown"> 依赖注入是为了将依赖组件的配置和使用分离开，以降低使用者与依赖之间的耦合度。</span></span><br><span class="hljs-comment">///<span class="language-markdown"> 注入依赖</span></span><br>Get.put&lt;PutController&gt;(PutController());<br><span class="hljs-comment">///<span class="language-markdown"> 获取依赖</span></span><br>Get.find&lt;PutController&gt;();<br></code></pre></td></tr></table></figure>
+
+<p>10、组件</p>
+<p>没有合适的整套的</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/felixblaschke/simple_animations">https://github.com/felixblaschke/simple_animations</a>—这个动画应该有用</p>
+<p>11、生命周期</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/445371503">https://zhuanlan.zhihu.com/p/445371503</a></p>
+<p>常用的就是：</p>
+<p>onInit（初始化，页面加载到内存中触发）；</p>
+<p>onReady（就绪，处理接口，业务逻辑）；</p>
+<p>onClose（销毁，删除监听事件）</p>
+<p>另外的onResume等等，要用 WidgetsBindingObserver，如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:flutter/cupertino.dart&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:get/get.dart&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;state.dart&#x27;</span>;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PagebbbLogic</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> <span class="hljs-title">with</span> <span class="hljs-title">WidgetsBindingObserver</span> </span>&#123;<br>  <span class="hljs-keyword">final</span> PagebbbState state = PagebbbState();<br>  <span class="hljs-keyword">void</span> setNumber()&#123;<br>    state.bNumber+=<span class="hljs-number">5</span>;<br>  &#125;<br>  <span class="hljs-keyword">void</span> setOb()&#123;<br>    state.ob[<span class="hljs-string">&#x27;a&#x27;</span>] += <span class="hljs-number">5</span>;<br>  &#125;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-keyword">void</span> onInit() &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onInit</span><br>    <span class="hljs-keyword">super</span>.onInit();<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;init&#x27;</span>);<br>    WidgetsBinding.instance?.addObserver(<span class="hljs-keyword">this</span>); <span class="hljs-comment">/// <span class="language-markdown">添加监听</span></span><br>  &#125;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-keyword">void</span> onReady() &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onInit</span><br>    <span class="hljs-keyword">super</span>.onReady();<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;onReady&#x27;</span>);<br>    <span class="hljs-keyword">var</span> map = Get.arguments;<br>    <span class="hljs-built_in">print</span>(map);<br>  &#125;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-keyword">void</span> onClose() &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onClose</span><br>    <span class="hljs-keyword">super</span>.onClose();<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;onClose&#x27;</span>);<br>    WidgetsBinding.instance?.removeObserver(<span class="hljs-keyword">this</span>); <span class="hljs-comment">/// <span class="language-markdown">删除监听</span></span><br>  &#125;<br>  <span class="hljs-meta">@override</span><br>  Future didChangeAppLifecycleState(AppLifecycleState state) <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-built_in">print</span>(state);<br>    <span class="hljs-keyword">switch</span> (state) &#123;<br>      <span class="hljs-keyword">case</span> AppLifecycleState.inactive: <span class="hljs-comment">// 处于这种状态的应用程序应该假设它们可能在任何时候暂停。</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;inactive&quot;</span>);<br>        <span class="hljs-keyword">break</span>;<br>      <span class="hljs-keyword">case</span> AppLifecycleState.resumed:<span class="hljs-comment">// 应用程序可见，后台返回至前台</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;进入resumed&quot;</span>);<br>        <span class="hljs-keyword">break</span>;<br>      <span class="hljs-keyword">case</span> AppLifecycleState.paused: <span class="hljs-comment">// 应用程序不可见，进入后台</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;进入后台paused&quot;</span>);<br>        <span class="hljs-keyword">break</span>;<br>      <span class="hljs-keyword">case</span> AppLifecycleState.detached: <span class="hljs-comment">// 申请将暂时暂停</span><br>        <span class="hljs-keyword">break</span>;<br>      <span class="hljs-keyword">default</span>:<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>12、小知识</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jonataslaw/getx#dependency-management">https://github.com/jonataslaw/getx#dependency-management</a>—-官方文档</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">// 页面传参</span><br>Get.arguments<br><span class="hljs-comment">// give name of previous route</span><br>Get.previousRoute<br><span class="hljs-comment">// 平台</span><br>GetPlatform.isAndroid<br>GetPlatform.isIOS<br><span class="hljs-comment">// check if snackbar is open</span><br>Get.isSnackbarOpen<br><span class="hljs-comment">// check if dialog is open</span><br>Get.isDialogOpen<br><span class="hljs-comment">// check if bottomsheet is open</span><br>Get.isBottomSheetOpen<br><span class="hljs-comment">// Equivalent to : MediaQuery.of(context).size.height,</span><br><span class="hljs-comment">// but immutable.</span><br>Get.height<br>Get.width<br><span class="hljs-comment">// 获取当前context，插件会用到</span><br>Get.context<br><span class="hljs-comment">// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.</span><br>Get.contextOverlay<br></code></pre></td></tr></table></figure>
+
+<p>12、原理</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6909445601269088270">https://juejin.cn/post/6909445601269088270</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6984593635681517582#heading-19">https://juejin.cn/post/6984593635681517582#heading-19</a></p>
+<p>数据刷新的原理：</p>
+<p>    1、GetBuilder加手动update：GetBuilder实际上是个 StatefulWidget，update底层实际上是setState();</p>
+<p>    2、obx加obs：obx继承ObxWidget，ObxWidget实际上也继承了StatefulWidget，obx初始化的时候会**RxNotifier()**订阅包含的obs变量的变化 ，obs值发生变化就会触发setState()；</p>
+<p>    —obs是在原数据的基础上内置callback的数据类型，数据变动触发callback，就是触发obx刷新；</p>
+<p>所以表面上看我们使用get框架写的页面都是StatelessWidget，实际上涉及数据操作的部分，底层还是StatefulWidget，万变不离其宗。</p>
+<p>无context的路由跳转原理：</p>
+<p>源码直接就能看到，用的就是原始的无context跳转：navigatorKey.currentState.pushNamed(‘&#x2F;home’)</p>
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000039139198">https://segmentfault.com/a/1190000039139198</a>—好文章，介绍篇</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7005003323753365517">https://juejin.cn/post/7005003323753365517</a>—文件生成器介绍篇</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6984593635681517582">https://juejin.cn/post/6984593635681517582</a>—-原理篇</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Flutter/" class="category-chain-item">Flutter</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Flutter/" class="print-no-link">#Flutter</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>GetX--Flutter开发框架</div>
+      <div>http://bestkele.com/2022/01/10/flutter/GetX/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/16/investigation/ABM/" title="苹果ABM商务应用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">苹果ABM商务应用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/14/investigation/Fusion-Design/" title="Fusion Design框架的调研">
+                        <span class="hidden-mobile">Fusion Design框架的调研</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"},"pageview":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
