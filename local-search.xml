@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Flutter google sign in</title>
+    <link href="/2023/09/20/flutter/flutter-googleSignIn/"/>
+    <url>/2023/09/20/flutter/flutter-googleSignIn/</url>
+    
+    <content type="html"><![CDATA[<p>使用插件：<a href="https://pub-web.flutter-io.cn/packages/google_sign_in">google_sign_in</a></p><p>这个插件是基于firebase的，firebase是google旗下提供给移动应用和web平台使用的开放平台；</p><ol><li><p>注册firebase账号<br>google登录嘛，你得先有个google账号才能去注册firebase;<br><a href="https://console.firebase.google.com/?hl=zh-cn&_gl=1*nyz7us*_ga*NTgwMTcyNzQuMTcyNTE3NTA2Mw..*_ga_CW55HF8NVT*MTczMzg5NzgyMy4yLjEuMTczMzg5ODA3Ny41MC4wLjA.">FireBase控制台</a></p></li><li><p>创建项目和应用，在项目下创建android和ios应用<br>创建一个项目</p></li></ol><p><img src="/image/article/flutter/flutter-googleSignIn/1.png"></p><p>在项目下新建android和ios应用</p><p><img src="/image/article/flutter/flutter-googleSignIn/2.png"></p><p>2.1 创建Android项目：</p><p><img src="/image/article/flutter/flutter-googleSignIn/3.png"></p><p>第一步写完之后其实就结束了，后面直接下一步下一步完成就行了(SHA-1签名肯定是要填的，不过现在不填，晚点填也可以)。第二步要你下载google-services.json文件放在项目中，如果只是用google登录这个插件，那么其实是不需要的，除非你用到了其他google服务。<br>(我在使用google message推送的时候是需要这个文件的，但是是根据配置它自动下载的，位置在android&#x2F;app&#x2F;google-services.json)</p><p>点击完成之后，设置Android项目：</p><p><img src="/image/article/flutter/flutter-googleSignIn/4.png"></p><p>上图所示页面需要添加指纹，就是SHA-1秘钥，debug和release的都需要填写，发布google play商店的时候，我用的是google play自带的签名，所有需要把这个签名也加进来；</p><p>值得注意的一点是，如果你没有自己生成z证书签名，androdi stduio会使用自己的默认debug签名证书，mac的文件位置：.android&#x2F;debug.keystore；</p><p>生成证书参考：<a href="https://bestkele.com/2019/12/20/flutter/flutter-android-jks">flutter android 打包自定义jks</a><br>获取签名SHA-1的方法：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">keytool -list -v -keystore  &lt;jks路径&gt;<br></code></pre></td></tr></table></figure><p>2.2 创建ios项目：</p><p><img src="/image/article/flutter/flutter-googleSignIn/5.png"></p><p>这里的第二步需要下载一个GoogleService-Info.plist文件，这个文件需要放在ios&#x2F;Runner这个目录下，其他的就没什么了；</p><ol start="3"><li>配置OAuth屏幕的凭据和OAuth权限请求页面<br><a href="https://console.cloud.google.com/apis/credentials">OAuth屏幕</a></li></ol><p><img src="/image/article/flutter/flutter-googleSignIn/6.png"></p><p>在左上角切换你刚才在firebase里面新建的项目，如果找不到，试试看看[全部]选项；</p><p>然后点击左侧菜单 OAuth权限请求页面，配置你的项目信息；</p><p>如果你一切顺利，这时候在凭据菜单内会有三个OAuth2.0 客户端ID，那么就没什么问题了；</p><p>在这里我遇到一个奇怪的错误，等会在下面再说；</p><ol start="4"><li>使用</li></ol><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:google_sign_in/google_sign_in.dart&#x27;</span>;<br><br><span class="hljs-comment">//google登录</span><br><span class="hljs-keyword">final</span> GoogleSignIn googleSignIn = GoogleSignIn(scopes: [<span class="hljs-string">&#x27;email&#x27;</span>]);<br><br><span class="hljs-keyword">void</span> googleLogin() <span class="hljs-keyword">async</span> &#123;<br>    GoogleSignInAccount? googleResult = <span class="hljs-keyword">await</span> googleSignIn.signIn();<br>    <span class="hljs-built_in">print</span>(googleResult);<br>&#125;<br></code></pre></td></tr></table></figure><p>使用时有个注意的地方，google账号会保持登录状态一段时间，如果我们想每次点击登录按钮都提示登录。那么就需要退出登录状态，达到切换账号的目的：</p><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dart">googleSignIn.isSignedIn().then((value) <span class="hljs-keyword">async</span>&#123;<br>    <span class="hljs-built_in">print</span>(value);<br>    <span class="hljs-comment">// 如果不退出，那已登录状态会保持一段时间，就不能达到切换账号的目的了</span><br>    <span class="hljs-keyword">if</span>(value == <span class="hljs-keyword">true</span>)&#123;<br>    <span class="hljs-keyword">await</span> googleSignIn.signOut();<br>    &#125;<br>    GoogleSignInAccount? googleResult = <span class="hljs-keyword">await</span> googleSignIn.signIn();<br>    <span class="hljs-built_in">print</span>(googleResult);<br>&#125;);<br></code></pre></td></tr></table></figure><ol start="5"><li>遇到的问题<br>很快啊，ios嗖的一下就好了；<br>android遇到了问题，报错信息如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[ERROR:flutter/runtime/dart_vm_initializer.cc(41)] <br>Unhandled Exception: PlatformException(sign_in_failed, <br>com.google.android.gms.common.api.ApiException: 10: , null, null)<br></code></pre></td></tr></table></figure>靠，这个问题高了好几个小时，按照stackoverflow的回答，我也一直以为这个是SHA-1签名的问题，我删除证书，重新新建，删除SHA-1，重新设置，但是问题依然存在，在此期间我升级了开发工具，清除android缓存,flutter缓存，添加了sha1和sha256两种秘钥，折腾死了也没好。</li></ol><p>然后在github搜啊搜，看到这个问题：<a href="https://github.com/flutter/flutter/issues/33393">ISSUE #33393</a></p><p>Issue中提示填写好<a href="https://console.cloud.google.com/apis/credentials">OAuth屏幕</a>的所有必填信息，我填过了啊，其实这个Issue和我遇到的问题不太一样，但是据此我得出结论，问题就出在OAuth这一块的设置上。</p><p><img src="/image/article/flutter/flutter-googleSignIn/7.png"></p><p>图上的android是我自己手动加上去的，为什么ios和web是自动加上去的，android却没有呢，在我手动加上去之后，google 登录就好了，我草！！！</p><p>然后我把firebase项目里面android应用所有的SHA 证书指纹全部删除了，还是能登录，不应该啊，但是确实是可以，太奇怪了，哎！保险起见，我还是把debug和release签名的两个SHA-1加进去了，保险点吧，毕竟后面用其他第三方服务也是需要的。</p><p>后来我新建应用的时候，增加sha1, OAuth2.0客户端id是自动增加上去的，加几个SHA-1就会自动新增几个OAuth2.0客户端id，看来是这只是个偶然的bug，希望你们不会遇到；</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Flutter</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Flutter</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>俄罗斯地铁线路图双语版</title>
     <link href="/2023/08/02/other/subway/"/>
     <url>/2023/08/02/other/subway/</url>
