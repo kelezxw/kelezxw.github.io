@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="使用插件：in_app_purchasegoogle play地址：Google Play ios内购参考链接：  商品配置和测试配置  恢复购买 android内购参考链接：  账号设置 in_app_purchase 是 Flutter 官方团队出的插件，支持 iOS 和 Android 平台的内购功能。 1. 开发者账号设置Google Play Console 和 App Store Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter In App Purchases">
+<meta property="og:url" content="http://bestkele.com/2024/02/10/flutter/flutter-inapp-purchases/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="使用插件：in_app_purchasegoogle play地址：Google Play ios内购参考链接：  商品配置和测试配置  恢复购买 android内购参考链接：  账号设置 in_app_purchase 是 Flutter 官方团队出的插件，支持 iOS 和 Android 平台的内购功能。 1. 开发者账号设置Google Play Console 和 App Store Co">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/1.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/2.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/4.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/5.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/6.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/7.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/3.png">
+<meta property="article:published_time" content="2024-02-10T15:30:42.000Z">
+<meta property="article:modified_time" content="2025-05-23T09:26:08.501Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://bestkele.com/image/article/flutter/flutter-inapp-purchases/1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Flutter In App Purchases - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flutter In App Purchases"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-10 23:30" pubdate>
+          2024年2月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Flutter In App Purchases</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年5月23日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>使用插件：<a target="_blank" rel="noopener" href="https://pub-web.flutter-io.cn/packages/in_app_purchase">in_app_purchase</a><br>google play地址：<a target="_blank" rel="noopener" href="https://play.google.com/console/u/1/developers/4680574610336798026/app-list?pli=1">Google Play</a></p>
+<p>ios内购参考链接：<br>  <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/72748db72a77">商品配置和测试配置</a><br>  <a target="_blank" rel="noopener" href="https://www.dengshunlai.com/blog/iap.html">恢复购买</a></p>
+<p>android内购参考链接：<br>  <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f6b01d108981">账号设置</a></p>
+<p>in_app_purchase 是 Flutter 官方团队出的插件，支持 iOS 和 Android 平台的内购功能。</p>
+<h3 id="1-开发者账号设置"><a href="#1-开发者账号设置" class="headerlink" title="1. 开发者账号设置"></a>1. 开发者账号设置</h3><p>Google Play Console 和 App Store Connect 的账号设置都比较简单，按照文档来就行了，其中支付相关的沙盒测试人员，收款账户协议这些都是在应用外层的，只有商品信息是在应用内设置的，这一点两个平台是一致的。</p>
+<h4 id="android部分："><a href="#android部分：" class="headerlink" title="android部分："></a>android部分：</h4><p>1、设置付款资料，必须先设置付款资料才能进行下面的设置(就是收款账号把，为什么叫付款资料？看来是google视角)；<br>2、设置应用内商品；<br><img src="/image/article/flutter/flutter-inapp-purchases/1.png" srcset="/img/loading.gif" lazyload><br>3、添加测试账号；<br><img src="/image/article/flutter/flutter-inapp-purchases/2.png" srcset="/img/loading.gif" lazyload><br>4、测试内购必须使用内部测试版本；<br>google play有三个测试类型，开放式测试，封闭式测试，内部测试，开放式测试是可以分发给任何人，封闭式测试是分发给一部分人灰度测试，这些人必须在测试账号里面或者收到邀请，但是封闭式测试是需要发布给google审核的，内部测试是开发人员测试用的。要测试内购需要测试员账号，所以是用内部测试；必须在内部测试的测试人员那个页面的下面点击复制链接，从这里链接下载的app才能获取到商品，否则是空的；<br>5、android的订阅通知是需要配置Google开发者通知的<br>参考链接：<a target="_blank" rel="noopener" href="https://developer.android.com/google/play/billing/rtdn-reference?hl=zh-cn#grant_publish_rights_on_your_topic">Google Play Bill Pub&#x2F;Sub</a><br><a target="_blank" rel="noopener" href="https://console.cloud.google.com/apis/dashboard">在这里配置发布订阅信息</a><br>创建发布主题<br><img src="/image/article/flutter/flutter-inapp-purchases/4.png" srcset="/img/loading.gif" lazyload><br><img src="/image/article/flutter/flutter-inapp-purchases/5.png" srcset="/img/loading.gif" lazyload><br>创建订阅者和接口(订阅消息会往这个服务端接口推送)<br><img src="/image/article/flutter/flutter-inapp-purchases/6.png" srcset="/img/loading.gif" lazyload><br>最后在Google Play Console的设置里面配置一下这个发布主题就行了<br><img src="/image/article/flutter/flutter-inapp-purchases/7.png" srcset="/img/loading.gif" lazyload><br>订阅信息类型如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs markdown">/**<br><span class="hljs-bullet">   *</span> notificationType    int<br><span class="hljs-bullet">   *</span> 通知的类型。它可以具有以下值：<br><span class="hljs-bullet">   *</span> (1) SUBSCRIPTION<span class="hljs-emphasis">_RECOVERED - 从帐号保留状态恢复了订阅。</span><br><span class="hljs-emphasis">   * (2) SUBSCRIPTION_</span>RENEWED - 续订了处于活动状态的订阅。<br><span class="hljs-bullet">   *</span> (3) SUBSCRIPTION<span class="hljs-emphasis">_CANCELED - 自愿或非自愿地取消了订阅。如果是自愿取消，在用户取消时发送。</span><br><span class="hljs-emphasis">   * (4) SUBSCRIP￼￼TION_</span>PURCHASED - 购买了新的订阅。<br><span class="hljs-bullet">   *</span> (5) SUBSCRIPTION<span class="hljs-emphasis">_ON_</span>HOLD - 订阅已进入帐号保留状态（如已启用）。<br><span class="hljs-bullet">   *</span> (6) SUBSCRIPTION<span class="hljs-emphasis">_IN_</span>GRACE<span class="hljs-emphasis">_PERIOD - 订阅已进入宽限期（如已启用）。</span><br><span class="hljs-emphasis">   * (7) SUBSCRIPTION_</span>RESTARTED - 用户已通过“Play”&gt;“帐号”&gt;“订阅”重新激活其订阅（需要选择使用订阅恢复功能）。<br><span class="hljs-bullet">   *</span> (8) SUBSCRIPTION<span class="hljs-emphasis">_PRICE_</span>CHANGE<span class="hljs-emphasis">_CONFIRMED - 用户已成功确认订阅价格变动。</span><br><span class="hljs-emphasis">   * (9) SUBSCRIPTION_</span>DEFERRED - 订阅的续订时间点已延期。<br><span class="hljs-bullet">   *</span> (10) SUBSCRIPTION<span class="hljs-emphasis">_PAUSED - 订阅已暂停。</span><br><span class="hljs-emphasis">   * (11) SUBSCRIPTION_</span>PAUSE<span class="hljs-emphasis">_SCHEDULE_</span>CHANGED - 订阅暂停计划已更改。<br><span class="hljs-bullet">   *</span> (12) SUBSCRIPTION<span class="hljs-emphasis">_REVOKED - 用户在有效时间结束前已撤消订阅。</span><br><span class="hljs-emphasis">   * (13) SUBSCRIPTION_</span>EXPIRED - 订阅已过期。<br><span class="hljs-emphasis">*/</span><br></code></pre></td></tr></table></figure>
+<h4 id="ios部分："><a href="#ios部分：" class="headerlink" title="ios部分："></a>ios部分：</h4><p>1、开发者证书那一套我就不说了，Identifiers那里的In-app purchases是默认勾选的；<br>2、添加内购商品信息，在app store connect 里面的  功能-app内购项目  模块，商品有四种：消耗型商品，非消耗型商品，自动续期订阅，非续期订阅。其中非消耗型商品，自动续期订阅这两种是需要恢复购买功能的。<br>3、在用户和访问模块左下方添加沙盒测试员，测试购买流程，这玩意烦得很，还必须是没注册过苹果账号的邮箱；<br><img src="/image/article/flutter/flutter-inapp-purchases/3.png" srcset="/img/loading.gif" lazyload><br>4、正式提交审核app的时候需要选择之前创建的商品，测试的时候不用管；<br>5、协议，税务，银行卡信息，其他信息没什么，那个CNAPS代码是这个发卡银行具体支行的代码；</p>
+<h3 id="2-注意事项"><a href="#2-注意事项" class="headerlink" title="2. 注意事项"></a>2. 注意事项</h3><p>1、其中非消耗型商品，自动续期订阅这两种是需要恢复购买功能的，不然app会被拒绝；</p>
+<p>为什么需要恢复购买这个行为？？？按道理说服务端其实已经存了购买记录并且和App的账号体系绑定，换设备了也可以恢复，由软件提供商自己判断就行了，那么恢复购买是基于什么考虑的呢？</p>
+<ul>
+<li>苹果希望支付行为和Apple ID绑定，而不是仅仅是和应用绑定；</li>
+<li>并不是所有的App都有账号体系，所以需要恢复购买这个行为；</li>
+<li>软件提供商有可能会要求更换设备重新购买商品，恢复购买是为了保护用户的权益；</li>
+</ul>
+<p>2、android不需要加<code>com.android.billingclient:billing</code>这个依赖，因为我们是flutter插件；</p>
+<p>3、google play有三个测试类型，开放式测试，封闭式测试，内部测试，开放式测试是可以分发给任何人，封闭式测试是分发给一部分人灰度测试，这些人必须在测试账号里面或者收到邀请，但是封闭式测试是需要发布给google审核的，内部测试是开发人员测试用的。要测试内购需要测试员账号，所以是封闭式测试或者内部测试；<br>我发布了一个内部测试，发现删不掉了，靠！<br>新建一个测试轨道，也删不掉，只能暂停，牛逼。</p>
+<p>4、google play 商店中appbundle要删除就必须把与他从已经关联的版本中分离出来，这样appbundle详情页才会有删除按钮；</p>
+<p>5、我的app并没有集成广告，但是发布封闭式测试总是提示：</p>
+<p>此版本包含 com.google.android.gms.permission.AD_ID 权限，但您在 Play 管理中心的声明中指出您的应用未使用广告 ID。您必须更新广告 ID 声明。</p>
+<p>原因是我用了google_sign_in这个插件，它是依赖于firebase的，firebase项目开启了google Analytics，这玩意在项目打包阶段自动会加入一个权限，把aab文件后缀改成zip，解压之后在</p>
+<p>base&#x2F;manifest&#x2F;AndroidManifest.xml文件中你就能看见ads权限声明了，如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart">&lt;uses-permission android:name=<span class="hljs-string">&quot;com.google.android.gms.permission.AD_ID&quot;</span> /&gt;<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/74127836/your-manifest-file-doesnt-include-the-com-google-android-gms-permission-ad-id-p">stackoverflow</a>上的解决方案是下面这段代码，不允许添加这条权限，那么google Analytics也不会生效</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart">&lt;uses-permission android:name=<span class="hljs-string">&quot;com.google.android.gms.permission.AD_ID&quot;</span> tools:node=<span class="hljs-string">&quot;remove&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+
+<p>那么干脆取消google Analytics算了，在firebase项目设置—集成 这里；</p>
+<p>好了，我试过了，不管用，去掉设置依然还是会加入这段ad_id权限代码；</p>
+<p>尝试用tools:node&#x3D;”remove”来解决问题，这需要在最上面的<code>&lt;manifest</code>这里加</p>
+<p>xmlns:tools&#x3D;”<a target="_blank" rel="noopener" href="http://schemas.android.com/tools">http://schemas.android.com/tools</a>“</p>
+<p>最后是这样，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/55334431/facing-below-error-toolsnode-associated-with-an-element-type-uses-permission">参考链接</a>：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart">&lt;manifest xmlns:android=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span> xmlns:tools=<span class="hljs-string">&quot;http://schemas.android.com/tools&quot;</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>有效！！！，这条权限是去掉了，但是商店里任然说有广告，我很无语，又查了一圈好像是<a target="_blank" rel="noopener" href="https://support.google.com/googleplay/android-developer/answer/6048248#zippy=">google要求必须加上去广告ID</a>，哎，说不清道不明那就当我有广告吧，配置改回去。</p>
+<p>6、android需要安装google 三件套才能用支付内购，我用的三星手机，三星毕竟是全球商品，内置有三件套其中的两个服务框架，所以只需要安装google play store就行了，先在商店里安装HiGoPlay ，然后用这个安装google play store</p>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;dart:async&#x27;</span>;<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:soulmate/utils/plugin/plugin.dart&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:soulmate/widgets/library/projectLibrary.dart&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;package:in_app_purchase/in_app_purchase.dart&#x27;</span>;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppPurchase</span> </span>&#123;<br>  <span class="hljs-comment">///<span class="language-markdown">订单信息订阅</span></span><br>  <span class="hljs-keyword">static</span> <span class="hljs-keyword">late</span> StreamSubscription&lt;<span class="hljs-built_in">dynamic</span>&gt; _subscription;<br><br>  <span class="hljs-comment">///<span class="language-markdown">订单业务回调</span></span><br>  <span class="hljs-keyword">static</span> <span class="hljs-built_in">Function?</span> orderCallback;<br><br>  <span class="hljs-comment">///<span class="language-markdown">初始化支付订单状态订阅</span></span><br>  <span class="hljs-keyword">static</span> initAppPayConfig() <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-keyword">final</span> Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;<br>    _subscription = purchaseUpdated.listen((purchaseDetailsList) &#123;<br>      _listenToPurchaseUpdated(purchaseDetailsList);<br>    &#125;, onDone: () &#123;<br>      _subscription.cancel();<br>    &#125;, onError: (error) &#123;<br>      <span class="hljs-comment">// handle error here.</span><br>    &#125;);<br>  &#125;<br><br>  <span class="hljs-comment">///<span class="language-markdown">支付状态逻辑处理</span></span><br>  <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> _listenToPurchaseUpdated(<br>      <span class="hljs-built_in">List</span>&lt;PurchaseDetails&gt; purchaseDetailsList) &#123;<br>    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) <span class="hljs-keyword">async</span> &#123;<br>      <span class="hljs-keyword">if</span> (purchaseDetails.status == PurchaseStatus.pending) &#123;<br>        <span class="hljs-comment">///<span class="language-markdown">购买进行中，展示加载框</span></span><br>        Loading.<span class="hljs-keyword">show</span>();<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// APPPlugin.logger.d(purchaseDetails.status);</span><br>        <span class="hljs-comment">// APPPlugin.logger.d(purchaseDetails.purchaseID);</span><br>        Loading.dismiss();<br>        <span class="hljs-keyword">if</span> (purchaseDetails.status == PurchaseStatus.error) &#123;<br>          <span class="hljs-comment">///<span class="language-markdown">购买失败，展示失败信息</span></span><br>          <span class="hljs-comment">// Loading.error(purchaseDetails.error!.message!);</span><br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (purchaseDetails.status == PurchaseStatus.purchased ||<br>            purchaseDetails.status == PurchaseStatus.restored) &#123;<br>          <span class="hljs-comment">///<span class="language-markdown">购买成功，展示成功信息</span></span><br>          <span class="hljs-comment">// print(purchaseDetails.status);</span><br>          <span class="hljs-comment">// print(&#x27;purchaseID：$&#123;purchaseDetails.purchaseID&#125;&#x27;);</span><br>          <span class="hljs-comment">// print(&#x27;productID：$&#123;purchaseDetails.productID&#125;&#x27;);</span><br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (purchaseDetails.status == PurchaseStatus.restored) &#123;<br>          <span class="hljs-comment">///<span class="language-markdown">恢复购买</span></span><br>          <span class="hljs-comment">// print(purchaseDetails);</span><br>        &#125;<br>        <span class="hljs-keyword">if</span> (purchaseDetails.pendingCompletePurchase) &#123;<br>          <span class="hljs-comment">///<span class="language-markdown">这个方法是为了应对购买成功后，app崩溃了，重新打开app，此时需要通知IAP平台，已经完成了购买流程</span></span><br>          InAppPurchase.instance.completePurchase(purchaseDetails);<br>        &#125;<br>        <span class="hljs-comment">// APPPlugin.logger.d(purchaseDetails.status);</span><br>        <span class="hljs-comment">///<span class="language-markdown">调用回调的后台接口，通知后台购买成功或者失败</span></span><br>        <span class="hljs-keyword">if</span> (orderCallback != <span class="hljs-keyword">null</span>) &#123;<br>          orderCallback!(purchaseDetails);<br>        &#125;<br>      &#125;<br>    &#125;);<br>  &#125;<br><br>  <span class="hljs-comment">///<span class="language-markdown">获取ios和android商店里面配置的商品列表</span></span><br>  <span class="hljs-keyword">static</span> Future&lt;<span class="hljs-built_in">List</span>&lt;ProductDetails&gt;&gt; getServerProducts(<br>      <span class="hljs-built_in">Set</span>&lt;<span class="hljs-built_in">String</span>&gt; pIds) <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-comment">///<span class="language-markdown">根据商品id获取云端商品列表</span></span><br>    <span class="hljs-keyword">try</span> &#123;<br>      <span class="hljs-keyword">final</span> <span class="hljs-built_in">bool</span> isAvailable = <span class="hljs-keyword">await</span> InAppPurchase.instance.isAvailable();<br>      <span class="hljs-keyword">if</span> (!isAvailable) &#123;<br>        <span class="hljs-keyword">return</span> [];<br>      &#125;<br>      <span class="hljs-keyword">final</span> ProductDetailsResponse response =<br>          <span class="hljs-keyword">await</span> InAppPurchase.instance.queryProductDetails(pIds);<br>      <span class="hljs-keyword">if</span> (response.notFoundIDs.isNotEmpty) &#123;<br>        <span class="hljs-keyword">return</span> [];<br>      &#125;<br>      <span class="hljs-keyword">return</span> response.productDetails;<br>    &#125; <span class="hljs-keyword">catch</span> (err) &#123;<br>      APPPlugin.logger.e(err);<br>    &#125;<br>    <span class="hljs-keyword">return</span> [];<br>  &#125;<br><br>  <span class="hljs-comment">///<span class="language-markdown">购买商品 type 1:购买 2:订阅</span></span><br>  <span class="hljs-keyword">static</span> payProductNow(<br>      ProductDetails productDetails, <span class="hljs-built_in">int</span> type, <span class="hljs-built_in">String</span> orderId) &#123;<br>    <span class="hljs-keyword">if</span> (productDetails == <span class="hljs-keyword">null</span>) &#123;<br>      exSnackBar(<span class="hljs-string">&quot;please check you product&quot;</span>, type: ExSnackBarType.warning);<br>      <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">final</span> PurchaseParam purchaseParam = PurchaseParam(<br>        productDetails: productDetails, applicationUserName: orderId);<br>    <span class="hljs-comment">// 消耗型商品(一次性购买)和非消耗型商品(月度订阅，年度订阅)的购买是不一样的</span><br>    <span class="hljs-keyword">if</span> (type == <span class="hljs-number">1</span>) &#123;<br>      InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-comment">///<span class="language-markdown">恢复购买</span></span><br>  <span class="hljs-comment">///<span class="language-markdown">消耗型项目，非消耗型，自动续期订阅，非续期订阅</span></span><br>  <span class="hljs-comment">///<span class="language-markdown">恢复购买是恢复非消耗型的商品或者自动续期订阅这两种类型</span></span><br>  <span class="hljs-comment">///<span class="language-markdown">这个需要提供一个手动按钮恢复，不然上架不给过哦</span></span><br>  <span class="hljs-keyword">static</span> restorePuchases() <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-keyword">await</span> InAppPurchase.instance.restorePurchases();<br>  &#125;<br><br>  <span class="hljs-comment">///<span class="language-markdown">取消支付订阅</span></span><br>  <span class="hljs-keyword">static</span> disposeSubscription() &#123;<br>    _subscription.cancel();<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Flutter/" class="category-chain-item">Flutter</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Flutter/" class="print-no-link">#Flutter</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flutter In App Purchases</div>
+      <div>http://bestkele.com/2024/02/10/flutter/flutter-inapp-purchases/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/21/flutter/flutter-signInWithApple/" title="Flutter Sign In With AppleId">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Flutter Sign In With AppleId</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/26/investigation/tts-stt/" title="文本语音互相转换">
+                        <span class="hidden-mobile">文本语音互相转换</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"}},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

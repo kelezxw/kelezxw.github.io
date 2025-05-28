@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kele">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="使用插件：firebase_messaging项目设置文档：Firebase Messaging使用文档：Firebase Cloud Messaging 这个插件的作用是实现 Flutter 应用的推送功能，Firebase Cloud Messaging (FCM) 是 Google 提供的一种跨平台消息传递解决方案，可以让开发者向 Android、iOS 和 Web 应用发送通知和数据消息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter Messaging Push">
+<meta property="og:url" content="http://bestkele.com/2023/11/24/flutter/flutter-messaging-push/index.html">
+<meta property="og:site_name" content="Move forward, or you&#39;ll fall behind">
+<meta property="og:description" content="使用插件：firebase_messaging项目设置文档：Firebase Messaging使用文档：Firebase Cloud Messaging 这个插件的作用是实现 Flutter 应用的推送功能，Firebase Cloud Messaging (FCM) 是 Google 提供的一种跨平台消息传递解决方案，可以让开发者向 Android、iOS 和 Web 应用发送通知和数据消息。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-googleSignIn/1.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-googleSignIn/2.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-messaging-push/1.png">
+<meta property="og:image" content="http://bestkele.com/image/article/flutter/flutter-messaging-push/2.png">
+<meta property="article:published_time" content="2023-11-24T14:15:43.000Z">
+<meta property="article:modified_time" content="2025-05-23T02:44:06.387Z">
+<meta property="article:author" content="kele">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://bestkele.com/image/article/flutter/flutter-googleSignIn/1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Flutter Messaging Push - Move forward, or you&#39;ll fall behind</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bestkele.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-MXP44HXX41"},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-MXP44HXX41", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MXP44HXX41');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kele</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flutter Messaging Push"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-24 22:15" pubdate>
+          2023年11月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Flutter Messaging Push</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年5月23日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>使用插件：<a target="_blank" rel="noopener" href="https://pub-web.flutter-io.cn/packages/firebase_messaging">firebase_messaging</a><br>项目设置文档：<a target="_blank" rel="noopener" href="https://firebase.flutter.dev/docs/messaging/overview">Firebase Messaging</a><br>使用文档：<a target="_blank" rel="noopener" href="https://firebase.google.com/docs/cloud-messaging?hl=zh-cn">Firebase Cloud Messaging</a></p>
+<p>这个插件的作用是实现 Flutter 应用的推送功能，Firebase Cloud Messaging (FCM) 是 Google 提供的一种跨平台消息传递解决方案，可以让开发者向 Android、iOS 和 Web 应用发送通知和数据消息。<br>我本来想偷懒，直接使用国内的jpush的，突然想起jpush的离线推送问题(ios有自己的apns推送，google有自己的message推送，由于国内墙的问题，google服务不能用，所以国内app的离线推送都有点问题，这个就不细说了)jpush是通过厂商通道vip账户解决的这个问题，在国外这一套自然也就行不通(跟客服确认过不行)，最后还是要老老实实看message的文档。</p>
+<h3 id="1-注册firebase账号，创建应用"><a href="#1-注册firebase账号，创建应用" class="headerlink" title="1. 注册firebase账号，创建应用"></a>1. 注册firebase账号，创建应用</h3><p><a target="_blank" rel="noopener" href="https://console.firebase.google.com/?hl=zh-cn&_gl=1*nyz7us*_ga*NTgwMTcyNzQuMTcyNTE3NTA2Mw..*_ga_CW55HF8NVT*MTczMzg5NzgyMy4yLjEuMTczMzg5ODA3Ny41MC4wLjA.">FireBase控制台</a></p>
+<p>创建一个项目</p>
+<p><img src="/image/article/flutter/flutter-googleSignIn/1.png" srcset="/img/loading.gif" lazyload></p>
+<p>在项目下新建android和ios应用</p>
+<p><img src="/image/article/flutter/flutter-googleSignIn/2.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-项目设置"><a href="#2-项目设置" class="headerlink" title="2. 项目设置"></a>2. 项目设置</h3><h4 id="2-1-firebase平台的设置"><a href="#2-1-firebase平台的设置" class="headerlink" title="2.1 firebase平台的设置"></a>2.1 firebase平台的设置</h4><p>adnroid:</p>
+<p>因为之前我使用firebase设置了项目的常规部分，android的包名，sha1都已经配置好了，所以不需要额外配置，这里有个注意事项，如果你在使用flutterEmbedding v1需要设置background service , V2是不需要的，如何判断你的项目是什么版本呢，查看android&#x2F;src&#x2F;main&#x2F;AndroidManifest.xml</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;meta-data android:name=<span class="hljs-string">&quot;flutterEmbedding&quot;</span> android:value=<span class="hljs-string">&quot;2&quot;</span> /&gt;<br></code></pre></td></tr></table></figure>
+
+<p>ios:<br>ios需要在云消息传递中设置apns推送证书或者apns秘钥，秘钥方式是推荐的用法，因为apns证书每年都需要更换，秘钥是永不过期的(真好)。在开发者页面左侧的keys新建一个，包含你要用的功能（我加了Apple Push Notifications service (APNs)和Sign In with Apple），下载p8文件，保存好，它只能下载一次。在firebase后台上传p8秘钥文件后还有两个id,一个是<strong>Key ID</strong>在keys界面可以看到，还有个团队id在开发者账号页可以看到。</p>
+<p>此外还需要在xcode的Signing&amp;Capabilities中加上Push Notifications</p>
+<h4 id="2-2-flutter项目的设置"><a href="#2-2-flutter项目的设置" class="headerlink" title="2.2 flutter项目的设置"></a>2.2 flutter项目的设置</h4><p>设置文档：<a target="_blank" rel="noopener" href="https://firebase.google.com/docs/cloud-messaging/flutter/client?hl=zh-cn#platform-specific_setup_and_requirements">Firebase Cloud Messaging Setup</a></p>
+<p><strong>第一步</strong>是安装firebase的cli,登录这步遇到了问题，装完cli之后，firebase login就是不行：<br><img src="/image/article/flutter/flutter-messaging-push/1.png" srcset="/img/loading.gif" lazyload><br>我在google上搜了好半天，据说是firebase登录使用全局代理也不行，<a target="_blank" rel="noopener" href="https://github.com/firebase/firebase-tools/issues/155">Issue155</a><br>根据issue的评论找到一个<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/27098328/firebase-in-nodejs-with-http-proxy/28155536#28155536">stackoverflow的解决方法</a>，就是要设置一个本地的代理：</p>
+<p><code>export http_proxy=http://127.0.0.1:1234</code>像这样的(根据你自己的梯子来)，不用担心,export只在目前的命令行窗口生效，是临时的；</p>
+<p>设置完代理<code>http_proxy</code>还是执行<code>firebase login</code>命令，依旧不行，我就全部设置一遍；</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">https_proxy</span>=http://127.0.0.1:7890 <span class="hljs-attribute">http_proxy</span>=http://127.0.0.1:7890 <span class="hljs-attribute">all_proxy</span>=socks5://127.0.0.1:7890<br></code></pre></td></tr></table></figure>
+<p>然后就好了，可能是all_proxy生效了，有firewall，干个啥是真不容易啊<br><img src="/image/article/flutter/flutter-messaging-push/2.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>第二步</strong>是全局安装<code>flutterfire_cli</code>这玩意顾名思义就是flutter项目的专属cli，装完之后配置一个全局变量：export PATH&#x3D;”$PATH”:”$HOME&#x2F;.pub-cache&#x2F;bin”</p>
+<p>然后用命令在flutter项目根目录执行 flutterfire configure 配置flutter项目,</p>
+<p>它还会自动下载google-services.json文件，位置在android&#x2F;app&#x2F;google-services.json；</p>
+<p>还会自动生成一个默认配置文件lib&#x2F;firebase_options.dart</p>
+<p>还会在android&#x2F;build.gradle中加依赖<code>classpath &#39;com.google.gms:google-services:4.3.10&#39;</code></p>
+<p>ios也会自动加文件：ios&#x2F;firebase_app_id_file.json</p>
+<p><font color='red'>注意</font>：</p>
+<p>在第一步安装firebase cli的文档中，login之后文档说需要执行初始化：firebase init 命令，它是原生项目才需要的，我们的flutter项目是不需要的，firebase cli只负责登录，获取项目信息，flutter项目是要靠第二步的cli生成配置的。<br>在很多例子和文档在flutter项目的main.dart中执行了,其实不需要。</p>
+<h3 id="3-使用"><a href="#3-使用" class="headerlink" title="3. 使用"></a>3. 使用</h3><p>初始化配置</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-comment">/// <span class="language-markdown">初始化</span></span><br><span class="hljs-keyword">await</span> Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);<br><span class="hljs-comment">/// <span class="language-markdown">权限请求</span></span><br>NotificationSettings settings = <span class="hljs-keyword">await</span> FirebaseMessaging.instance.requestPermission(<br>  alert: <span class="hljs-keyword">true</span>,<br>  announcement: <span class="hljs-keyword">false</span>,<br>  badge: <span class="hljs-keyword">true</span>,<br>  carPlay: <span class="hljs-keyword">false</span>,<br>  criticalAlert: <span class="hljs-keyword">false</span>,<br>  provisional: <span class="hljs-keyword">false</span>,<br>  sound: <span class="hljs-keyword">true</span>,<br>);<br></code></pre></td></tr></table></figure>
+<p>android 默认的推送图标不正确，需要加一行</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs haskell">&lt;meta-<span class="hljs-class"><span class="hljs-keyword">data</span></span><br>      android:name=<span class="hljs-string">&quot;com.google.firebase.messaging.default_notification_icon&quot;</span><br>      android:resource=<span class="hljs-string">&quot;@drawable/push_logo&quot;</span> /&gt;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Flutter/" class="category-chain-item">Flutter</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Flutter/" class="print-no-link">#Flutter</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flutter Messaging Push</div>
+      <div>http://bestkele.com/2023/11/24/flutter/flutter-messaging-push/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kele</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/26/investigation/tts-stt/" title="文本语音互相转换">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">文本语音互相转换</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/08/flutter/flutter-mobile-ads/" title="Flutter Mobile Ads">
+                        <span class="hidden-mobile">Flutter Mobile Ads</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://cdn.staticfile.org/waline/2.15.5/waline.min.css')
+      Fluid.utils.createScript('https://cdn.staticfile.org/waline/2.15.5/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.bestkele.com","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":[],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"reaction":true,"locale":{"placeholder":"留下只言片语"}},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/lib/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/lib/bing.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":320,"hOffset":20,"vOffset":10},"mobile":{"show":false,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
